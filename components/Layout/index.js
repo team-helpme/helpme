@@ -1,3 +1,3 @@
-import Head from './components/index';
+import NavHeader from './components/index';
 
-export default Head;
+export default NavHeader;
