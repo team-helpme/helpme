@@ -1,3 +1,3 @@
-import NavHeader from './NavHeader';
+import PageLayout from './PageLayout';
 
-export default NavHeader;
+export default PageLayout;

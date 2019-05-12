@@ -1,3 +1,3 @@
-import NavHeader from './components/index';
+import PageLayout from './components/index';
 
-export default NavHeader;
+export default PageLayout;
