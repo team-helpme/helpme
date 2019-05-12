@@ -1,3 +1,4 @@
+/* eslint-disable react/require-default-props */
 import React from 'react';
 import { Layout } from 'antd';
 import PropTypes from 'prop-types';
@@ -20,8 +21,6 @@ const { Content } = Layout;
  * @return {Object} controlvhe over all layout of the webpage
  */
 
-
-
 export default function PageLayout(props) {
     const {
         title,
@@ -32,30 +31,30 @@ export default function PageLayout(props) {
     } = props;
 
     return (
-    <>
-    <Layout className="LandingPage_layout">
-    <NavHeader
-			        title={title || 'Helpme | Connect with Friends'}
-			        isAuthenticated={isAuthenticated}
-			    />
-			    <Content className="PageLayout_body">
-			        <Layout hasSider>
-			            <Sidebar siderIsPresent={siderIsPresent} />
-			            <Content className="PageLayout_content">
-			                {children}
-			            </Content>
-			        </Layout>
-			    </Content>
-			</Layout>
-    {footerPresent ? <PageFooter /> : null}
-		</>
+        <>
+            <Layout className="LandingPage_layout">
+                <NavHeader
+                  title={title || 'Helpme | Connect with Friends'}
+                  isAuthenticated={isAuthenticated}
+                />
+                <Content className="PageLayout_body">
+                    <Layout hasSider>
+                        <Sidebar siderIsPresent={siderIsPresent} />
+                        <Content className="PageLayout_content">
+                            {children}
+                        </Content>
+                    </Layout>
+                </Content>
+            </Layout>
+            {footerPresent ? <PageFooter /> : null}
+        </>
     );
 }
 
 PageLayout.propTypes = {
-    children: PropTypes.node.isRequired,
-    footerPresent: PropTypes.bool.isRequired,
-    isAuthenticated: PropTypes.bool.isRequired,
-    siderIsPresent: PropTypes.bool.isRequired,
-    title: PropTypes.string.isRequired,
+    children: PropTypes.node,
+    footerPresent: PropTypes.bool,
+    isAuthenticated: PropTypes.bool,
+    siderIsPresent: PropTypes.bool,
+    title: PropTypes.string,
 };
