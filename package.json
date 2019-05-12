@@ -1,4 +1,3 @@
-
 {
   "name": "HelpMe",
   "version": "1.0.0",
@@ -15,7 +14,7 @@
     "type": "git",
     "url": "git+https://github.com/team-helpme/helpme.git"
   },
-  "author": "Uche Nnadi, Justice Otuya, Marshall Akpan, Daniel Damilare",
+  "author": "Justice Otuya, Marshall Akpan, Daniel Damilare",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/team-helpme/helpme/issues"
@@ -43,11 +42,13 @@
     "antd": "^3.16.3",
     "auth0-js": "^9.10.2",
     "babel-jest": "^24.7.1",
+    "babel-plugin-inline-react-svg": "^1.1.0",
     "body-parser": "^1.19.0",
     "dotenv": "^7.0.0",
     "enzyme": "^3.9.0",
     "enzyme-adapter-react-16": "^1.12.1",
     "express": "^4.16.4",
+    "jwt-decode": "^2.2.0",
     "mongoose": "^5.5.4",
     "next": "^8.0.4",
     "prop-types": "^15.7.2",

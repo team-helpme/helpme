@@ -1,14 +1,3 @@
-import {
-    authorize,
-    logout,
-    parseHash,
-    setToken,
-    unsetToken,
-    getUserFromServerCookie,
-    getUserFromLocalCookie,
-    getBaseUrl
-} from './components';
+import { Login, SignUp } from './components';
 
-export {
- authorize, logout, parseHash, setToken, unsetToken, getUserFromServerCookie, getUserFromLocalCookie 
-};
+export { Login, SignUp };
