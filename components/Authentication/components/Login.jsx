@@ -29,11 +29,21 @@ class NormalLoginForm extends React.Component {
         loading: false,
     }
 
+    /**
+    *  function that is used to show button loading
+    * @function
+    * @return {boolean} sets the state of the button to loading
+    */
     enterLoading = () => {
         this.setState({ loading: true });
     }
 
-    // handles the submitting of the login form
+    /**
+    *  function that is used to handle the submitting of the login form
+    * @function
+    * @param {Object} e - the event emmitter nodelist
+    * @return {Object} the login page
+    */
     handleSubmit = e => {
         const { validateFields } = this.props.form;
         e.preventDefault();
