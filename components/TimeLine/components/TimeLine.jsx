@@ -5,7 +5,7 @@ import { Icon, Divider } from 'antd';
 import PageLayout from '../../Layout';
 import './TimeLine.css';
 import CreatePostModal from './CreatePostModal';
-import { CreatePostComponent } from './CreatePostComponent';
+import CreatePostComponent from './CreatePostComponent';
 import data from '../../../data/data.json'; // dummy data to be rplaced with api data
 import profile from '../../../data/profile.json'; // dummy data to be rplaced with api data
 import { POPULAR_TOPIC, USERS_BIO, CREATEPOST_PLACEHOLDER } from '../constant';
@@ -135,7 +135,7 @@ class TimeLine extends React.Component {
                                 POPULAR_TOPIC.map(topic => {
                                     const { link, text } = topic;
                                     return (
-                                        <li>
+                                        <li key={text}>
                                             <Link href={link}>
                                                 <a>{text}</a>
                                             </Link>
@@ -166,14 +166,14 @@ class TimeLine extends React.Component {
                     {/* main timeline */}
                     <section className="TimeLine_post">
                         <section className="TimeLine-post-component">
-                            <CreatePostComponent placeholder={CREATEPOST_PLACEHOLDER} minRows={5} />
+                            <CreatePostComponent InputPlaceholder={CREATEPOST_PLACEHOLDER} rowHeight={5} />
                         </section>
 
                         <Divider />
 
                         {data.map(user => {
                             const {
-                                id, firstName, lastName, email, post, avartar, image,
+                                id, first_name, last_name, email, post, avartar, image,
                             } = user;
 
                             return (
@@ -188,7 +188,7 @@ class TimeLine extends React.Component {
                                         <div className="post-content-container">
                                             <div className="user-post-details">
                                                 <p className="user-name">
-                                                    {`${firstName} ${lastName}`}
+                                                    {`${first_name} ${last_name}`}
                                                 </p>
                                                 <p className="user-time-posted">3h</p>
                                             </div>
@@ -214,7 +214,7 @@ class TimeLine extends React.Component {
                                                             }
                                                             : null
                                                     }
-                                                  onClick={evenet => this.handleLikeButton(event, id)}
+                                                  onClick={event => this.handleLikeButton(event, id)}
                                                   className="like-icon"
                                                 />
                                                 {this.state.likeCount}
@@ -223,8 +223,9 @@ class TimeLine extends React.Component {
                                             <div style={this.state.activeComment === id ? { display: 'block' } : { display: 'none' }}>
 
                                                 <CreatePostComponent
-                                                  minRows={2}
-                                                  placeholder="Write your reply"
+                                                  handleOk={this.handleOk}
+                                                  InputPlaceholder="Write your reply"
+                                                  rowHeight={2}
                                                 />
                                             </div>
                                         </div>
@@ -232,8 +233,7 @@ class TimeLine extends React.Component {
                                     <Divider />
                                 </section>
                             );
-                        }
-                        )}
+                        })}
                     </section>
                 </main>
             </PageLayout>

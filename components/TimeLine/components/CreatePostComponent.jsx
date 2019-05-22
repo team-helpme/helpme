@@ -4,86 +4,99 @@ import {
 } from 'antd';
 import PropTypes from 'prop-types';
 
-
 const { TextArea } = Input;
 
 /**
  * Helper function that is used for creating the input part of the post *component
- *
  * @function
- * @param {String} placeholder - the placeholder for the input component
- * @param {integer} minRows - the minimum amount of rows that the input component will initially contain
+ * @param {String} InputPlaceholder - the placeholder for the input component
+ * @param {integer} rowHeight - the minimum amount of rows that the input component will initially contain
  * @return {Object} the input part of the createpost component
  */
-const CreatePostInput = props => (
-    <TextArea
-  placeholder={props.placeholder}
-  size="small"
-        className="compose-textarea"
-        autosize={props.minRows}
-  autoFocus
-    />
-);
-
-
+const CreatePostInput = props => {
+    const { InputPlaceholder, rowHeight } = props;
+    return (
+        <TextArea
+          placeholder={InputPlaceholder}
+          size="small"
+          className="compose-textarea"
+          autosize={{
+                minRows: rowHeight,
+            }}
+          style={{ padding: '.5em 1em' }}
+          autoFocus
+        />
+    );
+};
 
 /**
  * Helper function that controls picture upload of the post component and is also the footer of the post component
- *
  * @function
  * @param {Function} handleOk -  controls what happens when the submit button  of the modal is clicked
  * @return {Object} the input part of the createpost component
  */
-const CreatePostButtons = props => (
+const CreatePostButtons = props => {
+    const { handleOk } = props;
+    return (
+        <section className="modal-footer">
+            <Upload>
+                <Icon
+                  type="picture"
+                  style={{
+                        fontSize: 32,
+                        color: '#1890ff',
+                        display: 'inline',
+                    }}
+                />
+            </Upload>
 
-    <section className="modal-footer">
-    <Upload>
-            <Icon
-                type="picture"
-                style={{
-                    fontSize: 32,
-                    color: '#1890ff',
-                    display: 'inline',
-                }}
-            />
-        </Upload>
-
-        <Button key="submit" type="primary" onClick={props.handleOk}>
-			Post
-</Button>
-    </section>
-);
-
-
-
+            <Button key="submit" type="primary" onClick={handleOk}>
+                Post
+            </Button>
+        </section>
+    );
+};
 
 /**
  * full create post component which combines the CreatePostInput ans CreatePostButtons component. i
- *
  * @function
- * @param {String} placeholder - the placeholder for the input component
- * @param {integer} minRows - the minimum amount of rows that the input component will initially contain
- *  * @param {Function} handleOk -  controls what happens when the submit button  of the modal is clicked
+ * @param {String} InputPlaceholder - the placeholder for the input component
+ * @param {integer} rowHeight - the minimum amount of rows that the input component will initially contain
+ *  @param {Function} handleOk -  controls what happens when the submit button  of the modal is clicked
  * @return {Object} the input part of the createpost component
  */
 
-const CreatePostComponent = props => (
+const CreatePostComponent = props => {
+    const {
+        InputPlaceholder,
+        rowHeight,
+        handleOk,
+    } = props;
 
-    <>
-    <CreatePostInput
-  minRows={props.minRows}
-		    placeholder={props.placeholder}
-		/>
-    <div className="comment-post-button">
-		    <CreatePostButtons handleOk={props.handleOk} />
-		</div>
-	</>
-);
+    return (
+        <>
+            <CreatePostInput
+              InputPlaceholder={InputPlaceholder}
+              rowHeight={rowHeight}
+            />
+            <div className="comment-post-button">
+                <CreatePostButtons handleOk={handleOk} />
+            </div>
+        </>
+    );
+};
 
-export { CreatePostInput, CreatePostButtons, CreatePostComponent };
+export default CreatePostComponent;
 
+CreatePostInput.propTypes = {
+    InputPlaceholder: PropTypes.string.isRequired,
+    rowHeight: PropTypes.number.isRequired,
+};
 CreatePostButtons.propTypes = {
-    minRows: PropTypes.number,
-    placeholder: PropTypes.string,
-    handleOk: PropTypes.string,
+    handleOk: PropTypes.func.isRequired,
+};
+CreatePostComponent.propTypes = {
+    InputPlaceholder: PropTypes.string.isRequired,
+    handleOk: PropTypes.func.isRequired,
+    rowHeight: PropTypes.number.isRequired,
 };
