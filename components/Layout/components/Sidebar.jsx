@@ -43,5 +43,5 @@ export default function Sidebar(props) {
 }
 
 Sidebar.propTypes = {
-    isSiderPresent: PropTypes.bool.isRequired,
+    isSiderPresent: PropTypes.bool,
 };

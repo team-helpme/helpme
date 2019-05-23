@@ -40,11 +40,13 @@ const SKELETON_PROPS = [{
     paragraph: { rows: 7 },
     title: 'TEST',
 }];
+// eslint-disable-next-line import/no-mutable-exports
 let LOADING_SKELETON = [];
-for (let i = 0; i < 2; i++) {
+for (let i = 0; i < 2; i + 1) {
     LOADING_SKELETON = [...LOADING_SKELETON, ...SKELETON_PROPS];
 }
 
+// eslint-disable-next-line max-len
 const USERS_BIO = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellen dusharum odit inventore, iste dignissimos laudantium! Veniam.';
 
 const CREATEPOST_PLACEHOLDER = "What's are you thinking?";

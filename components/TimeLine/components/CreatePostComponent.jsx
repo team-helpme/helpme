@@ -83,7 +83,7 @@ const CreatePostComponent = props => {
     );
 };
 
-export default CreatePostComponent;
+export { CreatePostComponent, CreatePostInput, CreatePostButtons };
 
 CreatePostInput.propTypes = {
     InputPlaceholder: PropTypes.string.isRequired,

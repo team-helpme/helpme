@@ -7,7 +7,7 @@ import {
 import PageLayout from '../../Layout';
 import '../../../static/TimeLine.css';
 import CreatePostModal from './CreatePostModal';
-import CreatePostComponent from './CreatePostComponent';
+import { CreatePostComponent } from './CreatePostComponent';
 import data from '../../../data/data.json'; // dummy data to be replaced with api data
 import { CREATEPOST_PLACEHOLDER, LOADING_SKELETON } from '../constant';
 import TimeLineProfileInfo from './TimeLineProfileInfo';
@@ -94,10 +94,10 @@ class TimeLine extends React.Component {
         const { profileData } = this.state;
         return (
             <PageLayout
-              isSiderPresent
-              isFooterPresent={false}
-              isAuthenticated
-              title="Timeline | Find friends"
+                isSiderPresent
+                isFooterPresent={false}
+                isAuthenticated
+                title="Timeline | Find friends"
             >
                 <main className="TimeLine_content">
 
@@ -107,9 +107,9 @@ class TimeLine extends React.Component {
                             <Icon type="form" className="create-icon" onClick={this.showModal} />
                         </div>
                         <CreatePostModal
-                          visible={this.state.visible}
-                          handleOkFunction={this.handleOk}
-                          handleCancel={this.handleCancel}
+                            visible={this.state.visible}
+                            handleOkFunction={this.handleOk}
+                            handleCancel={this.handleCancel}
                         />
                     </section>
 
@@ -141,9 +141,9 @@ class TimeLine extends React.Component {
                                             {/* avatar */}
                                             <div key={id} className="post-container">
                                                 <img
-                                                  src={avatar}
-                                                  alt="user's face"
-                                                  className="user-avatar"
+                                                    src={avatar}
+                                                    alt="user's face"
+                                                    className="user-avatar"
                                                 />
 
                                                 <div className="post-content-container">
@@ -168,22 +168,22 @@ class TimeLine extends React.Component {
                                                     {/* post reaction */}
                                                     <div className="post-reaction">
                                                         <Icon
-                                                          type="message"
-                                                          className="message-icon"
-                                                          onClick={() => this.handleComment(id)}
+                                                            type="message"
+                                                            className="message-icon"
+                                                            onClick={() => this.handleComment(id)}
                                                         />
                                                         <Icon
-                                                          type="like"
-                                                          theme={this.state.like ? 'filled' : 'outlined'}
-                                                          style={
+                                                            type="like"
+                                                            theme={this.state.like ? 'filled' : 'outlined'}
+                                                            style={
                                                                 this.state.like
                                                                     ? {
                                                                         color: '#1890ff',
                                                                     }
                                                                     : null
                                                             }
-                                                          onClick={() => this.handleLikeButton(id)}
-                                                          className="like-icon"
+                                                            onClick={() => this.handleLikeButton(id)}
+                                                            className="like-icon"
                                                         />
                                                         {this.state.likeCount}
                                                     </div>
@@ -192,9 +192,9 @@ class TimeLine extends React.Component {
 
                                                         {/* post comment component */}
                                                         <CreatePostComponent
-                                                          handleOkFunction={this.handleOk}
-                                                          InputPlaceholder="Write your reply"
-                                                          rowHeight={20}
+                                                            handleOkFunction={this.handleOk}
+                                                            InputPlaceholder="Write your reply"
+                                                            rowHeight={20}
                                                         />
                                                     </div>
                                                 </div>
@@ -217,12 +217,12 @@ class TimeLine extends React.Component {
                                     } = items;
                                     return (
                                         <Skeleton
-                                          key={id}
-                                          paragraph={paragraph}
-                                          title={title}
-                                          loading={loading}
-                                          active={active}
-                                          avatar={avatar}
+                                            key={id}
+                                            paragraph={paragraph}
+                                            title={title}
+                                            loading={loading}
+                                            active={active}
+                                            avatar={avatar}
                                         />
                                     );
                                 })
