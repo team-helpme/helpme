@@ -3,7 +3,7 @@ import {
     Form
 } from 'antd';
 import 'antd/dist/antd.css';
-import './Authentication.css';
+import '../../../static/Authentication.css';
 import Router from 'next/router';
 import RegistrationImage from '../../../static/register.svg';
 import {

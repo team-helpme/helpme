@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import NavHeader from './NavHeader';
 import Sidebar from './Sidebar';
 import PageFooter from './PageFooter';
-import './PageLayout.css';
+import '../../../static/PageLayout.css';
 import { HEADER_TITLE } from '../constants';
 
 const { Content } = Layout;
@@ -21,7 +21,7 @@ const { Content } = Layout;
  */
 export default function PageLayout(props) {
     const {
-        title, isAuthenticated, children, isFooterPresent, SiderPresent,
+        title, isAuthenticated, children, isFooterPresent, isSiderPresent,
     } = props;
     return (
         <>
@@ -29,7 +29,7 @@ export default function PageLayout(props) {
                 <NavHeader title={title || HEADER_TITLE} isAuthenticated={isAuthenticated} />
                 <Content className="PageLayout_body">
                     <Layout hasSider>
-                        <Sidebar isSiderPresent={SiderPresent} />
+                        <Sidebar isSiderPresent={isSiderPresent} />
                         <Content className="PageLayout_content">{children}</Content>
                     </Layout>
                 </Content>
@@ -42,6 +42,6 @@ PageLayout.propTypes = {
     children: PropTypes.node.isRequired,
     isAuthenticated: PropTypes.bool.isRequired,
     isFooterPresent: PropTypes.bool.isRequired,
-    SiderPresent: PropTypes.bool.isRequired,
+    isSiderPresent: PropTypes.bool.isRequired,
     title: PropTypes.string.isRequired,
 };

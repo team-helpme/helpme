@@ -5,12 +5,14 @@ import {
     Icon, Divider, Skeleton, List, Avatar
 } from 'antd';
 import PageLayout from '../../Layout';
-import './TimeLine.css';
+import '../../../static/TimeLine.css';
 import CreatePostModal from './CreatePostModal';
 import CreatePostComponent from './CreatePostComponent';
 import data from '../../../data/data.json'; // dummy data to be replaced with api data
-import profile from '../../../data/profile.json'; // dummy data to be replaced with api data
-import { POPULAR_TOPIC, USERS_BIO, CREATEPOST_PLACEHOLDER } from '../constant';
+import { CREATEPOST_PLACEHOLDER, LOADING_SKELETON } from '../constant';
+import TimeLineProfileInfo from './TimeLineProfileInfo';
+import TimeLinePopularTopic from './TimeLinePopularTopic';
+import TimeLineOnlineFriends from './TimeLineOnlineFriends';
 
 /**
  * Helper function that is used to render the TimeLine Component
@@ -90,25 +92,12 @@ class TimeLine extends React.Component {
 
     render() {
         const { profileData } = this.state;
-        const LoadingSkeleton = (
-            <section style={{ width: '90%', margin: '1em auto' }}>
-                <Skeleton
-                    paragraph={{ rows: 5, width: 20 }}
-                    title
-                    loading
-                    active
-                    avatar
-                    avatar={{ size: 'large' }}
-                />
-            </section>
-        );
-
         return (
             <PageLayout
-                SiderPresent
-                isFooterPresent={false}
-                isAuthenticated
-                title="Timeline | Find friends"
+              isSiderPresent
+              isFooterPresent={false}
+              isAuthenticated
+              title="Timeline | Find friends"
             >
                 <main className="TimeLine_content">
 
@@ -118,75 +107,22 @@ class TimeLine extends React.Component {
                             <Icon type="form" className="create-icon" onClick={this.showModal} />
                         </div>
                         <CreatePostModal
-                            visible={this.state.visible}
-                            handleOkFunction={this.handleOk}
-                            handleCancel={this.handleCancel}
+                          visible={this.state.visible}
+                          handleOkFunction={this.handleOk}
+                          handleCancel={this.handleCancel}
                         />
                     </section>
 
                     {/* profile info desktop */}
-                    <aside className="TimeLine_profile-info">
-                        <img
-                            src="https://robohash.org/temporeinventorererum.bmp?size=50x50&set=set1"
-                            alt="profile info of user"
-                            className="user-avatar"
-                        />
-                        {/* followers stat */}
-                        <h3 className="user-name">Baba Rahman</h3>
-                        <div className="user-followers-stat">
-                            <div className="users-follow-number">
-                                <h3 className="count">123</h3>
-                                <p>Following</p>
-                            </div>
-                            <Divider type="vertical" style={{ height: '50px' }} />
-                            <div className="users-follow-number">
-                                <h3 className="count">123</h3>
-                                <p>Followers</p>
-                            </div>
-                        </div>
-                        <div className="users-bio">
-                            {USERS_BIO}
-                        </div>
-                    </aside>
-
+                    <TimeLineProfileInfo />
                     {/* popular topics aside */}
-                    <aside className="TimeLine_popular-topic">
-                        <h3>Popular Topic</h3>
-                        <ul>
-                            {
-                                POPULAR_TOPIC.map(topic => {
-                                    const { link, text } = topic;
-                                    return (
-                                        <li key={text}>
-                                            <Link href={link}>
-                                                <a>{text}</a>
-                                            </Link>
-                                        </li>
-                                    );
-                                })
-                            }
-                        </ul>
-                    </aside>
-
+                    <TimeLinePopularTopic />
                     {/* online friends aside tab */}
-                    <aside className="TimeLine_online-friends">
-                        <h3>Online Friends</h3>
-                        <ul>
-                            {profile.map(user => (
-                                <li key={user.email}>
-                                    <img
-                                        src={user.photo}
-                                        alt="user's face"
-                                        className="user-avatar avartar-online"
-                                    />
-                                    {user.name}
-                                </li>
-                            ))}
-                        </ul>
-                    </aside>
+                    <TimeLineOnlineFriends />
 
                     {/* main timeline */}
                     <section className="TimeLine_post">
+                        {/* create post component */}
                         <section className="TimeLine-post-component">
                             <CreatePostComponent InputPlaceholder={CREATEPOST_PLACEHOLDER} rowHeight={5} />
                         </section>
@@ -197,59 +133,68 @@ class TimeLine extends React.Component {
                             profileData.length > 0 ? (
                                 profileData.map(user => {
                                     const {
-                                        id, first_name, last_name, email, post, avartar, image,
+                                        id, first_name, last_name, email, post, avatar, image,
                                     } = user;
 
                                     return (
                                         <section key={id}>
+                                            {/* avatar */}
                                             <div key={id} className="post-container">
                                                 <img
-                                                    src={avartar}
-                                                    alt="user's face"
-                                                    className="user-avatar"
+                                                  src={avatar}
+                                                  alt="user's face"
+                                                  className="user-avatar"
                                                 />
 
                                                 <div className="post-content-container">
                                                     <div className="user-post-details">
+                                                        {/* post user */}
                                                         <p className="user-name">
                                                             {`${first_name} ${last_name}`}
                                                         </p>
+
+                                                        {/* post time */}
                                                         <p className="user-time-posted">3h</p>
                                                     </div>
+
+                                                    {/* post image */}
                                                     {image ? (
                                                         <img src={image} className="post-image" />
                                                     ) : null}
+
+                                                    {/* post */}
                                                     <p className="user-post">{post}</p>
 
                                                     {/* post reaction */}
                                                     <div className="post-reaction">
                                                         <Icon
-                                                            type="message"
-                                                            className="message-icon"
-                                                            onClick={() => this.handleComment(id)}
+                                                          type="message"
+                                                          className="message-icon"
+                                                          onClick={() => this.handleComment(id)}
                                                         />
                                                         <Icon
-                                                            type="like"
-                                                            theme={this.state.like ? 'filled' : 'outlined'}
-                                                            style={
+                                                          type="like"
+                                                          theme={this.state.like ? 'filled' : 'outlined'}
+                                                          style={
                                                                 this.state.like
                                                                     ? {
                                                                         color: '#1890ff',
                                                                     }
                                                                     : null
                                                             }
-                                                            onClick={() => this.handleLikeButton(id)}
-                                                            className="like-icon"
+                                                          onClick={() => this.handleLikeButton(id)}
+                                                          className="like-icon"
                                                         />
                                                         {this.state.likeCount}
                                                     </div>
 
                                                     <div style={this.state.activeComment === id ? { display: 'block' } : { display: 'none' }}>
 
+                                                        {/* post comment component */}
                                                         <CreatePostComponent
-                                                            handleOkFunction={this.handleOk}
-                                                            InputPlaceholder="Write your reply"
-                                                            rowHeight={2}
+                                                          handleOkFunction={this.handleOk}
+                                                          InputPlaceholder="Write your reply"
+                                                          rowHeight={20}
                                                         />
                                                     </div>
                                                 </div>
@@ -258,12 +203,29 @@ class TimeLine extends React.Component {
                                         </section>
                                     );
                                 })
-                            ) : (
-                                    <>
-                                        {LoadingSkeleton}
-                                        {LoadingSkeleton}
-                                    </>
-                                )
+                            )
+                                :
+                                // data loading simulation
+                                LOADING_SKELETON.map(items => {
+                                    const {
+                                        paragraph,
+                                        title,
+                                        loading,
+                                        active,
+                                        avatar,
+                                        id,
+                                    } = items;
+                                    return (
+                                        <Skeleton
+                                          key={id}
+                                          paragraph={paragraph}
+                                          title={title}
+                                          loading={loading}
+                                          active={active}
+                                          avatar={avatar}
+                                        />
+                                    );
+                                })
                         }
                     </section>
                 </main>

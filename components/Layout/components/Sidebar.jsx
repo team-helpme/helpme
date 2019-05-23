@@ -8,13 +8,13 @@ const { Sider } = Layout;
 /**
  * Function that controls the sidebar which displays on mobile
  * @function
- * @param {boolean} IsSiderPresent shows sidebar if true
+ * @param {boolean} isSiderPresent shows sidebar if true
  * @return {Object} Side Bar
  */
 export default function Sidebar(props) {
-    const { IsSiderPresent } = props;
+    const { isSiderPresent } = props;
     return (
-        IsSiderPresent
+        isSiderPresent
             ? (
                 <Sider breakpoint="lg" collapsedWidth="0" className="layout_sider">
                     <div className="logo" />
@@ -43,5 +43,5 @@ export default function Sidebar(props) {
 }
 
 Sidebar.propTypes = {
-    IsSiderPresent: PropTypes.bool.isRequired,
+    isSiderPresent: PropTypes.bool.isRequired,
 };
