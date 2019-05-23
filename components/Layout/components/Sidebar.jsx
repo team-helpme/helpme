@@ -13,7 +13,7 @@ const { Sider } = Layout;
  */
 export default function Sidebar(props) {
     const { IsSiderPresent } = props;
-    return IsSiderPresent ? (
+    return (IsSiderPresent ? (
         <Sider breakpoint="lg" collapsedWidth="0" className="layout_sider">
             <div className="logo" />
             <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
@@ -36,7 +36,7 @@ export default function Sidebar(props) {
                 }
             </Menu>
         </Sider>
-    ) : null;
+    ) : null);
 }
 
 Sidebar.propTypes = {
