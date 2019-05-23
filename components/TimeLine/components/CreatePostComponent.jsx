@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-    Icon, Modal, Button, Upload, Input, Divider
+    Icon, Button, Upload, Input
 } from 'antd';
 import PropTypes from 'prop-types';
 
@@ -20,10 +20,7 @@ const CreatePostInput = props => {
           placeholder={InputPlaceholder}
           size="small"
           className="compose-textarea"
-          autosize={{
-                minRows: rowHeight,
-            }}
-          style={{ padding: '.5em 1em' }}
+          autosize={{ minRows: rowHeight }}
           autoFocus
         />
     );
@@ -32,11 +29,11 @@ const CreatePostInput = props => {
 /**
  * Helper function that controls picture upload of the post component and is also the footer of the post component
  * @function
- * @param {Function} handleOk -  controls what happens when the submit button  of the modal is clicked
+ * @param {Function} handleOkFunction -  controls what happens when the submit button  of the modal is clicked
  * @return {Object} the input part of the createpost component
  */
 const CreatePostButtons = props => {
-    const { handleOk } = props;
+    const { handleOkFunction } = props;
     return (
         <section className="modal-footer">
             <Upload>
@@ -50,7 +47,7 @@ const CreatePostButtons = props => {
                 />
             </Upload>
 
-            <Button key="submit" type="primary" onClick={handleOk}>
+            <Button key="submit" type="primary" onClick={handleOkFunction}>
                 Post
             </Button>
         </section>
@@ -62,7 +59,7 @@ const CreatePostButtons = props => {
  * @function
  * @param {String} InputPlaceholder - the placeholder for the input component
  * @param {integer} rowHeight - the minimum amount of rows that the input component will initially contain
- *  @param {Function} handleOk -  controls what happens when the submit button  of the modal is clicked
+ *  @param {Function} handleOkFunction -  controls what happens when the submit button  of the modal is clicked
  * @return {Object} the input part of the createpost component
  */
 
@@ -70,7 +67,7 @@ const CreatePostComponent = props => {
     const {
         InputPlaceholder,
         rowHeight,
-        handleOk,
+        handleOkFunction,
     } = props;
 
     return (
@@ -80,7 +77,7 @@ const CreatePostComponent = props => {
               rowHeight={rowHeight}
             />
             <div className="comment-post-button">
-                <CreatePostButtons handleOk={handleOk} />
+                <CreatePostButtons handleOkFunction={handleOkFunction} />
             </div>
         </>
     );
@@ -93,10 +90,10 @@ CreatePostInput.propTypes = {
     rowHeight: PropTypes.number.isRequired,
 };
 CreatePostButtons.propTypes = {
-    handleOk: PropTypes.func.isRequired,
+    handleOkFunction: PropTypes.func,
 };
 CreatePostComponent.propTypes = {
     InputPlaceholder: PropTypes.string.isRequired,
-    handleOk: PropTypes.func.isRequired,
+    handleOkFunction: PropTypes.func,
     rowHeight: PropTypes.number.isRequired,
 };

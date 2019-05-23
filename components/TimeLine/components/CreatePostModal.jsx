@@ -1,30 +1,22 @@
 import React from 'react';
-import {
-    Modal
-} from 'antd';
+import { Modal } from 'antd';
 import PropTypes from 'prop-types';
 import CreatePostComponent from './CreatePostComponent';
 
 const CreatePostModal = props => {
-    const { visible, handleOk, handleCancel } = props;
+    const { visible, handleOkFunction, handleCancel } = props;
 
     return (
         <Modal
           visible={visible}
-          onOk={handleOk}
+          onOk={handleOkFunction}
           onCancel={handleCancel}
-          style={{
-                top: '20',
-                height: '100%',
-                paddingRight: '0',
-                paddingLeft: '0',
-            }}
           className="create-post-modal"
           footer={null}
         >
             <CreatePostComponent
-              handleOk={handleOk}
-              rowHeight={18}
+              handleOkFunction={handleOkFunction}
+              rowHeight={5}
               InputPlaceholder="What is on your mind?"
             />
         </Modal>
@@ -34,6 +26,6 @@ const CreatePostModal = props => {
 export default CreatePostModal;
 CreatePostModal.propTypes = {
     handleCancel: PropTypes.func.isRequired,
-    handleOk: PropTypes.func.isRequired,
+    handleOkFunction: PropTypes.func.isRequired,
     visible: PropTypes.bool.isRequired,
 };
