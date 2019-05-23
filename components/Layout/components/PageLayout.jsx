@@ -39,9 +39,9 @@ export default function PageLayout(props) {
     );
 }
 PageLayout.propTypes = {
-    children: PropTypes.node,
-    isAuthenticated: PropTypes.bool,
-    isFooterPresent: PropTypes.bool,
-    isSiderPresent: PropTypes.bool,
-    title: PropTypes.string,
+    children: PropTypes.node.isRequired,
+    isAuthenticated: PropTypes.bool.isRequired,
+    isFooterPresent: PropTypes.bool.isRequired,
+    isSiderPresent: PropTypes.bool.isRequired,
+    title: PropTypes.string.isRequired,
 };

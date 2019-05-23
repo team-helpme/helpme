@@ -2,7 +2,7 @@ import React from 'react';
 import { Layout, Menu, Icon } from 'antd';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
-import { sideBarMenuItems } from '../constants';
+import { SIDEBAR_MENU_ITEMS } from '../constants';
 
 const { Sider } = Layout;
 /**
@@ -18,7 +18,7 @@ export default function Sidebar(props) {
             <div className="logo" />
             <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
                 {
-                    sideBarMenuItems.map(sideBarItem => {
+                    SIDEBAR_MENU_ITEMS.map(sideBarItem => {
                         const {
                             key, href, type, text,
                         } = sideBarItem;
@@ -39,6 +39,6 @@ export default function Sidebar(props) {
     ) : null;
 }
 
-Sider.propTypes = {
-    IsSiderPresent: PropTypes.bool,
+Sidebar.propTypes = {
+    IsSiderPresent: PropTypes.bool.isRequired,
 };

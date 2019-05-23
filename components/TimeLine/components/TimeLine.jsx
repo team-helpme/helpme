@@ -106,8 +106,8 @@ class TimeLine extends React.Component {
 
         return (
             <PageLayout
-                siderIsPresent
-                footerPresent={false}
+                isSiderPresent
+                isFooterPresent={false}
                 isAuthenticated
                 title="Timeline | Find friends"
             >
