@@ -73,6 +73,12 @@ class TimeLine extends React.Component {
         });
     };
 
+    /**
+    * Helper function that is used to hable clicking on the like button
+    * @function
+    * @param {Number} id the id of the liked post
+    * @return {Object} changes the state of the like component
+    */
     handleLikeButton = id => {
         const likeCount = this.state.like ? this.state.likeCount - 1 : this.state.likeCount + 1;
         console.log(id);
@@ -176,11 +182,7 @@ class TimeLine extends React.Component {
                                                             type="like"
                                                             theme={this.state.like ? 'filled' : 'outlined'}
                                                             style={
-                                                                this.state.like
-                                                                    ? {
-                                                                        color: '#1890ff',
-                                                                    }
-                                                                    : null
+                                                                this.state.like ? { color: '#1890ff' } : null
                                                             }
                                                             onClick={() => this.handleLikeButton(id)}
                                                             className="like-icon"
