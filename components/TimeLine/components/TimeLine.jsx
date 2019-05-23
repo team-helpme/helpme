@@ -2,8 +2,7 @@
 import React, { PropTypes } from 'react';
 import Link from 'next/link';
 import {
-    Icon, Divider, Skeleton, List,
-    Avatar
+    Icon, Divider, Skeleton, List, Avatar
 } from 'antd';
 import PageLayout from '../../Layout';
 import './TimeLine.css';
@@ -106,7 +105,7 @@ class TimeLine extends React.Component {
 
         return (
             <PageLayout
-                isSiderPresent
+                SiderPresent
                 isFooterPresent={false}
                 isAuthenticated
                 title="Timeline | Find friends"

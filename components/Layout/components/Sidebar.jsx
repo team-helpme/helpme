@@ -13,30 +13,33 @@ const { Sider } = Layout;
  */
 export default function Sidebar(props) {
     const { IsSiderPresent } = props;
-    return (IsSiderPresent ? (
-        <Sider breakpoint="lg" collapsedWidth="0" className="layout_sider">
-            <div className="logo" />
-            <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
-                {
-                    SIDEBAR_MENU_ITEMS.map(sideBarItem => {
-                        const {
-                            key, href, type, text,
-                        } = sideBarItem;
-                        return (
-                            <Menu.Item key={key}>
-                                <Link href={href}>
-                                    <a>
-                                        <Icon type={type} />
-                                        <span className="nav-text">{text}</span>
-                                    </a>
-                                </Link>
-                            </Menu.Item>
-                        );
-                    })
-                }
-            </Menu>
-        </Sider>
-    ) : null);
+    return (
+        IsSiderPresent
+            ? (
+                <Sider breakpoint="lg" collapsedWidth="0" className="layout_sider">
+                    <div className="logo" />
+                    <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
+                        {
+                            SIDEBAR_MENU_ITEMS.map(sideBarItem => {
+                                const {
+                                    key, href, type, text,
+                                } = sideBarItem;
+                                return (
+                                    <Menu.Item key={key}>
+                                        <Link href={href}>
+                                            <a>
+                                                <Icon type={type} />
+                                                <span className="nav-text">{text}</span>
+                                            </a>
+                                        </Link>
+                                    </Menu.Item>
+                                );
+                            })
+                        }
+                    </Menu>
+                </Sider>
+            ) : null
+    );
 }
 
 Sidebar.propTypes = {
