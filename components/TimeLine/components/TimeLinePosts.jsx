@@ -9,7 +9,7 @@ import {
 
 const TimeLinePosts = props => {
     const {
-        profileData, like, activeComment, handleComment, handleOk,
+        profileData, like, activeComment, handleComment, handleOk, handleLikeButton,
     } = props;
     return (
 
