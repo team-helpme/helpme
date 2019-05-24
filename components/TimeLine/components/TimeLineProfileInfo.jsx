@@ -1,13 +1,14 @@
 import React from 'react';
 import { Divider } from 'antd';
 import { USERS_BIO } from '../constant';
+import '../../../static/TimeLine.css'
 
 const TimeLineProfileInfo = () => (
     <aside className="TimeLine_profile-info">
         <img
-          src="https://robohash.org/temporeinventorererum.bmp?size=50x50&set=set1"
-          alt="profile info of user"
-          className="user-avatar"
+            src="https://robohash.org/temporeinventorererum.bmp?size=50x50&set=set1"
+            alt="profile info of user"
+            className="user-avatar"
         />
         {/* followers stat */}
         <h3 className="user-name">Baba Rahman</h3>
@@ -16,7 +17,7 @@ const TimeLineProfileInfo = () => (
                 <h3 className="count">123</h3>
                 <p>Following</p>
             </div>
-            <Divider type="vertical" style={{ height: '50px' }} />
+            <Divider type="vertical" className="divider-height" />
             <div className="users-follow-number">
                 <h3 className="count">123</h3>
                 <p>Followers</p>

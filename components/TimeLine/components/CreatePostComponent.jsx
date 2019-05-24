@@ -3,6 +3,7 @@ import {
     Icon, Button, Upload, Input
 } from 'antd';
 import PropTypes from 'prop-types';
+import '../../../static/TimeLine.css';
 
 const { TextArea } = Input;
 
@@ -39,11 +40,7 @@ const CreatePostButtons = props => {
             <Upload>
                 <Icon
                   type="picture"
-                  style={{
-                        fontSize: 32,
-                        color: '#1890ff',
-                        display: 'inline',
-                    }}
+                  className="create-post-icon"
                 />
             </Upload>
 
@@ -86,14 +83,14 @@ const CreatePostComponent = props => {
 export { CreatePostComponent, CreatePostInput, CreatePostButtons };
 
 CreatePostInput.propTypes = {
-    InputPlaceholder: PropTypes.string.isRequired,
-    rowHeight: PropTypes.number.isRequired,
+    InputPlaceholder: PropTypes.string,
+    rowHeight: PropTypes.number,
 };
 CreatePostButtons.propTypes = {
     handleOkFunction: PropTypes.func,
 };
 CreatePostComponent.propTypes = {
-    InputPlaceholder: PropTypes.string.isRequired,
+    InputPlaceholder: PropTypes.string,
     handleOkFunction: PropTypes.func,
-    rowHeight: PropTypes.number.isRequired,
+    rowHeight: PropTypes.number,
 };
