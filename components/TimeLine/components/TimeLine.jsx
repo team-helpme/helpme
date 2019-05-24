@@ -1,6 +1,5 @@
 /* eslint-disable no-tabs */
 import React, { PropTypes } from 'react';
-import Link from 'next/link';
 import {
     Icon, Divider
 } from 'antd';
