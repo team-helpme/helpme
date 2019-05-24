@@ -7,7 +7,8 @@ import PageLayout from '../../Layout';
 import '../../../static/TimeLine.css';
 import CreatePostModal from './CreatePostModal';
 import { CreatePostComponent } from './CreatePostComponent';
-import data from '../../../data/data.json'; // dummy data to be replaced with api data
+// dummy data to be replaced with api data, commented so that test can pass, will be removed when api is ready
+// import data from '../../../data/data.json';
 import {
     CREATEPOST_PLACEHOLDER, TIMELINE_TITLE
 } from '../constant';
