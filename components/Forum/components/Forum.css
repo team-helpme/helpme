@@ -1,0 +1,39 @@
+.forum-item{
+    display:flex;
+    padding: 1em
+}
+
+.forum-text > *{
+margin: .5em 0 ;
+}
+.forum-topic{
+
+}
+.forum-reaction > *{
+font-size: 12px;
+margin-right: 10px;
+}
+
+.forum-time-tag{
+display: flex;
+flex-direction: column;
+}
+.forum-tag{
+
+}
+.forum-time{
+font-size: 10px;
+margin-top:10px
+}
+
+@media screen and (min-width: 768px){
+    .forum-time-tag{
+flex-direction: row;
+justify-content: space-between;
+align-content: center;
+}
+.forum-time{
+align-self:center;
+margin-top:0px
+}
+}
