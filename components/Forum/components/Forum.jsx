@@ -3,7 +3,7 @@ import {
     Tabs, List, Avatar, Icon
 } from 'antd';
 import PageLayout from '../../Layout';
-import '../../../static/Forum.css';
+import './Forum.css';
 import forum_data from '../../../data/forum_data.json';
 import ForumLatestPost from './ForumLatestPost';
 import {ForumTopUsers} from './ForumAsides'

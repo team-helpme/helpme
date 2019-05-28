@@ -34,6 +34,11 @@ justify-content: space-between;
 align-content: center;
 }
 
+.ant-tabs-nav-scroll{
+	background:#ffffff;
+    margin-bottom:2px;
+}
+
 @media screen and (min-width: 451px) and (max-width: 767px){
     .forum{
             max-width: 450px;
@@ -43,6 +48,9 @@ align-content: center;
 }
 
 @media screen and (min-width: 768px){
+    .ant-tabs-nav-scroll{
+    padding:0 1em;
+}
 .ant-tabs .ant-tabs-top-content > .ant-tabs-tabpane{
 display: grid;
 grid-template-rows: minmax(300px, auto) auto;
@@ -85,6 +93,8 @@ margin-top:0px
 @media screen and (min-width: 1024px){
 .ant-tabs .ant-tabs-top-content.ant-tabs-content-animated{
     max-width: 1024px;
-  
+}
+.ant-tabs-nav-scroll{
+    padding:0 6em;
 }
 }

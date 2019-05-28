@@ -3,7 +3,7 @@ import {
     Icon, Button, Upload, Input
 } from 'antd';
 import PropTypes from 'prop-types';
-import '../../../static/TimeLine.css';
+import './TimeLine.css';
 
 const { TextArea } = Input;
 

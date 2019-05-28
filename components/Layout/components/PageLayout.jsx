@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import NavHeader from './NavHeader';
 import Sidebar from './Sidebar';
 import PageFooter from './PageFooter';
-import '../../../static/PageLayout.css';
+import './PageLayout.css';
 import { HEADER_TITLE } from '../constants';
 
 const { Content } = Layout;

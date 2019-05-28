@@ -1,7 +1,7 @@
 import React from 'react';
 import { Divider } from 'antd';
 import { USERS_BIO } from '../constant';
-import '../../../static/TimeLine.css'
+import './TimeLine.css'
 
 const TimeLineProfileInfo = () => (
     <aside className="TimeLine_profile-info">

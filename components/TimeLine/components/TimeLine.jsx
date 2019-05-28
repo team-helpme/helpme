@@ -4,7 +4,7 @@ import {
     Icon, Divider
 } from 'antd';
 import PageLayout from '../../Layout';
-import '../../../static/TimeLine.css';
+import './TimeLine.css';
 import CreatePostModal from './CreatePostModal';
 import { CreatePostComponent } from './CreatePostComponent';
 // dummy data to be replaced with api data, commented so that test can pass, will be removed when api is ready
