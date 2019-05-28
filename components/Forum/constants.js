@@ -24,26 +24,26 @@ const LOADING_SKELETON = [{
 }];
 
 const TOP_USERS = [{
+    avartar: 'https://randomuser.me/api/portraits/men/68.jpg',
+    comment_count: 30,
+    date_joined: '2017',
     name: 'Justice Macho',
-    avartar:"https://randomuser.me/api/portraits/men/68.jpg",
-    date_joined : '2017',
-post_count: 12,
-comment_count: 30,
+    post_count: 12,
 },
 {
+    avartar: 'https://randomuser.me/api/portraits/women/8.jpg',
+    comment_count: 30,
+    date_joined: '2018',
     name: 'Idris Kaine',
-    avartar:"https://randomuser.me/api/portraits/women/8.jpg",
-    date_joined : '2018',
-post_count:67,
-comment_count: 30,
+    post_count: 67,
 },
 {
+    avartar: 'https://randomuser.me/api/portraits/men/28.jpg',
+    comment_count: 300,
+    date_joined: '2019',
     name: 'Justice',
-    avartar:"https://randomuser.me/api/portraits/men/28.jpg",
-    date_joined : '2019',
-post_count: 12,
-comment_count: 300,
-}
-]
+    post_count: 12,
+},
+];
 
-export { LOADING_SKELETON , TOP_USERS}
+export { LOADING_SKELETON, TOP_USERS };

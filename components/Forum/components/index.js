@@ -1,3 +1,3 @@
-import Forum from './Forum'
+import Forum from './Forum';
 
-export default Forum
+export default Forum;
