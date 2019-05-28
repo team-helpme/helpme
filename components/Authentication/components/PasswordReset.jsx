@@ -6,8 +6,8 @@ import {
     Button,
     notification, Icon
 } from 'antd';
-import 'antd/dist/antd.css';
 import './Authentication.css';
+import 'antd/dist/antd.css';
 import Router from 'next/router';
 import ForgotPassword from '../../../static/forgot_password.svg';
 

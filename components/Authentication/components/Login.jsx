@@ -1,8 +1,8 @@
 /* eslint-disable react/jsx-no-literals */
 import React from 'react';
 import { Form, Button, Typography } from 'antd';
-import 'antd/dist/antd.css';
 import './Authentication.css';
+import 'antd/dist/antd.css';
 import Router from 'next/router';
 import LoginImage from '../../../static/login.svg';
 import LoginInputItemGenerator from './LoginInputItemGenerator';

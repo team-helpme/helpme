@@ -47,7 +47,7 @@ export default class Forum extends Component {
                 <main className="forum_content">
                     <Tabs defaultActiveKey="1" onChange={this.handleTabChange}>
                         <TabPane tab="Latest" key="1">
-                            <ForumTopUsers/>
+                            <ForumTopUsers blogData={data}/>
                             <ForumLatestPost blogData={data} />
                         </TabPane>
                         <TabPane tab="Trending" key="2">Content of Tab Pane 2</TabPane>

@@ -27,7 +27,7 @@ const TOP_USERS = [{
     avartar: 'https://randomuser.me/api/portraits/men/68.jpg',
     comment_count: 30,
     date_joined: '2017',
-    name: 'Justice Macho',
+    name: 'Macho',
     post_count: 12,
 },
 {
