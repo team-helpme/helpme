@@ -1,11 +1,20 @@
 import React from 'react';
 import {
-    Icon, Divider, Skeleton
+    Icon, Divider, Skeleton,List,Typography,Avatar
 } from 'antd';
 import { CreatePostComponent } from './CreatePostComponent';
+
 import {
     LOADING_SKELETON, COMMENT_PLACEHOLDER
 } from '../constant';
+
+
+const IconText = ({ type, text, action }) => (
+  <span>
+    <Icon type={type} style={{ marginRight: 8 }} onClick={action} />
+    {text}
+  </span>
+);
 
 const TimeLinePosts = props => {
     const {
@@ -14,74 +23,50 @@ const TimeLinePosts = props => {
     return (
 
         profileData.length !== 0 ? (
-            profileData.map(user => {
-                const {
-                    id, first_name, last_name, email, post, avatar, image, likeCount,
-                } = user;
-
-                return (
-                    <section key={id}>
-                        {/* avatar */}
-                        <div key={id} className="post-container">
-                            <img
-                              src={avatar}
-                              alt="user's face"
-                              className="user-avatar"
-                            />
-
-                            <div className="post-content-container">
-                                <div className="user-post-details">
-                                    {/* post user */}
-                                    <p className="user-name">
-                                        {`${first_name} ${last_name}`}
-                                    </p>
-
-                                    {/* post time */}
-                                    <p className="user-time-posted">3h</p>
-                                </div>
-
-                                {/* post image */}
-                                {image ? (
-                                    <img src={image} className="post-image" />
-                                ) : null}
-
-                                {/* post */}
-                                <p className="user-post">{post}</p>
-
-                                {/* post reaction */}
-                                <div className="post-reaction">
-                                    <Icon
-                                      type="message"
-                                      className="message-icon"
-                                      onClick={() => handleComment(id)}
-                                    />
-                                    <Icon
-                                      type="like"
-                                      theme={like ? 'filled' : 'outlined'}
-                                      className={
-                                            like ? 'liked like-icon' : 'like-icon'
-                                        }
-                                      onClick={() => handleLikeButton(id)}
-
-                                    />
-                                    {likeCount}
-                                </div>
-
-                                {/* post comment component */}
-                                <div className={activeComment === id ? 'show' : 'hide'}>
-                                    <CreatePostComponent
-                                      handleOkFunction={handleOk}
-                                      InputPlaceholder={COMMENT_PLACEHOLDER}
-                                      rowHeight={2}
-                                    />
-                                </div>
-                            </div>
-                        </div>
-                        <Divider />
-                    </section>
-                );
-            })
-        )
+            <List
+         itemLayout="vertical"
+       dataSource={profileData}
+       style={{margin: '0 1em'}}
+       size='large'
+       renderItem = {user => {
+        const { id, first_name, last_name, email, post, avatar, image, likeCount,textValue,
+handleOnChange} = user;
+    return    <List.Item
+        key={id}
+         actions={[
+          <IconText type="star-o" text="156" />,
+          <IconText type="like-o" text={likeCount} action={() => handleLikeButton(id)}  />,
+          <IconText type="message" text={likeCount} action={() => handleComment(id)}  />,
+        ]}
+       
+        >
+        <List.Item.Meta
+          avatar={<Avatar src={avatar} className="user-avatar"/>}
+          title={`${first_name} ${last_name}`}
+          description={'3h ago'}
+        />
+       {  image ? <img
+            className="post-image" 
+            alt={image? `${first_name} image`: null}
+            src={image}
+          /> : null
+       }
+        {post}
+          {/* post comment component */}
+                               <div  className={activeComment === id ? 'show' : 'hide'}>
+                                     <CreatePostComponent
+                                       handleOkFunction={handleOk}
+                                       InputPlaceholder={COMMENT_PLACEHOLDER}
+                                       rowHeight={2}
+                                       textValue={textValue}
+              handleOnChange={handleOnChange}
+                                      
+                                 />
+                                 </div>
+        </List.Item>
+       }}
+/>
+         )
             :
             // data loading simulation
             LOADING_SKELETON.map(items => {
