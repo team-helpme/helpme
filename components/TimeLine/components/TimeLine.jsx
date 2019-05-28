@@ -17,7 +17,7 @@ import TimeLinePopularTopic from './TimeLinePopularTopic';
 import TimeLineOnlineFriends from './TimeLineOnlineFriends';
 import TimeLinePosts from './TimeLinePosts';
 
-/**
+/**Helper function that is used to render the TimeLine Component
  * @class TimeLine
  * @extends {React.Component}
  * @return {Object} returns the TimeLine component
@@ -66,7 +66,6 @@ class TimeLine extends React.Component {
     handleOk = e => {
         const {visible} = this.state;
         // close the modal;
-        // this.ModalHandler();
         if (visible){
             this.setState({
                 visible: false
@@ -124,16 +123,15 @@ class TimeLine extends React.Component {
                     <section>
                         {/* edit component for mobile */}
                         <div className="create-icon-container">
-                            <Icon type="form" className="create-icon" onClick={this.ModalHandler} />
+                            <Icon type="form" className="create-icon" onClick={this.modalHandler} />
                         </div>
 
                         <CreatePostModal
                             visible={this.state.visible}
                             handleOkFunction={this.handleOk}
-                            closeModal={this.ModalHandler}
+                            closeModal={this.modalHandler}
                             handleOnChange={this.handleStatusValue}
                             textValue={this.state.statusValue}
-                              
                         />
                     </section>
 
