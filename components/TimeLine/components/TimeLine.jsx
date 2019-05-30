@@ -3,6 +3,8 @@ import React from 'react';
 import {
     Icon, Divider
 } from 'antd';
+import { connect } from 'react-redux';
+
 import PageLayout from '../../Layout';
 import './TimeLine.css';
 import CreatePostModal from './CreatePostModal';
@@ -17,12 +19,21 @@ import TimeLinePopularTopic from './TimeLinePopularTopic';
 import TimeLineOnlineFriends from './TimeLineOnlineFriends';
 import TimeLinePosts from './TimeLinePosts';
 
+import { controlModal } from '../actions';
+
 /**
  * @class TimeLine
  * @extends {React.Component}
  * @return {Object} returns the TimeLine component
  */
 class TimeLine extends React.Component {
+    // static getInitialProps({ reduxStore, req }) {
+    //     const isServer = !!req;
+    //     // DISPATCH ACTIONS HERE ONLY WITH `reduxStore.dispatch`
+    //     reduxStore.dispatch(controlModal(isServer));
+    //     return {};
+    // }
+
     constructor(props) {
         super(props);
         this.state = {
@@ -44,6 +55,7 @@ class TimeLine extends React.Component {
 
     componentDidMount() {
         this.setState({ profileData: data });
+        console.log(this.props);
     }
 
     /**
@@ -177,4 +189,9 @@ class TimeLine extends React.Component {
         );
     }
 }
-export default TimeLine;
+
+const mapDispatchToProps = { controlModal };
+export default connect(
+    null,
+    mapDispatchToProps
+)(TimeLine);

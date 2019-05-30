@@ -6,7 +6,7 @@ import PageLayout from '../../Layout';
 import './Forum.css';
 import forum_data from '../../../data/forum_data.json';
 import ForumLatestPost from './ForumLatestPost';
-import {ForumTopUsers} from './ForumAsides'
+import { ForumTopUsers } from './ForumAsides';
 
 const IconText = ({ type, text, action }) => (
     <span>
@@ -47,8 +47,10 @@ export default class Forum extends Component {
                 <main className="forum_content">
                     <Tabs defaultActiveKey="1" onChange={this.handleTabChange}>
                         <TabPane tab="Latest" key="1">
-                            <ForumTopUsers blogData={data}/>
-                            <ForumLatestPost blogData={data} />
+                            <section className="forum_latest_tab">
+                                <ForumTopUsers blogData={data} />
+                                <ForumLatestPost blogData={data} />
+                            </section>
                         </TabPane>
                         <TabPane tab="Trending" key="2">Content of Tab Pane 2</TabPane>
                         <TabPane tab="Favourite" key="3">Content of Tab Pane 3</TabPane>

@@ -20,6 +20,7 @@ const LandingPage = () => (
       title={PAGE_TITLE}
     >
         {
+
             LANDING_PAGE_CONTENTS.map(landingPageContent => {
                 const {
                     paragraphText,
