@@ -3,6 +3,8 @@ import React from 'react';
 import { Layout } from 'antd';
 import PropTypes from 'prop-types';
 
+import { connect } from 'react-redux';
+
 import NavHeader from './NavHeader';
 import Sidebar from './Sidebar';
 import PageFooter from './PageFooter';

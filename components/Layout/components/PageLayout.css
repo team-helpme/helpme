@@ -3,13 +3,8 @@
     margin-top: 64px;
 }
 
-<<<<<<< HEAD
-.PageLayout_content_sidebar{
-height: calc(100vh - 64px);
-=======
 .PageLayout_content_sidebar {
     height: calc(100vh - 64px);
->>>>>>> a8ab9038fb57d776fc5854a18152fe6be9c625d8
 }
 
 .layout_header-mobile {
@@ -66,17 +61,20 @@ a {
     .PageLayout_body {
         background: #E6ECF0;
     }
+
     .PageLayout_content {
         margin-top: 63px;
         background-color: #e8e8e8
-}
-.layout_sider {
+    }
+
+    .layout_sider {
         display: none;
     }
 
-.layout_header-mobile {
+    .layout_header-mobile {
         display: none;
     }
+
     .layout_header-desktop {
         background-color: #ffffff;
         display: flex;
