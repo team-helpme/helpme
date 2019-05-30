@@ -1,4 +1,8 @@
 import React from 'react';
+<<<<<<< HEAD
+=======
+
+>>>>>>> a8ab9038fb57d776fc5854a18152fe6be9c625d8
 import './LandingPage.css';
 import 'antd/dist/antd.css';
 import LandingPageContent from './LandingPageContent';

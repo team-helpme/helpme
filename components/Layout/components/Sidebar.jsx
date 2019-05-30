@@ -2,6 +2,10 @@ import React from 'react';
 import { Layout, Menu, Icon } from 'antd';
 import Link from 'next/link';
 import PropTypes from 'prop-types';
+<<<<<<< HEAD
+=======
+
+>>>>>>> a8ab9038fb57d776fc5854a18152fe6be9c625d8
 import { SIDEBAR_MENU_ITEMS } from '../constants';
 
 const { Sider } = Layout;

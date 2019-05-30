@@ -2,9 +2,10 @@ import React from 'react';
 import {
     Form
 } from 'antd';
+import Router from 'next/router';
+
 import './Authentication.css';
 import 'antd/dist/antd.css';
-import Router from 'next/router';
 import RegistrationImage from '../../../static/register.svg';
 import {
     SIGNUP_INPUTS
