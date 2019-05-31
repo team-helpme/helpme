@@ -1,4 +1,5 @@
-.login-form , .password-form{
+.login-form,
+.password-form {
     max-width: 300px;
     margin: 1em auto;
     height: 60vh;
@@ -7,11 +8,13 @@
 }
 
 .login-form-forgot,
-.login-form-register,.password-form-register {
+.login-form-register,
+.password-form-register {
     color: #1890ff;
 }
 
-.login-form-button, .password-form-button {
+.login-form-button,
+.password-form-button {
     width: 100%;
 }
 
@@ -52,11 +55,12 @@
     margin: 1em auto;
 }
 
-.form_icon{
-     color: rgba(0,0,0,.25)
+.form_icon {
+    color: rgba(0, 0, 0, .25)
 }
 
 @media screen and (max-width: 798px) {
+
     .login-image-section,
     .password-image-section {
         position: relative;
@@ -108,7 +112,8 @@
         height: 80%
     }
 
-    .login-image-section,.password-image-section,
+    .login-image-section,
+    .password-image-section,
     .registration-image-section {
         height: 100vh;
         width: 50vw;
@@ -116,6 +121,7 @@
         place-items: center;
     }
 }
-.input-icon{
-    color: rgba(0,0,0,.25);
+
+.input-icon {
+    color: rgba(0, 0, 0, .25);
 }

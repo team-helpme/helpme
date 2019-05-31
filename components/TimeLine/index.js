@@ -1,3 +1,6 @@
 import TimeLine from './components/index';
-
-export default TimeLine;
+import { handleModalReducer } from './reducers';
+import { controlModal } from './actions';
+import actionTypes from './actionTypes'
+;
+export { TimeLine, handleModalReducer, controlModal };

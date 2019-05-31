@@ -56,9 +56,14 @@ const USERS_BIO = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Repe
 const CREATEPOST_PLACEHOLDER = 'What is on your mind?';
 const COMMENT_PLACEHOLDER = 'Write your reply';
 const TIMELINE_TITLE = 'Timeline | Find friends';
+const TOGGLE_MODAL = 'TOGGLE_MODAL';
 
 export {
-    POPULAR_TOPIC, USERS_BIO,
+    POPULAR_TOPIC,
+    USERS_BIO,
     CREATEPOST_PLACEHOLDER,
-    LOADING_SKELETON, TIMELINE_TITLE, COMMENT_PLACEHOLDER
+    LOADING_SKELETON,
+    TIMELINE_TITLE,
+    COMMENT_PLACEHOLDER,
+    TOGGLE_MODAL
 };

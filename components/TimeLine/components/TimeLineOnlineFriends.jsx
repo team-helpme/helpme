@@ -1,7 +1,5 @@
 import React from 'react';
-// dummy data to be replaced with api data, commented so that test can pass, will be removed when api is ready
-import profile from '../../../data/profile.json';
-import './TimeLine.css';
+
 
 const TimeLineOnlineFriends = () => (
     <aside className="TimeLine_online-friends">

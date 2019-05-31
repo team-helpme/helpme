@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import {
     Tabs, List, Avatar, Icon
 } from 'antd';
-import PageLayout from '../../Layout';
+
 import './Forum.css';
+import PageLayout from '../../Layout';
 import forum_data from '../../../data/forum_data.json';
 import ForumLatestPost from './ForumLatestPost';
 import { ForumTopUsers } from './ForumAsides';

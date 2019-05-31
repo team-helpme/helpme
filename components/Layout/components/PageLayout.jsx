@@ -5,10 +5,10 @@ import PropTypes from 'prop-types';
 
 import { connect } from 'react-redux';
 
+import './PageLayout.css';
 import NavHeader from './NavHeader';
 import Sidebar from './Sidebar';
 import PageFooter from './PageFooter';
-import './PageLayout.css';
 import { HEADER_TITLE } from '../constants';
 
 const { Content } = Layout;

@@ -1,14 +1,14 @@
 import { TOGGLE_MODAL } from './constant';
+import actionTypes from './actionTypes';
 
 const initialState = {
     isOpen: false,
 };
 
-export const handleModalToggle = (state = initialState, action) => {
+export const handleModalReducer = (state = initialState, action) => {
     switch (action.type) {
-    case TOGGLE_MODAL:
-        return { ...state, isOpen: action.payload };
-        break;
+    case actionTypes.TOGGLE_MODAL:
+        return { ...state, isOpen: !state.isOpen };
     default:
         return state;
     }

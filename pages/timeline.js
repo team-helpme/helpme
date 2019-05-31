@@ -1,4 +1,3 @@
-import TimeLine from '../components/TimeLine';
-import '../components/TimeLine/components/TimeLine.css';
+import { TimeLine } from '../components/TimeLine';
 
 export default TimeLine;

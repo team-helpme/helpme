@@ -6,7 +6,6 @@ import {
 import Link from 'next/link';
 import PropTypes from 'prop-types';
 
-import 'antd/dist/antd.css';
 import { HEADER_TITLE, MENU_ITEMS } from '../constants';
 
 const { Header } = Layout;
@@ -32,20 +31,14 @@ function NavHeader(props) {
         <>
             {/* head parametes */}
             <Head>
-                <meta charSet="UTF-8" />
-                <meta name="viewport" content="width=device-width initial-scale=1.0" />
-                <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
-                <link rel="shortcut icon" href="../../static/favicon.ico" type="image/x-icon" />
-                <link rel="icon" href="../../static/favicon.ico" type="image/x-icon" />
-                <link
-                  rel="stylesheet"
-                  href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css"
-                />
+                <link rel="shortcut icon" href="../../../static/favicon.ico" type="image/x-icon" />
+                <link rel="icon" href="../../../static/favicon.ico" type="image/x-icon" />
+
                 <title>{!title ? HEADER_TITLE : title}</title>
             </Head>
             {/* navheader for mobile */}
             <Header theme="light" className="layout_header-mobile">
-                <Link href="/">
+                <Link prefetch href="/">
                     <a>
                         <img src="../../../static/logo.png" alt="helpme logo" className="logo" />
                     </a>
@@ -53,7 +46,7 @@ function NavHeader(props) {
                 {/* hide when authenticated */}
                 {isAuthenticated ? null : (
                     <Button className="LandingPage_login_button" type="primary">
-                        <Link href="/login">
+                        <Link prefetch href="/login">
                             <a>Login</a>
                         </Link>
                     </Button>
@@ -61,7 +54,7 @@ function NavHeader(props) {
             </Header>
             {/* header for desktop */}
             <Header theme="light" className="layout_header-desktop">
-                <Link href="/">
+                <Link prefetch href="/">
                     <a>
                         <img src="../../../static/logo.png" alt="helpme logo" className="logo" />
                     </a>
@@ -86,7 +79,7 @@ function NavHeader(props) {
                                     const { key, href, text } = menuItem;
                                     return (
                                         <Menu.Item key={key}>
-                                            <Link href={href}>
+                                            <Link prefetch href={href}>
                                                 <a>{text}</a>
                                             </Link>
                                         </Menu.Item>
@@ -95,14 +88,14 @@ function NavHeader(props) {
                             }
                         </Menu>
                         <Button className="LandingPage_login_button" type="danger">
-                            <Link href="/">
+                            <Link prefetch href="/">
                                 <a>Logout</a>
                             </Link>
                         </Button>
                     </>
                 ) : (
                     <Button className="LandingPage_login_button" type="primary">
-                        <Link href="/login">
+                        <Link prefetch href="/login">
                             <a>Login</a>
                         </Link>
                     </Button>

@@ -1,5 +1,4 @@
 import React from 'react';
-import './Forum.css';
 import {
     Icon, Divider, Tag, Typography, Skeleton
 } from 'antd';

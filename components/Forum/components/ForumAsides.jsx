@@ -1,5 +1,4 @@
 import React from 'react';
-import './Forum.css';
 import { Typography, Icon, Skeleton } from 'antd';
 import { TOP_USERS, LOADING_SKELETON } from '../constants';
 

@@ -9,7 +9,6 @@ import {
 import Router from 'next/router';
 
 import './Authentication.css';
-import 'antd/dist/antd.css';
 import ForgotPassword from '../../../static/forgot_password.svg';
 import {
     FORGET_PASSWORD_NOTIFICATION_TITLE,
