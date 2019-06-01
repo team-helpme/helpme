@@ -4,6 +4,7 @@ const initialState = {
     error: undefined,
     isFetching: false,
     isOpen: false,
+    statusValue: '',
     timelineData: [],
 };
 
@@ -27,9 +28,25 @@ export const profileDataReducer = (state = initialState, action) => {
 };
 
 export const handleModalReducer = (state = initialState, action) => {
-    switch (action.type) {
-    case actionTypes.TOGGLE_MODAL:
-        return { ...state, isOpen: !state.isOpen };
+    const { type } = action;
+    const { TOGGLE_MODAL } = actionTypes;
+    const { isOpen } = state;
+
+    switch (type) {
+    case TOGGLE_MODAL:
+        return { ...state, isOpen: !isOpen };
+    default:
+        return state;
+    }
+};
+
+export const updateStatus = (state = initialState, action) => {
+    const { type, payload } = action;
+    const { UPDATE_STATUS } = actionTypes;
+
+    switch (type) {
+    case UPDATE_STATUS:
+        return { ...state, statusField: payload };
     default:
         return state;
     }

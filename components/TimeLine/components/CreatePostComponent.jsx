@@ -14,7 +14,9 @@ const { TextArea } = Input;
  * @return {Object} the input part of the createpost component
  */
 const CreatePostInput = props => {
-    const { InputPlaceholder, rowHeight,handleOnChange,postValue,textValue } = props;
+    const {
+        InputPlaceholder, rowHeight, handleOnChange, postValue, textValue,
+    } = props;
     return (
         <TextArea
           placeholder={InputPlaceholder}
@@ -23,7 +25,6 @@ const CreatePostInput = props => {
           autosize={{ minRows: rowHeight }}
           autoFocus
           onChange={handleOnChange}
-          value={textValue}
         />
     );
 };
@@ -66,7 +67,7 @@ const CreatePostComponent = props => {
         InputPlaceholder,
         rowHeight,
         handleOkFunction,
-        handleOnChange,textValue
+        handleOnChange,
     } = props;
 
     return (
@@ -75,7 +76,6 @@ const CreatePostComponent = props => {
               InputPlaceholder={InputPlaceholder}
               rowHeight={rowHeight}
               handleOnChange={handleOnChange}
-              textValue={textValue}
             />
             <div className="comment-post-button">
                 <CreatePostButtons handleOkFunction={handleOkFunction} />
@@ -89,7 +89,7 @@ export { CreatePostComponent, CreatePostInput, CreatePostButtons };
 CreatePostInput.propTypes = {
     InputPlaceholder: PropTypes.string,
     rowHeight: PropTypes.number,
-    handlePostChange:PropTypes.func
+    handlePostChange: PropTypes.func,
 };
 CreatePostButtons.propTypes = {
     handleOkFunction: PropTypes.func,

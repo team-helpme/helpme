@@ -5,7 +5,7 @@ import {
 
 import './Forum.css';
 import PageLayout from '../../Layout';
-import forum_data from '../../../data/forum_data.json';
+import forum_data from '../../../data/forumData.json';
 import ForumLatestPost from './ForumLatestPost';
 import { ForumTopUsers } from './ForumAsides';
 

@@ -3,10 +3,12 @@ import actionTypes from './actionTypes';
 const {
     TOGGLE_MODAL, FETCH_PROFILE_REQUEST,
     FETCH_PROFILE_DATA_FAILURE,
-    FETCH_PROFILE_DATA_SUCCESS,
+    FETCH_PROFILE_DATA_SUCCESS, CHANGE_UPDATE_FIELD,
 } = actionTypes;
 
 export const controlModal = () => ({ type: TOGGLE_MODAL });
+
+export const setPostUpdateField = text => ({ payload: text, type: CHANGE_UPDATE_FIELD });
 
 // Instead of plain objects, we are returning function.
 export const fetchProfileData = () => dispatch => {

@@ -7,8 +7,9 @@ import 'antd/dist/antd.css';
 
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { controlModal, fetchProfileData } from '../actions';
+import { controlModal, fetchProfileData, setPostUpdateField } from '../actions';
 
+import './TimeLine.css';
 import PageLayout from '../../Layout';
 import CreatePostModal from './CreatePostModal';
 import { CreatePostComponent } from './CreatePostComponent';
@@ -53,7 +54,6 @@ class TimeLine extends React.Component {
     modalHandler = () => {
         const { controlModal } = this.props;
         controlModal();
-        console.log(this.props);
     };
 
     /**
@@ -62,15 +62,8 @@ class TimeLine extends React.Component {
      * @return {Object} returns 'false' to close the modal post component
      */
     handleOk = e => {
-        const { visible } = this.state;
-        // close the modal;
-        if (visible) {
-            this.setState({
-                visible: false,
-            });
-        }
-
-        // make an api call
+        this.modalHandler();
+        // close the modal and make make an api call
     };
 
     /**
@@ -117,9 +110,7 @@ class TimeLine extends React.Component {
     * @return {Object} changes the state of the status value
     */
     handleStatusValue = e => {
-        this.setState({
-            statusValue: e.target.value,
-        });
+        // setPostUpdateField();
     }
 
     //     render() {
@@ -128,7 +119,7 @@ class TimeLine extends React.Component {
     // }
     render() {
         const {
-            timelineData, visible, statusValue, like, likeCount, activeComment, activeLikeButton, commentValue,
+            timelineData, isOpen, handleStatusValue, statusValue, like, likeCount, activeComment, activeLikeButton, commentValue,
         } = this.props;
         return (
             <PageLayout
@@ -146,11 +137,10 @@ class TimeLine extends React.Component {
                         </div>
 
                         <CreatePostModal
-                          visible={visible}
+                          visible={isOpen}
                           handleOkFunction={this.handleOk}
                           closeModal={this.modalHandler}
-                          handleOnChange={this.handleStatusValue}
-                          textValue={statusValue}
+                          handleOnChange={handleStatusValue}
                         />
                     </section>
 
@@ -197,14 +187,15 @@ class TimeLine extends React.Component {
     }
 }
 
-const mapStateToProps = state => {
-    const { isOpen, data } = state;
-    return {
-        isOpen: state.handleModalReducer.isOpen,
-        timelineData: state.profileDataReducer.timelineData,
-    };
-};
-
-const mapDispatchToProps = dispatch => bindActionCreators({ controlModal, fetchProfileData }, dispatch);
+const mapStateToProps = state => ({
+    isOpen: state.handleModalReducer.isOpen,
+    statusValue: state.updateStatus.statusValue,
+    timelineData: state.profileDataReducer.timelineData,
+});
+const mapDispatchToProps = dispatch => bindActionCreators({
+    controlModal,
+    fetchProfileData,
+    handleStatusValue: event => setPostUpdateField(event.target.value),
+}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(TimeLine);
