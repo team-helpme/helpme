@@ -1,3 +1,5 @@
+/* eslint-disable react/jsx-filename-extension */
+/* eslint-disable max-len */
 
 import App, { Container } from 'next/app';
 import React from 'react';

@@ -1,10 +1,10 @@
 import actionTypes from './actionTypes';
 
 const initialState = {
-    isOpen: false,
-    isFetching: false,
-    timelineData: [],
     error: undefined,
+    isFetching: false,
+    isOpen: false,
+    timelineData: [],
 };
 
 export const profileDataReducer = (state = initialState, action) => {
@@ -20,7 +20,7 @@ export const profileDataReducer = (state = initialState, action) => {
     case FETCH_PROFILE_DATA_SUCCESS:
         return { ...state, isFetching: false, timelineData: action.timelineData };
     case FETCH_PROFILE_DATA_FAILURE:
-        return { ...state, isFetching: false, error: action.error };
+        return { ...state, error: action.error, isFetching: false };
     default:
         return state;
     }
