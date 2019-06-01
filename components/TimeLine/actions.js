@@ -2,9 +2,9 @@ import { log } from 'util';
 import actionTypes from './actionTypes';
 
 const {
-    TOGGLE_MODAL, FETCH_PROFILE_DATA,
+    TOGGLE_MODAL, FETCH_PROFILE_REQUEST,
     FETCH_PROFILE_DATA_FAILURE,
-    PROFILE_DATA_SUCCESS,
+    FETCH_PROFILE_DATA_SUCCESS,
 } = actionTypes;
 
 export const controlModal = () => ({ type: TOGGLE_MODAL });
@@ -14,7 +14,7 @@ export const fetchProfileData = () =>
     dispatch => {
         // Dispatching REQUEST action, which tells our app, that we are started requesting todos.
         dispatch({
-            type: FETCH_PROFILE_DATA,
+            type: FETCH_PROFILE_REQUEST,
         });
         return fetch('../../static/data/timelineData.json')
         // Here, we are getting json body(in our case it will contain `data` or `error` prop, depending on request was failed or not) from server response
@@ -29,10 +29,9 @@ export const fetchProfileData = () =>
                     });
                 } else {
                     // When everything is ok, dispatching SUCCESS action.
-                    console.log(body);
                     dispatch({
-                        profile: body,
-                        type: PROFILE_DATA_SUCCESS,
+                        timelineData: body,
+                        type: FETCH_PROFILE_DATA_SUCCESS,
                     });
                 }
             });
