@@ -1,27 +1,25 @@
 /* eslint-disable no-tabs */
 import React from 'react';
-import {
-    Icon, Divider
-} from 'antd';
-import 'antd/dist/antd.css';
-
+import { Icon, Divider } from 'antd';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import { controlModal, fetchProfileData, setPostUpdateField } from '../actions';
 
-import './TimeLine.css';
+import {
+    controlModal, fetchProfileData, setPostUpdateField, handlePostUpdate
+} from '../actions';
+import { getIsOpen, getStatusValue, getTimelineData } from '../selectors';
+
 import PageLayout from '../../Layout';
 import CreatePostModal from './CreatePostModal';
 import { CreatePostComponent } from './CreatePostComponent';
 
-import {
-    CREATEPOST_PLACEHOLDER, TIMELINE_TITLE
-} from '../constant';
+import { STRINGS } from '../constants';
 import TimeLineProfileInfo from './TimeLineProfileInfo';
 import TimeLinePopularTopic from './TimeLinePopularTopic';
 import TimeLineOnlineFriends from './TimeLineOnlineFriends';
 import TimeLinePosts from './TimeLinePosts';
 
+const { CREATE_POST_PLACEHOLDER, TIMELINE_TITLE } = STRINGS;
 /** Helper function that is used to render the TimeLine Component
  * @class TimeLine
  * @extends {React.Component}
@@ -62,7 +60,22 @@ class TimeLine extends React.Component {
      * @return {Object} returns 'false' to close the modal post component
      */
     handleOk = e => {
+        const {
+            timelineData, statusValue, handlePostUpdate, setPostUpdateField,
+        } = this.props;
+        const data = {
+            email: 'jotuya2@gmail.com',
+            first_name: 'Justice',
+            id: timelineData.length,
+            last_name: 'Otuya',
+            post: statusValue,
+        };
+        // get post
+        handlePostUpdate(data);
+        // close modal
         this.modalHandler();
+        // clear post component
+        this.props.setPostUpdateField('');
         // close the modal and make make an api call
     };
 
@@ -110,23 +123,25 @@ class TimeLine extends React.Component {
     * @return {Object} changes the state of the status value
     */
     handleStatusValue = e => {
-        // setPostUpdateField();
+        const { setPostUpdateField } = this.props;
+        setPostUpdateField(e.target.value);
     }
 
-    //     render() {
-    //         return <button onClick={this.modalHandler}>test</button>;
-    //     }
-    // }
+    clearStatusValue = e => {
+        const { setPostUpdateField } = this.props;
+        setPostUpdateField(e.target.value = '');
+    }
+
     render() {
         const {
-            timelineData, isOpen, handleStatusValue, statusValue, like, likeCount, activeComment, activeLikeButton, commentValue,
+            timelineData, isOpen, setPostUpdateField, statusValue, like, likeCount, activeComment, activeLikeButton, commentValue,
         } = this.props;
         return (
             <PageLayout
-              isSiderPresent={timelineData.length > 0}
-              isFooterPresent={false}
-              isAuthenticated
-              title={TIMELINE_TITLE}
+                isSiderPresent={timelineData.length > 0}
+                isFooterPresent={false}
+                isAuthenticated
+                title={TIMELINE_TITLE}
             >
                 <main className="TimeLine_content">
 
@@ -137,10 +152,10 @@ class TimeLine extends React.Component {
                         </div>
 
                         <CreatePostModal
-                          visible={isOpen}
-                          handleOkFunction={this.handleOk}
-                          closeModal={this.modalHandler}
-                          handleOnChange={handleStatusValue}
+                            visible={isOpen}
+                            handleOkFunction={this.handleOk}
+                            closeModal={this.modalHandler}
+                            handleOnChange={this.handleStatusValue}
                         />
                     </section>
 
@@ -156,10 +171,9 @@ class TimeLine extends React.Component {
                         {/* create post component */}
                         <section className="TimeLine-post-component">
                             <CreatePostComponent
-                              InputPlaceholder={CREATEPOST_PLACEHOLDER}
-                              rowHeight={5}
-                              handleOnChange={this.handleStatusValue}
-                              textValue={statusValue}
+                                InputPlaceholder={CREATE_POST_PLACEHOLDER}
+                                rowHeight={5}
+                                handleOnChange={this.handleStatusValue}
                             />
                         </section>
 
@@ -168,13 +182,14 @@ class TimeLine extends React.Component {
                         <section style={{ background: 'white' }}>
                             {/* timeline posts */}
                             <TimeLinePosts
-                              profileData={timelineData}
-                            //   like={like}
-                            //   likeCount={likeCount}
-                            //   activeComment={activeComment}
-                            //   activeLikeButton={activeLikeButton}
-                            //   handleComment={this.handleComment}
-                            //   handleLikeButton={this.handleLikeButton}
+                                profileData={timelineData}
+                                //   like={like}
+                                //   likeCount={likeCount}
+                                //   activeComment={activeComment}
+                                //   activeLikeButton={activeLikeButton}
+                                //   handleComment={this.handleComment}
+                                //   handleLikeButton={this.handleLikeButton}
+                                // handleComment={this.handleComment}
                             //   handleOk={this.handleOk}
                             //   handleOnChange={this.handleCommentValue}
                             //   textValue={commentValue}
@@ -188,14 +203,16 @@ class TimeLine extends React.Component {
 }
 
 const mapStateToProps = state => ({
-    isOpen: state.handleModalReducer.isOpen,
-    statusValue: state.updateStatus.statusValue,
-    timelineData: state.profileDataReducer.timelineData,
+    isOpen: getIsOpen(state),
+    statusValue: getStatusValue(state),
+    timelineData: getTimelineData(state),
 });
+
 const mapDispatchToProps = dispatch => bindActionCreators({
     controlModal,
     fetchProfileData,
-    handleStatusValue: event => setPostUpdateField(event.target.value),
+    handlePostUpdate,
+    setPostUpdateField,
 }, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(TimeLine);

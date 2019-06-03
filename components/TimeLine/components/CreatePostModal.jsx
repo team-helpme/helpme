@@ -2,7 +2,9 @@ import React from 'react';
 import { Modal } from 'antd';
 import PropTypes from 'prop-types';
 import { CreatePostComponent } from './CreatePostComponent';
-import { CREATEPOST_PLACEHOLDER } from '../constant';
+import { STRINGS } from '../constants';
+
+const { CREATE_POST_PLACEHOLDER } = STRINGS;
 
 const CreatePostModal = props => {
     const {
@@ -11,17 +13,18 @@ const CreatePostModal = props => {
 
     return (
         <Modal
-            visible={visible}
-            onOk={handleOkFunction}
-            onCancel={closeModal}
-            className="create-post-modal"
-            footer={null}
+          visible={visible}
+          onOk={handleOkFunction}
+          onCancel={closeModal}
+          className="create-post-modal"
+          footer={null}
         >
             <CreatePostComponent
-                handleOkFunction={handleOkFunction}
-                rowHeight={5}
-                InputPlaceholder={CREATEPOST_PLACEHOLDER}
-                handleOnChange={handleOnChange}
+              handleOkFunction={handleOkFunction}
+              rowHeight={5}
+              InputPlaceholder={CREATE_POST_PLACEHOLDER}
+              handleOnChange={handleOnChange}
+            // textValue={textValue}
             />
         </Modal>
     );

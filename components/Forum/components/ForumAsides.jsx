@@ -8,9 +8,9 @@ const ForumTopUsers = props => {
     const { blogData } = props;
 
     return (
-      <section className="forum_topusers">
+        <section className="forum_topusers">
             <Title level={4}>Top Users of The Week</Title>
-        {
+            {
                 blogData.length > 0 ? TOP_USERS.map(user => {
                     const {
                         name, avartar, date_joined, post_count, comment_count,
@@ -18,11 +18,11 @@ const ForumTopUsers = props => {
 
                     return (
                         <div className="forum_user" key={name}>
-                <img src={avartar} alt={name} className="user-avatar" />
+                            <img src={avartar} alt={name} className="user-avatar" />
 
-                <div className="forum_topusers-userdetails">
-                  <p>{name}</p>
-                  <p>{`since ${date_joined}`}</p>
+                            <div className="forum_topusers-userdetails">
+                                <p>{name}</p>
+                                <p>{`since ${date_joined}`}</p>
                             </div>
 
                             <p className="forum_topusers-interaction">

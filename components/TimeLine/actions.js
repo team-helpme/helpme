@@ -1,14 +1,15 @@
+/* eslint-disable camelcase */
 import actionTypes from './actionTypes';
 
 const {
     TOGGLE_MODAL, FETCH_PROFILE_REQUEST,
     FETCH_PROFILE_DATA_FAILURE,
-    FETCH_PROFILE_DATA_SUCCESS, CHANGE_UPDATE_FIELD,
+    FETCH_PROFILE_DATA_SUCCESS, UPDATE_STATUS, ADD_POST_TO_TIMELINE,
 } = actionTypes;
 
 export const controlModal = () => ({ type: TOGGLE_MODAL });
 
-export const setPostUpdateField = text => ({ payload: text, type: CHANGE_UPDATE_FIELD });
+export const setPostUpdateField = text => ({ payload: text, type: UPDATE_STATUS });
 
 // Instead of plain objects, we are returning function.
 export const fetchProfileData = () => dispatch => {
@@ -37,3 +38,24 @@ export const fetchProfileData = () => dispatch => {
             }
         });
 };
+
+export const handlePostUpdate = data => {
+    const {
+        id, first_name, last_name, email, post, avatar,
+    } = data;
+    return ({
+        type: ADD_POST_TO_TIMELINE,
+        payload: {
+            avatar,
+            email,
+            first_name,
+            id,
+            last_name,
+            post,
+        },
+    });
+};
+
+// export const handleLikeButton = id => {
+
+// };

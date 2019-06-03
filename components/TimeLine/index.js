@@ -1,7 +1,5 @@
-import TimeLine from './components/index';
-import { handleModalReducer, profileDataReducer, updateStatus } from './reducers';
-import { controlModal } from './actions';
+import { reducers } from './reducers';
+import * as components from './components';
+import * as actions from './actions';
 
-export {
-    TimeLine, handleModalReducer, controlModal, profileDataReducer, updateStatus
-};
+export { actions, components, reducers };

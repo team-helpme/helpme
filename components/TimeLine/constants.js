@@ -1,4 +1,6 @@
-const POPULAR_TOPIC = [
+export const NAME = 'timeLine';
+
+export const POPULAR_TOPIC = [
     {
         link: '#',
         text: 'Lorem, ipsum.',
@@ -33,7 +35,7 @@ const POPULAR_TOPIC = [
     },
 ];
 
-const LOADING_SKELETON = [{
+export const LOADING_SKELETON = [{
     active: true,
     avatar: true,
     id: 1,
@@ -50,20 +52,10 @@ const LOADING_SKELETON = [{
     title: true,
 }];
 
-// eslint-disable-next-line max-len
-const USERS_BIO = 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellen dusharum odit inventore, iste dignissimos laudantium! Veniam.';
-
-const CREATEPOST_PLACEHOLDER = 'What is on your mind?';
-const COMMENT_PLACEHOLDER = 'Write your reply';
-const TIMELINE_TITLE = 'Timeline | Find friends';
-const TOGGLE_MODAL = 'TOGGLE_MODAL';
-
-export {
-    POPULAR_TOPIC,
-    USERS_BIO,
-    CREATEPOST_PLACEHOLDER,
-    LOADING_SKELETON,
-    TIMELINE_TITLE,
-    COMMENT_PLACEHOLDER,
-    TOGGLE_MODAL
+export const STRINGS = {
+    COMMENT_PLACEHOLDER: 'Write your reply',
+    CREATE_POST_PLACEHOLDER: 'What is on your mind?',
+    TIMELINE_TITLE: 'Timeline | Find friends',
+    TOGGLE_MODAL: 'TOGGLE_MODAL',
+    USERS_BIO: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Repellen dusharum odit inventore, iste dignissimos laudantium! Veniam.',
 };

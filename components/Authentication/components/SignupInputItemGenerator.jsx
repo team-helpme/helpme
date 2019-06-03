@@ -41,18 +41,18 @@ const SignupInputGenerator = (actions, items, decorator) => {
     let fieldChildren;
 
     switch (FieldType) {
-        case 'input':
-            Field = Input;
-            break;
-        case 'checkbox':
-            Field = Checkbox;
-            break;
-        case 'button':
-            Field = Button;
-            break;
-        default:
-            Field = null;
-            break;
+    case 'input':
+        Field = Input;
+        break;
+    case 'checkbox':
+        Field = Checkbox;
+        break;
+    case 'button':
+        Field = Button;
+        break;
+    default:
+        Field = null;
+        break;
     }
 
     if (isButton && hasFieldChildren) {

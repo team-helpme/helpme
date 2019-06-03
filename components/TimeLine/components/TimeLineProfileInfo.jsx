@@ -1,7 +1,8 @@
 import React from 'react';
 import { Divider } from 'antd';
-import { USERS_BIO } from '../constant';
+import { STRINGS } from '../constants';
 
+const { USERS_BIO } = STRINGS;
 const TimeLineProfileInfo = () => (
     <aside className="TimeLine_profile-info">
         <img
@@ -9,6 +10,7 @@ const TimeLineProfileInfo = () => (
           alt="profile info of user"
           className="user-avatar"
         />
+
         {/* followers stat */}
         <h3 className="user-name">Baba Rahman</h3>
         <div className="user-followers-stat">

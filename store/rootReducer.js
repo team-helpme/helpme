@@ -1,8 +1,8 @@
 import { combineReducers } from 'redux';
-import { handleModalReducer, profileDataReducer, updateStatus } from '../components/TimeLine';
+import * as timeLine from '../components/timeLine';
 
 const rootReducer = combineReducers({
-    handleModalReducer, profileDataReducer, updateStatus,
+    timeLine: timeLine.reducers,
 });
 
 export default rootReducer;

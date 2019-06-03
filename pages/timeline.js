@@ -1,3 +1,5 @@
-import { TimeLine } from '../components/TimeLine';
+import { components } from '../components/timeLine';
+
+const { TimeLine } = components;
 
 export default TimeLine;

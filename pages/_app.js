@@ -16,12 +16,6 @@ import withReduxStore from '../lib/with-redux-store';
 */
 
 class MyApp extends App {
-    // static async getInitialProps({ Component, ctx }) {
-    //     const pageProps = Component.getInitialProps ? await Component.getInitialProps(ctx) : {};
-
-    //     return { pageProps };
-    // }
-
     render() {
         const { Component, pageProps, reduxStore } = this.props;
         return (

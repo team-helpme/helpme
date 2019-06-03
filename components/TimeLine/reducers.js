@@ -1,3 +1,4 @@
+/* eslint-disable import/prefer-default-export */
 import actionTypes from './actionTypes';
 
 const initialState = {
@@ -8,45 +9,38 @@ const initialState = {
     timelineData: [],
 };
 
-export const profileDataReducer = (state = initialState, action) => {
+export const reducers = (state = initialState, action) => {
     const {
+        CLEAR_STATUS_FIELD,
         FETCH_PROFILE_REQUEST,
         FETCH_PROFILE_DATA_FAILURE,
         FETCH_PROFILE_DATA_SUCCESS,
+        TOGGLE_MODAL,
+        UPDATE_STATUS,
+        ADD_POST_TO_TIMELINE,
     } = actionTypes;
 
-    switch (action.type) {
-    case FETCH_PROFILE_REQUEST:
-        return { ...state, isFetching: true };
-    case FETCH_PROFILE_DATA_SUCCESS:
-        return { ...state, isFetching: false, timelineData: action.timelineData };
-    case FETCH_PROFILE_DATA_FAILURE:
-        return { ...state, error: action.error, isFetching: false };
-    default:
-        return state;
-    }
-};
+    const {
+        type, timelineData, error, payload,
+    } = action;
 
-export const handleModalReducer = (state = initialState, action) => {
-    const { type } = action;
-    const { TOGGLE_MODAL } = actionTypes;
     const { isOpen } = state;
 
     switch (type) {
+    case FETCH_PROFILE_REQUEST:
+        return { ...state, isFetching: true };
+    case FETCH_PROFILE_DATA_SUCCESS:
+        return { ...state, isFetching: false, timelineData };
+    case FETCH_PROFILE_DATA_FAILURE:
+        return { ...state, error, isFetching: false };
     case TOGGLE_MODAL:
         return { ...state, isOpen: !isOpen };
-    default:
-        return state;
-    }
-};
-
-export const updateStatus = (state = initialState, action) => {
-    const { type, payload } = action;
-    const { UPDATE_STATUS } = actionTypes;
-
-    switch (type) {
+    case ADD_POST_TO_TIMELINE:
+        return payload.post !== '' ? { ...state, timelineData: [payload, ...state.timelineData] } : state;
     case UPDATE_STATUS:
-        return { ...state, statusField: payload };
+        return { ...state, statusValue: payload };
+    case CLEAR_STATUS_FIELD:
+        return { ...state, statusValue: '' };
     default:
         return state;
     }
