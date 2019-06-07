@@ -51,8 +51,8 @@ nextApp.prepare().then(() => {
 
     // Routes Middleware
     app.use('/api/users', users);
-    app.use('/api/profile', profile);
-    app.use('/api/topic', topic);
+    app.use('/api/profiles', profile);
+    app.use('/api/topics', topic);
 
     // next should handle all other routes except the ones specified.
     app.get('*', (req, res) => handle(req, res));

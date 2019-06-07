@@ -17,7 +17,10 @@ router.post('/', async (req, res) => {
 
     // Check Validation
     if (!isValid) {
-        return res.status(400).json(errors);
+        return res.json({
+            message: errors,
+            status: 'error',
+        });
     }
 
     // check if user profile exists
@@ -25,7 +28,10 @@ router.post('/', async (req, res) => {
     const user = await Profile.findOne({ email });
 
     if (user) {
-        return res.status(400).json({ message: `${email} already exist` });
+        return res.json({
+            message: `${email} already exist`,
+            status: 'error',
+        });
     }
     // create new profile
     const profile = new Profile({
@@ -39,8 +45,8 @@ router.post('/', async (req, res) => {
     try {
         const newProfile = await profile.save();
         return res.json({
-            message: 'profile successfully created',
-            profile: newProfile,
+            data: { newProfile },
+            status: 'success',
         });
     } catch (err) {
         return err;
@@ -52,11 +58,15 @@ router.get('/', async (req, res) => {
     try {
         const profiles = await Profile.find();
         if (!profiles) {
-            return res.status(404).json({
+            return res.json({
                 message: 'No Profile found',
+                status: 'error',
             });
         }
-        return res.json(profiles);
+        return res.json({
+            data: { profiles },
+            status: 'success',
+        });
     } catch (err) {
         return err;
     }
@@ -68,8 +78,9 @@ router.get('/:profileId', async (req, res) => {
     try {
         const profile = await Profile.findById(profileId);
         if (!profile) {
-            return res.status(404).json({
+            return res.json({
                 message: `Profile not found with id ${profileId}`,
+                status: 'error',
             });
         }
         return res.json(profile);
@@ -77,6 +88,7 @@ router.get('/:profileId', async (req, res) => {
         if (err.kind === 'ObjectId') {
             return res.json({
                 message: `Profile not found with id ${profileId}`,
+                status: 'error',
             });
         }
     }
@@ -95,7 +107,10 @@ router.put('/:profileId', async (req, res) => {
 
     // Check Validation
     if (!isValid) {
-        return res.status(400).json(errors);
+        return res.json({
+            message: errors,
+            status: 'error',
+        });
     }
     const profile = new Profile({
         city,
@@ -108,13 +123,18 @@ router.put('/:profileId', async (req, res) => {
         const updatedProfile = await Profile.findByIdAndUpdate(profileId, profile, { new: true });
         if (!updatedProfile) {
             return res.json({
-                message: `Profile not found with id ${profileId}`,
+                message: `Error updating profile with id ${profileId}`,
+                status: 'error',
             });
         }
-        return res.json(updatedProfile);
+        return res.json({
+            data: { updatedProfile },
+            status: 'success',
+        });
     } catch (err) {
-        return res.status(500).json({
+        return res.json({
             message: `Error updating profile with id ${profileId}`,
+            status: 'error',
         });
     }
 });
@@ -127,9 +147,13 @@ router.delete('/:profileId', async (req, res) => {
         if (!profile) {
             return res.json({
                 message: `Profile not found with id ${profileId}`,
+                status: 'error',
             });
         }
-        return res.json({ message: 'Profile deleted successfully!' });
+        return res.json({
+            data: null,
+            status: 'success',
+        });
     } catch (err) {
         return err;
     }
