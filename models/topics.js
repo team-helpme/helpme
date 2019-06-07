@@ -9,6 +9,10 @@ const topicSchema = new mongoose.Schema({
         required: 'Forum topic Should have a valid User!',
         type: mongoose.Schema.ObjectId,
     },
+    comments: {
+        default: 0,
+        type: Number,
+    },
     content: {
         required: 'Content cannot be empty',
         trim: true,
@@ -18,11 +22,19 @@ const topicSchema = new mongoose.Schema({
         default: Date.now,
         type: Date,
     },
+    likes: {
+        default: 0,
+        type: Number,
+    },
     tags: [String],
     title: {
         require: 'Please enter a Title for the Forum topic!',
         trim: true,
         type: String,
+    },
+    views: {
+        default: 0,
+        type: Number,
     },
 });
 // Define Our Indexes for quick queries and searches
