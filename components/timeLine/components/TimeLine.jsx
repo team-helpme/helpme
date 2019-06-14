@@ -44,6 +44,8 @@ const { PageLayout } = components;
  * @return {Object} returns the TimeLine component
  */
 class TimeLine extends React.Component {
+
+
 state ={
     commentValue: '',
     isModalOpen: false,
@@ -51,6 +53,7 @@ state ={
 }
 
 componentDidMount() {
+    console.log(this.props.auth);
     const { loadTimeLineData, loadOnlineFriendsData } = this.props;
     loadTimeLineData();
     loadOnlineFriendsData();

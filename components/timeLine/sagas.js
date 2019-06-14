@@ -6,7 +6,7 @@ import {
     setTimeLineError, setTimeLineData, setOnlineFriendsData, setOnlineFriendsError
 } from './actions';
 
-const TIMELINE_DATA_URL = '../../static/data/timelineData.json';
+const TIMELINE_DATA_URL = '/api/posts';
 const PROFILE_URL = '../../../static/data/profiles.json';
 const {
     REQUEST_LOAD_TIMELINE_DATA,
