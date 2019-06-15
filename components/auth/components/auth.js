@@ -1,47 +1,114 @@
-import jwtDecode from 'jwt-decode';
-import Cookie from 'js-cookie';
+import auth0 from 'auth0-js';
+import Router from 'next/router';
 
-// The code above sets and unsets a cookie with the token gotten from the Auth0 server.
+export default class Auth {
+	auth0 = new auth0.WebAuth({
+	    domain: 'teamhelpme.auth0.com',
+	    clientID: 'Jok9xa6Ucl4IgigMnTIMeDiwxiyWNb19',
+	    redirectUri: 'http://localhost:3000/auth/signed-in',
+	    responseType: 'token id_token',
+	    scope: 'openid profile email',
+	  });
 
-const getQueryParams = () => {
-    const params = {};
-    window.location.href.replace(/([^(?|#)=&]+)(=([^&]*))?/g, ($0, $1, $2, $3) => {
-        params[$1] = $3;
-    });
-    return params;
-};
+	  userProfile = {}
 
-export const setToken = (idToken, accessToken) => {
-    if (!process.browser) {
-        return;
-    }
-    Cookie.set('user', jwtDecode(idToken));
-    Cookie.set('idToken', idToken);
-    Cookie.set('accessToken', accessToken);
-};
+	  constructor() {
+	    this.login = this.login.bind(this);
+	    this.logout = this.logout.bind(this);
+	    this.handleAuthentication = this.handleAuthentication.bind(this);
+	    this.isAuthenticated = this.isAuthenticated.bind(this);
+	    this.getAccessToken = this.getAccessToken.bind(this);
+	      this.getProfile = this.getProfile.bind(this);
+	      this.setSession = this.setSession.bind(this);
+	  }
 
-export const unsetToken = () => {
-    if (!process.browser) {
-        return;
-    }
-    Cookie.remove('idToken');
-    Cookie.remove('accessToken');
-    Cookie.remove('user');
+	  login() {
+	    this.auth0.authorize();
+	  }
 
-    // to support logging out from all windows
-    window.localStorage.setItem('logout', Date.now());
-};
+	  // ...
 
-export const getUserFromServerCookie = req => {
-    if (!req.headers.cookie) {
-        return undefined;
-    }
-    const jwtCookie = req.headers.cookie.split(';').find(c => c.trim().startsWith('idToken='));
-    if (!jwtCookie) {
-        return undefined;
-    }
-    const jwt = jwtCookie.split('=')[1];
-    return jwtDecode(jwt);
-};
+	  handleAuthentication() {
+	    this.auth0.parseHash((err, authResult) => {
+	        if (authResult && authResult.accessToken && authResult.idToken) {
+	            this.setSession(authResult);
+	            this.getProfile();
+	        } else if (err) {
+	  Router.push('/auth/auth-check');
+	            console.log(err);
+	            alert(`Error: ${err.error}. Check the console for further details.`);
+	        }
+	    });
+	  }
 
-export const getUserFromLocalCookie = () => Cookie.getJSON('user');
+	  getAccessToken() {
+	    return this.accessToken;
+	  }
+
+	  getIdToken() {
+	    return this.idToken;
+	  }
+
+	  setSession(authResult) {
+	    // Set isLoggedIn flag in localStorage
+	    localStorage.setItem('isLoggedIn', 'true');
+
+	    // Set the time that the Access Token will expire at
+	    const expiresAt = (authResult.expiresIn * 1000) + new Date().getTime();
+	    localStorage.setItem('access_token', authResult.accessToken);
+	    localStorage.setItem('id_token', authResult.idToken);
+	    localStorage.setItem('expires_at', expiresAt);
+
+	    // navigate to the home route
+	  Router.push('/timeline');
+	  }
+
+	  // renewSession() {
+	  //     this.auth0.checkSession({}, (err, authResult) => {
+	  //         if (authResult && authResult.accessToken && authResult.idToken) {
+	  //             this.setSession(authResult);
+	  //         } else if (err) {
+	  //             this.logout();
+	  //             console.log(err);
+	  //             alert(`Could not get a new token (${err.error}: ${err.error_description}).`);
+	  //         }
+	  //     });
+	  // }
+
+	  logout() {
+	    // Remove tokens and expiry time
+	    this.accessToken = null;
+	    this.idToken = null;
+	    this.expiresAt = 0;
+
+	    // Remove isLoggedIn flag from localStorage
+	    localStorage.removeItem('isLoggedIn');
+	    // Clear access token and ID token from local storage
+	    localStorage.removeItem('access_token');
+	    localStorage.removeItem('id_token');
+	    localStorage.removeItem('expires_at');
+	    this.userProfile = null;
+	    console.log('Logged Out');
+	    // navigate to the home route
+	    Router.push('/');
+	  }
+
+	  getProfile() {
+	    const accessToken = this.getAccessToken();
+	    if (accessToken) {
+		  this.auth0.client.userInfo(accessToken, (err, profile) => {
+	            if (profile) {
+			  this.userProfile = { profile };
+			  console.log(this.userProfile);
+			 }
+		   });
+		 }
+	   }
+
+	   isAuthenticated() {
+	    // Check whether the current time is past the
+	    // access token's expiry time
+	    const expiresAt = JSON.parse(localStorage.getItem('expires_at'));
+	    return new Date().getTime() < expiresAt;
+	  }
+}

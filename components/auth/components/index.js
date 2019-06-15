@@ -1,10 +1,11 @@
+import 'antd/dist/antd.css';
+// import './LandingPage.css';
 import {
     authorize, logout, parseHash, getBaseUrl
 } from './auth0';
-import {
-    setToken, unsetToken, getUserFromServerCookie, getUserFromLocalCookie
-} from './auth';
+import Authentication from './Authentication';
 
 export {
-    authorize, logout, parseHash, setToken, unsetToken, getUserFromServerCookie, getUserFromLocalCookie, getBaseUrl
+    authorize, logout, parseHash,
+    getBaseUrl, Authentication
 };

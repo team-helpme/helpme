@@ -1,12 +1,11 @@
 // The code above makes a request to Auth0 server to initiate and authorize a user.
 
 const getAuth0 = options => {
-    const config = require('../../../.env');
     const auth0 = require('auth0-js');
 
     return new auth0.WebAuth({
-        clientID: config.AUTH0_CLIENT_ID,
-        domain: config.AUTH0_CLIENT_DOMAIN,
+        clientID: process.env.AUTH0_CLIENT_ID,
+        domain: 'teamhelpme.auth0.com',
     });
 };
 

@@ -27,7 +27,7 @@ const { Search } = Input;
  */
 function NavHeader(props) {
     const {
-        handleSearch, searchValue, title, selectedKey, isAuthenticated,
+        handleSearch, searchValue, title, selectedKey, isAuthenticated, handleLogin,
     } = props;
 
     return (
@@ -46,9 +46,9 @@ function NavHeader(props) {
                 {/* hide when authenticated */}
                 {isAuthenticated ? null : (
                     <Button className="LandingPage_login_button" type="primary">
-                        <Link href={LOGIN_LINK}>
-                            <a>{LOGIN}</a>
-                        </Link>
+                        {/* <Link href={LOGIN_LINK}> */}
+                        {LOGIN}
+                        {/* </Link> */}
                     </Button>
                 )}
             </Header>
@@ -98,12 +98,13 @@ function NavHeader(props) {
                 <Button
                     className="LandingPage_login_button"
                     type={isAuthenticated ? 'danger' : 'primary'}
+                    onClick={handleLogin}
                 >
-                    <Link href={isAuthenticated ? LOGOUT_LINK : LOGIN_LINK}>
-                        <a>
-                            { isAuthenticated ? LOGOUT : LOGIN }
-                        </a>
-                    </Link>
+                    {/* <Link href={isAuthenticated ? LOGOUT_LINK : LOGIN_LINK}> */}
+                    {/* <a> */}
+                    { isAuthenticated ? LOGOUT : LOGIN }
+                    {/* </a> */}
+                    {/* </Link> */}
                 </Button>
             </Header>
         </>

@@ -3,6 +3,7 @@ import { Layout } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 
+import Auth from '../../auth/components/auth';
 import NavHeader from './NavHeader';
 import PageFooter from './PageFooter';
 import Sidebar from './Sidebar';
@@ -21,32 +22,58 @@ const { HEADER_TITLE } = STRINGS;
  * @param {Function} isSiderPresent  displays side for mobile pages
  * @return {Object} control the over all layout of the webpage
  */
-export default function PageLayout(props) {
-    const {
-        title, isAuthenticated, children, isFooterPresent,
-        isSiderPresent, handleSearch, searchValue, selectedKey,
-    } = props;
-    return (
-        <>
-            <Layout className="LandingPage_layout">
-                <NavHeader
-                    title={title || HEADER_TITLE}
-                    isAuthenticated={isAuthenticated}
-                    handleSearch={null || handleSearch}
-                    searchValue={searchValue}
-                    selectedKey={selectedKey}
-                />
-                <Content className="PageLayout_body">
-                    <Layout hasSider className="PageLayout_content_sidebar">
-                        <Sidebar isSiderPresent={isSiderPresent} selectedKey={selectedKey} />
-                        <Content className="PageLayout_content">{children}</Content>
-                    </Layout>
-                </Content>
-                {isFooterPresent ? <PageFooter /> : null}
-            </Layout>
-        </>
-    );
+
+const auth = new Auth();
+
+class PageLayout extends React.Component {
+    // goTo(route) {
+    //     this.props.history.replace(`/${route}`);
+    // }
+
+    login() {
+        auth.login();
+    }
+
+    logout() {
+        auth.logout();
+    }
+
+    componentDidMount() {
+        console.log(this.props);
+    }
+
+    render() {
+        const {
+            title, isAuthenticated, children, isFooterPresent,
+            isSiderPresent, handleSearch, searchValue, selectedKey,
+        } = this.props;
+
+        return (
+            <>
+                <Layout className="LandingPage_layout">
+                    <NavHeader
+                        title={title || HEADER_TITLE}
+                        isAuthenticated={isAuthenticated}
+                        handleSearch={null || handleSearch}
+                        searchValue={searchValue}
+                        selectedKey={selectedKey}
+                        handleLogin={this.login}
+                    />
+                    <Content className="PageLayout_body">
+                        <Layout hasSider className="PageLayout_content_sidebar">
+                            <Sidebar isSiderPresent={isSiderPresent} selectedKey={selectedKey} />
+                            <Content className="PageLayout_content">{children}</Content>
+                        </Layout>
+                    </Content>
+                    {isFooterPresent ? <PageFooter /> : null}
+                </Layout>
+            </>
+        );
+    }
 }
+
+export default PageLayout;
+
 PageLayout.propTypes = {
     children: PropTypes.node,
     handleSearch: PropTypes.func,
