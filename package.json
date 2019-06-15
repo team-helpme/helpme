@@ -7,9 +7,9 @@
     "test": "jest",
     "lint": "eslint --ext .js --ext .jsx . --fix",
     "dev": "node server/index.js",
-    "build": "next build -p $PORT",
+    "build": "next build",
     "heroku-postbuild": "npm run build",
-    "start": "next start"
+    "start": "next start -p $PORT"
   },
   "repository": {
     "type": "git",
