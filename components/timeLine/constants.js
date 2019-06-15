@@ -68,9 +68,32 @@ export const STRINGS = {
     inventore, iste dignissimos laudantium! Veniam.`,
 };
 
-export const USER_PROFILE = {
-    followers: 445,
-    following: 234,
-    image: 'https://robohash.org/temporeinventorererum.bmp?size=50x50&set=set1',
-    name: 'Baba Rahman',
-};
+export const PROFILE_INPUTS = [
+    {
+        id: 'firstName',
+        label: 'First Name',
+        placeholder: 'Whats your first Name',
+    },
+    {
+        id: 'lastName',
+        label: 'LastName',
+        placeholder: 'input your Last name',
+    },
+    {
+        id: 'city',
+        label: 'City',
+        placeholder: 'input your City',
+    },
+    {
+        id: 'country',
+        label: 'Country',
+        placeholder: 'input your Country',
+
+    },
+    {
+        id: 'bio',
+        label: 'Bio',
+        placeholder: 'input your bio',
+        type: 'textArea',
+    },
+];

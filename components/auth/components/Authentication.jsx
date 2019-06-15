@@ -3,7 +3,8 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
-
+import Router from 'next/router';
+import Auth from './auth';
 import {
     getProfile,
     loginFailure,
@@ -14,16 +15,26 @@ import {
     getUserProfile
 } from '../selectors';
 
+const auth = new Auth();
 class Authentication extends PureComponent {
     componentDidMount() {
-        this.props.getProfile();
+        const { isAuthenticated, userProfile } = auth;
+        const { loginSuccess, loginFailure, getProfile } = this.props;
+        console.log(this.props.loginSuccess);
+        if (isAuthenticated()) {
+            loginSuccess();
+            getProfile(auth.getProfile());
+            Router.push('/timeline');
+        } else if (!auth.isAuthenticated()) {
+            loginFailure();
+            auth.login();
+        }
     }
 
     render() {
-        console.log(this.props);
         return (
             <div>
-                Authenticating you ....
+                signing you in .....
             </div>
         );
     }

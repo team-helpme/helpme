@@ -4,6 +4,8 @@ import { connect } from 'react-redux';
 import { Divider, Icon } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
+import Router from 'next/router';
+import Auth from '../../auth/components/auth';
 
 import {
     commentButtonClicked,
@@ -16,7 +18,10 @@ import {
     setOnlineFriendsData,
     setOnlineFriendsError,
     loadOnlineFriendsData,
-    setTimeLineError
+    setTimeLineError,
+    postProfileDataToDatabase,
+    postProfileDataToDatabaseSuccess,
+    postProfileDataToDatabaseError
 } from '../actions';
 import { components } from '../../layout';
 import { CreatePostComponent } from './CreatePostComponent';
@@ -27,7 +32,8 @@ import {
     getIsOnlineFriendsFetching,
     getIsTimelineFetching,
     getOnlineFriendsData,
-    getTimelineData
+    getTimelineData,
+    getUserProfile
 } from '../selectors';
 import TimeLinePosts from './TimeLinePosts';
 import TimeLinePopularTopic from './TimeLinePopularTopic';
@@ -37,6 +43,7 @@ import { STRINGS } from '../constants';
 
 const { CREATE_POST_PLACEHOLDER, TIMELINE_TITLE } = STRINGS;
 const { PageLayout } = components;
+const auth = new Auth();
 
 /** Helper function that is used to render the TimeLine Component
  * @class TimeLine
@@ -44,16 +51,25 @@ const { PageLayout } = components;
  * @return {Object} returns the TimeLine component
  */
 class TimeLine extends React.Component {
-
-
 state ={
     commentValue: '',
     isModalOpen: false,
     statusValue: '',
+    userData: {},
+    isFormModalOpen: false,
 }
 
 componentDidMount() {
-    console.log(this.props.auth);
+    if (!auth.isAuthenticated()) {
+        Router.push('/api/users/login');
+    }
+
+    const ProfileData = JSON.parse(localStorage.getItem('profile'));
+    const userData = { ...ProfileData.profile, id: ProfileData.profile.sub.substring(6) };
+    this.setState({
+        userData,
+    });
+
     const { loadTimeLineData, loadOnlineFriendsData } = this.props;
     loadTimeLineData();
     loadOnlineFriendsData();
@@ -154,11 +170,52 @@ componentDidMount() {
         });
     }
 
+      handleTextChange = e => {
+          this.setState(
+              {
+                  [e.target.name]: e.target.value,
+              }
+          );
+      }
+
+    handlePostSubmit = e => {
+        const {
+            userData,
+            firstName,
+            lastName,
+            city,
+            country,
+            bio,
+        } = this.state;
+        const { email } = userData;
+        const { postProfileDataToDatabase } = this.props;
+        const body = {
+            bio,
+            city,
+            country,
+            email,
+            firstName,
+            lastName,
+        };
+        // const data = JSON.stringify(body);
+        postProfileDataToDatabase(body);
+        this.FormModalHandler();
+    };
+
+    FormModalHandler = () => {
+        const { isFormModalOpen } = this.state;
+        this.setState({
+            isFormModalOpen: !isFormModalOpen,
+        });
+    };
+
     render() {
         const {
             timelineData, isTimelineFetching, onlineFriendsData, isOnlineFriendsFetching,
         } = this.props;
-        const { commentValue, isModalOpen, statusValue } = this.state;
+        const {
+            commentValue, isModalOpen, statusValue, userData,
+        } = this.state;
 
         return (
             <PageLayout
@@ -186,7 +243,13 @@ componentDidMount() {
                     </section>
 
                     {/* profile info desktop */}
-                    <TimeLineProfileInfo />
+                    <TimeLineProfileInfo
+                        profile={userData}
+                        handleOk={this.handlePostSubmit}
+                        isFormModalOpen={this.state.isFormModalOpen}
+                        handleModal={this.FormModalHandler}
+                        handleTextChange={this.handleTextChange}
+                    />
                     {/* popular topics aside */}
                     <TimeLinePopularTopic />
                     {/* online friends aside tab */}
@@ -245,10 +308,14 @@ const timeLineActions = {
     likeButtonClicked,
     loadOnlineFriendsData,
     loadTimeLineData,
+    postProfileDataToDatabase,
+    postProfileDataToDatabaseError,
+    postProfileDataToDatabaseSuccess,
     setOnlineFriendsData,
     setOnlineFriendsError,
     setTimeLineData,
     setTimeLineError,
+
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators(timeLineActions, dispatch);

@@ -1,7 +1,7 @@
-export const LOGIN_FAILURE = 'LOGIN_FAILURE';
+const actionTypes = {
+    GET_PROFILE: 'GET_PROFILE',
+    LOGIN_FAILURE: 'LOGIN_FAILURE',
+    LOGIN_SUCCESS: 'LOGIN_SUCCESS',
+};
 
-export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
-
-export const GET_PROFILE = 'GET_PROFILE';
-
-export const REMOVE_PROFILE = 'REMOVE_PROFILE';
+export default actionTypes;

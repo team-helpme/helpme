@@ -31,84 +31,62 @@ export default class Auth {
 	  handleAuthentication() {
 	    this.auth0.parseHash((err, authResult) => {
 	        if (authResult && authResult.accessToken && authResult.idToken) {
-	            this.setSession(authResult);
-	            this.getProfile();
+				  this.setSession(authResult);
+				  this.getProfile(authResult.accessToken);
 	        } else if (err) {
-	  Router.push('/auth/auth-check');
+	  this.login();
 	            console.log(err);
 	            alert(`Error: ${err.error}. Check the console for further details.`);
 	        }
 	    });
 	  }
 
-	  getAccessToken() {
-	    return this.accessToken;
-	  }
-
-	  getIdToken() {
-	    return this.idToken;
-	  }
-
 	  setSession(authResult) {
-	    // Set isLoggedIn flag in localStorage
-	    localStorage.setItem('isLoggedIn', 'true');
-
-	    // Set the time that the Access Token will expire at
-	    const expiresAt = (authResult.expiresIn * 1000) + new Date().getTime();
-	    localStorage.setItem('access_token', authResult.accessToken);
-	    localStorage.setItem('id_token', authResult.idToken);
-	    localStorage.setItem('expires_at', expiresAt);
-
-	    // navigate to the home route
-	  Router.push('/timeline');
+	      // Set the time that the access token will expire at
+	      const expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
+	      localStorage.setItem('access_token', authResult.accessToken);
+	      localStorage.setItem('id_token', authResult.idToken);
+	      localStorage.setItem('expires_at', expiresAt);
+	      // navigate to the home route
 	  }
-
-	  // renewSession() {
-	  //     this.auth0.checkSession({}, (err, authResult) => {
-	  //         if (authResult && authResult.accessToken && authResult.idToken) {
-	  //             this.setSession(authResult);
-	  //         } else if (err) {
-	  //             this.logout();
-	  //             console.log(err);
-	  //             alert(`Could not get a new token (${err.error}: ${err.error_description}).`);
-	  //         }
-	  //     });
-	  // }
 
 	  logout() {
-	    // Remove tokens and expiry time
-	    this.accessToken = null;
-	    this.idToken = null;
-	    this.expiresAt = 0;
-
-	    // Remove isLoggedIn flag from localStorage
-	    localStorage.removeItem('isLoggedIn');
-	    // Clear access token and ID token from local storage
-	    localStorage.removeItem('access_token');
-	    localStorage.removeItem('id_token');
-	    localStorage.removeItem('expires_at');
-	    this.userProfile = null;
-	    console.log('Logged Out');
-	    // navigate to the home route
-	    Router.push('/');
+	      // Clear access token and ID token from local storage
+	      localStorage.removeItem('access_token');
+	      localStorage.removeItem('id_token');
+		  localStorage.removeItem('expires_at');
+		  localStorage.removeItem('profile');
+	      this.userProfile = null;
+	      console.log('Logged Out');
+	      // navigate to the home route
+	      Router.push('/');
 	  }
 
+	  getAccessToken() {
+	      if (localStorage.getItem('access_token')) {
+		  const accessToken = localStorage.getItem('access_token');
+		  return accessToken;
+	      }
+		  console.log('No accessToken');
+		  return null;
+	   }
+
 	  getProfile() {
-	    const accessToken = this.getAccessToken();
-	    if (accessToken) {
+	      const accessToken = this.getAccessToken();
+	      if (accessToken) {
 		  this.auth0.client.userInfo(accessToken, (err, profile) => {
-	            if (profile) {
+	              if (profile) {
 			  this.userProfile = { profile };
-			  console.log(this.userProfile);
+			  localStorage.setItem('profile', JSON.stringify(this.userProfile));
 			 }
 		   });
 		 }
 	   }
 
-	   isAuthenticated() {
-	    // Check whether the current time is past the
-	    // access token's expiry time
-	    const expiresAt = JSON.parse(localStorage.getItem('expires_at'));
-	    return new Date().getTime() < expiresAt;
+	  isAuthenticated() {
+	      // Check whether the current time is past the
+	      // access token's expiry time
+	      const expiresAt = JSON.parse(localStorage.getItem('expires_at'));
+	      return new Date().getTime() < expiresAt;
 	  }
 }

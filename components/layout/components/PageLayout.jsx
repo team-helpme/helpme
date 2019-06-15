@@ -2,8 +2,8 @@
 import { Layout } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
-
 import Auth from '../../auth/components/auth';
+
 import NavHeader from './NavHeader';
 import PageFooter from './PageFooter';
 import Sidebar from './Sidebar';
@@ -22,13 +22,12 @@ const { HEADER_TITLE } = STRINGS;
  * @param {Function} isSiderPresent  displays side for mobile pages
  * @return {Object} control the over all layout of the webpage
  */
-
 const auth = new Auth();
 
 class PageLayout extends React.Component {
-    // goTo(route) {
-    //     this.props.history.replace(`/${route}`);
-    // }
+    state= {
+        isAuthenticated: false,
+    }
 
     login() {
         auth.login();
@@ -39,12 +38,14 @@ class PageLayout extends React.Component {
     }
 
     componentDidMount() {
-        console.log(this.props);
+        this.setState({
+            isAuthenticated: auth.isAuthenticated(),
+        });
     }
 
     render() {
         const {
-            title, isAuthenticated, children, isFooterPresent,
+            title, children, isFooterPresent,
             isSiderPresent, handleSearch, searchValue, selectedKey,
         } = this.props;
 
@@ -53,19 +54,22 @@ class PageLayout extends React.Component {
                 <Layout className="LandingPage_layout">
                     <NavHeader
                         title={title || HEADER_TITLE}
-                        isAuthenticated={isAuthenticated}
+                        isAuthenticated={this.state.isAuthenticated}
                         handleSearch={null || handleSearch}
                         searchValue={searchValue}
                         selectedKey={selectedKey}
                         handleLogin={this.login}
+                        handleLogOut={this.logout}
                     />
                     <Content className="PageLayout_body">
                         <Layout hasSider className="PageLayout_content_sidebar">
                             <Sidebar isSiderPresent={isSiderPresent} selectedKey={selectedKey} />
-                            <Content className="PageLayout_content">{children}</Content>
+                            <Content className="PageLayout_content">
+                                {children}
+                                {isFooterPresent ? <PageFooter /> : null}
+                            </Content>
                         </Layout>
                     </Content>
-                    {isFooterPresent ? <PageFooter /> : null}
                 </Layout>
             </>
         );

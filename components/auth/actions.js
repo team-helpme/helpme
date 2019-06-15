@@ -1,8 +1,10 @@
-import {
+import actionTypes from './actionTypes';
+
+const {
     LOGIN_FAILURE,
     LOGIN_SUCCESS,
-    GET_PROFILE
-} from './actionTypes';
+    GET_PROFILE,
+} = actionTypes;
 
 export const loginFailure = () => ({
     type: LOGIN_FAILURE,

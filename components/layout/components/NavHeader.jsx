@@ -27,9 +27,8 @@ const { Search } = Input;
  */
 function NavHeader(props) {
     const {
-        handleSearch, searchValue, title, selectedKey, isAuthenticated, handleLogin,
+        handleSearch, searchValue, title, selectedKey, isAuthenticated, handleLogin, handleLogOut,
     } = props;
-
     return (
         <>
             {/* head parametes */}
@@ -38,23 +37,34 @@ function NavHeader(props) {
             </Head>
             {/* navheader for mobile */}
             <Header theme="light" className="layout_header-mobile">
-                <Link href={LOGIN_LINK}>
+                <Link href={isAuthenticated ? '/timeline' : LOGIN_LINK}>
                     <a>
                         <img src={HELPME_LOGO} alt={HELPME_LOGO_DESC} className="logo" />
                     </a>
                 </Link>
                 {/* hide when authenticated */}
                 {isAuthenticated ? null : (
-                    <Button className="LandingPage_login_button" type="primary">
+                    <Button
+                        className="LandingPage_login_button"
+                        onClick={isAuthenticated ? handleLogOut : handleLogin}
+                        type="primary"
+                    >
                         {/* <Link href={LOGIN_LINK}> */}
                         {LOGIN}
                         {/* </Link> */}
                     </Button>
+                //      <Button
+                //      className="LandingPage_login_button"
+                //      type={isAuthenticated ? 'danger' : 'primary'}
+                //      onClick={isAuthenticated ? handleLogOut : handleLogin}
+                //  >
+                //      { isAuthenticated ? LOGOUT : LOGIN }
+                //  </Button>
                 )}
             </Header>
             {/* header for desktop */}
             <Header theme="light" className="layout_header-desktop">
-                <Link href="/">
+                <Link href={isAuthenticated ? '/timeline' : LOGIN_LINK}>
                     <a>
                         <img src={HELPME_LOGO} alt={HELPME_LOGO_DESC} className="logo" />
                     </a>
@@ -84,6 +94,7 @@ function NavHeader(props) {
                             let { key, href, text } = menuItem;
                             if (key === 1) {
                                 href = isAuthenticated ? '/timeline' : '/';
+                                text = isAuthenticated ? 'TimeLine' : text;
                             }
                             return (
                                 <Menu.Item key={key}>
@@ -98,13 +109,9 @@ function NavHeader(props) {
                 <Button
                     className="LandingPage_login_button"
                     type={isAuthenticated ? 'danger' : 'primary'}
-                    onClick={handleLogin}
+                    onClick={isAuthenticated ? handleLogOut : handleLogin}
                 >
-                    {/* <Link href={isAuthenticated ? LOGOUT_LINK : LOGIN_LINK}> */}
-                    {/* <a> */}
                     { isAuthenticated ? LOGOUT : LOGIN }
-                    {/* </a> */}
-                    {/* </Link> */}
                 </Button>
             </Header>
         </>

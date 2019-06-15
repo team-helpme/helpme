@@ -1,8 +1,10 @@
-import {
+import actionTypes from './actionTypes';
+
+const {
+    GET_PROFILE,
     LOGIN_FAILURE,
     LOGIN_SUCCESS,
-    GET_PROFILE
-} from './actionTypes';
+} = actionTypes;
 
 const initialState = {
     isAuthenticated: false,
@@ -18,7 +20,8 @@ export default (state = initialState, action) => {
     case LOGIN_SUCCESS:
         return { ...state, isAuthenticated: true };
     case GET_PROFILE:
-        return { ...state, userProfile: payload };
+        console.log('payload', payload);
+        // return { ...state, userProfile: payload };
     default:
         return state;
     }
