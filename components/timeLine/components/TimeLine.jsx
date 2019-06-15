@@ -219,7 +219,7 @@ componentDidMount() {
 
         return (
             <PageLayout
-                isSiderPresent={timelineData.length > 0}
+                isSiderPresent={!isTimelineFetching}
                 isFooterPresent={false}
                 isAuthenticated
                 title={TIMELINE_TITLE}
