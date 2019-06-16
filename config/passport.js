@@ -2,7 +2,7 @@ const passport = require('passport');
 const Auth0Strategy = require('passport-auth0');
 const dotenv = require('dotenv');
 
-dotenv.config();
+dotenv.config({ silent: true });
 
 // Configure Passport to use Auth0
 const {

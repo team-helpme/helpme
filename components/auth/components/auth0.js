@@ -5,7 +5,7 @@ const getAuth0 = () => {
     const auth0 = require('auth0-js');
 
     return new auth0.WebAuth({
-        clientID: process.env.AUTH0_CLIENT_ID,
+        clientID: process.env.clientID,
         domain: 'teamhelpme.auth0.com',
     });
 };
