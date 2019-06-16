@@ -1,6 +1,7 @@
+/* eslint-disable global-require */
 // The code above makes a request to Auth0 server to initiate and authorize a user.
 
-const getAuth0 = options => {
+const getAuth0 = () => {
     const auth0 = require('auth0-js');
 
     return new auth0.WebAuth({
@@ -11,7 +12,7 @@ const getAuth0 = options => {
 
 export const getBaseUrl = () => `${window.location.protocol}//${window.location.host}`;
 
-const getOptions = container => ({
+const getOptions = () => ({
     redirectUri: `${getBaseUrl()}/auth/signed-in`,
     responseType: 'token id_token',
     scope: 'openid profile email',

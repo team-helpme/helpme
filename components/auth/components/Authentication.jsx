@@ -19,8 +19,8 @@ import {
 const auth = new Auth();
 class Authentication extends PureComponent {
     componentDidMount() {
-        const { isAuthenticated, userProfile } = auth;
-        const { loginSuccess, loginFailure, getUserProfile } = this.props;
+        const { isAuthenticated } = auth;
+        const { loginSuccess, loginFailure } = this.props;
         try {
             auth.handleAuthentication().then(() => {
                 if (isAuthenticated()) {
@@ -29,7 +29,6 @@ class Authentication extends PureComponent {
                 }
             });
         } catch (err) {
-            console.log('err', err);
             if (!auth.isAuthenticated()) {
                 loginFailure();
                 auth.login();
@@ -61,3 +60,8 @@ const authActions = {
 const mapDispatchToProps = dispatch => bindActionCreators(authActions, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Authentication);
+
+Authentication.propTypes = {
+    loginFailure: PropTypes.func.isRequired,
+    loginSuccess: PropTypes.func.isRequired,
+};

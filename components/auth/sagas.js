@@ -1,5 +1,5 @@
 import {
-    takeEvery, call, put
+    takeEvery, put
 } from 'redux-saga/effects';
 import actionTypes from './actionTypes';
 import {

@@ -29,18 +29,18 @@ class PageLayout extends React.Component {
         isAuthenticated: false,
     }
 
-    login() {
-        auth.login();
-    }
-
-    logout() {
-        auth.logout();
-    }
-
     componentDidMount() {
         this.setState({
             isAuthenticated: auth.isAuthenticated(),
         });
+    }
+
+    login = () => {
+        auth.login();
+    }
+
+    logout = () => {
+        auth.logout();
     }
 
     render() {
@@ -49,12 +49,14 @@ class PageLayout extends React.Component {
             isSiderPresent, handleSearch, searchValue, selectedKey,
         } = this.props;
 
+        const { isAuthenticated } = this.state;
+
         return (
             <>
                 <Layout className="LandingPage_layout">
                     <NavHeader
                         title={title || HEADER_TITLE}
-                        isAuthenticated={this.state.isAuthenticated}
+                        isAuthenticated={isAuthenticated}
                         handleSearch={null || handleSearch}
                         searchValue={searchValue}
                         selectedKey={selectedKey}
@@ -81,7 +83,6 @@ export default PageLayout;
 PageLayout.propTypes = {
     children: PropTypes.node,
     handleSearch: PropTypes.func,
-    isAuthenticated: PropTypes.bool,
     isFooterPresent: PropTypes.bool,
     isSiderPresent: PropTypes.bool,
     searchValue: PropTypes.string,

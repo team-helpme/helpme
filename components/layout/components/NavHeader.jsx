@@ -16,7 +16,7 @@ const {
 } = STRINGS;
 const { HELPME_LOGO } = IMAGE_URLS;
 const { HELPME_LOGO_DESC } = IMAGE_ALT;
-const { LOGIN_LINK, LOGOUT_LINK } = LINKS;
+const { LOGIN_LINK } = LINKS;
 const { Search } = Input;
 
 /**
@@ -53,13 +53,6 @@ function NavHeader(props) {
                         {LOGIN}
                         {/* </Link> */}
                     </Button>
-                //      <Button
-                //      className="LandingPage_login_button"
-                //      type={isAuthenticated ? 'danger' : 'primary'}
-                //      onClick={isAuthenticated ? handleLogOut : handleLogin}
-                //  >
-                //      { isAuthenticated ? LOGOUT : LOGIN }
-                //  </Button>
                 )}
             </Header>
             {/* header for desktop */}
@@ -127,6 +120,8 @@ function NavHeader(props) {
 }
 export default NavHeader;
 NavHeader.propTypes = {
+    handleLogOut: PropTypes.func.isRequired,
+    handleLogin: PropTypes.func.isRequired,
     handleSearch: PropTypes.func,
     isAuthenticated: PropTypes.bool.isRequired,
     searchValue: PropTypes.string,

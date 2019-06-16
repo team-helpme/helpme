@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types */
 /* eslint-disable no-shadow */
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
@@ -53,10 +54,10 @@ const auth = new Auth();
 class TimeLine extends React.Component {
 state ={
     commentValue: '',
+    isFormModalOpen: false,
     isModalOpen: false,
     statusValue: '',
     userData: {},
-    isFormModalOpen: false,
 }
 
 componentDidMount() {
@@ -78,7 +79,9 @@ componentDidUpdate(prevState, prevProps) {
         // we have to parse it because auth0 adds some strings to the profile data
         userData = { ...ProfileData.profile, id: ProfileData.profile.sub.substring(6) };
     }
-    // because of async, the profile data will not be available in the local storage until some time. so always check the local storage and compare with current user data state. but when the userdata changes in local storage, pull it and update state
+    // because of async, the profile data will not be available in the local storage until
+    // some time. so always check the local storage and compare with current user data state.
+    // but when the userdata changes in local storage, pull it and update state
     if (JSON.stringify(userData) !== JSON.stringify(prevProps.userData)) {
         this.handleGetProfileUpdate(userData);
     }
@@ -194,7 +197,7 @@ handleGetProfileUpdate = userData => {
           );
       }
 
-    handlePostSubmit = e => {
+    handlePostSubmit = () => {
         const {
             userData,
             firstName,
@@ -230,7 +233,7 @@ handleGetProfileUpdate = userData => {
             timelineData, isTimelineFetching, onlineFriendsData, isOnlineFriendsFetching,
         } = this.props;
         const {
-            commentValue, isModalOpen, statusValue, userData,
+            commentValue, isModalOpen, statusValue, userData, isFormModalOpen,
         } = this.state;
 
         return (
@@ -262,7 +265,7 @@ handleGetProfileUpdate = userData => {
                     <TimeLineProfileInfo
                         profile={userData}
                         handleOk={this.handlePostSubmit}
-                        isFormModalOpen={this.state.isFormModalOpen}
+                        isFormModalOpen={isFormModalOpen}
                         handleModal={this.FormModalHandler}
                         handleTextChange={this.handleTextChange}
                     />
@@ -353,6 +356,7 @@ TimeLine.propTypes = {
         name: PropTypes.string.isRequired,
         photo: PropTypes.string.isRequired,
     })).isRequired,
+    postProfileDataToDatabase: PropTypes.func.isRequired,
     timelineData: PropTypes.arrayOf(PropTypes.shape({
         avatar: PropTypes.string.isRequired,
         comment: PropTypes.number.isRequired,
@@ -362,8 +366,10 @@ TimeLine.propTypes = {
         likes: PropTypes.number.isRequired,
         post: PropTypes.string.isRequired,
     })).isRequired,
+    userData: PropTypes.object,
 };
 
 TimeLine.defaultProps = {
     isOnlineFriendsFetching: null,
+    userData: {},
 };

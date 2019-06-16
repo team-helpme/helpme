@@ -1,3 +1,4 @@
+/* eslint-disable react/forbid-prop-types */
 import {
     Divider, Button, Modal, Form, Input, Spin
 } from 'antd';
@@ -9,7 +10,7 @@ import {
 } from '../constants';
 
 const {
-    FOLLOWING, FOLLOWERS, USERS_BIO, AT,
+    FOLLOWING, FOLLOWERS, USERS_BIO, AT, COMPLETE_YOUR_PROFILE,
 } = STRINGS;
 
 class TimeLineProfileForm extends React.Component {
@@ -21,7 +22,8 @@ state = {
 componentDidUpdate(prevProps) {
     const { name } = this.state;
     const { profile } = prevProps;
-    if ((JSON.stringify(profile) !== '{}' && JSON.stringify(profile) !== undefined) && (profile.name !== name)) {
+    if ((JSON.stringify(profile) !== '{}' && JSON.stringify(profile) !== undefined)
+    && (profile.name !== name)) {
         this.handleGetProfileData(profile);
     }
 }
@@ -34,7 +36,10 @@ handleGetProfileData(profile) {
 
 render() {
     const { isProfilePresent } = this.state;
-    const { handleModal } = this.props;
+    const {
+        handleModal, isFormModalOpen,
+        handleOk, handleTextChange,
+    } = this.props;
     if (isProfilePresent) {
         const {
             picture,
@@ -56,16 +61,23 @@ render() {
                 </p>
                 {/* if the user does not have a bio, ask to complete the profile */}
                 {(!bio)
-                    ? <Button type="primary" onClick={handleModal}>Complete Your Profile</Button> : (
+                    ? (
+                        <Button
+                            type="primary"
+                            onClick={handleModal}
+                        >
+                            {COMPLETE_YOUR_PROFILE}
+                        </Button>
+                    ) : (
                         <>
                             <div className="user-followers-stat">
                                 <div className="users-follow-number">
-                                    <h3 className="count">{following}</h3>
+                                    <h3 className="count">{3}</h3>
                                     <p>{FOLLOWING}</p>
                                 </div>
                                 <Divider type="vertical" className="divider-height" />
                                 <div className="users-follow-number">
-                                    <h3 className="count">{followers}</h3>
+                                    <h3 className="count">{4}</h3>
                                     <p>{FOLLOWERS}</p>
                                 </div>
                             </div>
@@ -77,20 +89,24 @@ render() {
                 }
                 <Modal
                     title="Basic Modal"
-                    visible={this.props.isFormModalOpen}
-                    onOk={this.props.handleOk}
-                    onCancel={this.props.handleModal}
+                    visible={isFormModalOpen}
+                    onOk={handleOk}
+                    onCancel={handleModal}
                 >
                     <Form className="registration-form" onSubmit={this.handleSubmit}>
                         {
                             PROFILE_INPUTS.map(profile => {
                                 const {
-                                    id, label, placeholder, type,
+                                    id, label, placeholder,
                                 } = profile;
 
                                 return (
                                     <Form.Item label={label} key={id}>
-                                        <Input placeholder={placeholder} name={id} onChange={e => this.props.handleTextChange(e)} />
+                                        <Input
+                                            placeholder={placeholder}
+                                            name={id}
+                                            onChange={e => handleTextChange(e)}
+                                        />
                                     </Form.Item>
 
                                 );
@@ -115,10 +131,14 @@ const TimeLineProfileInfo = Form.create()(TimeLineProfileForm);
 
 export default TimeLineProfileInfo;
 
-TimeLineProfileInfo.propTypes = {
+TimeLineProfileForm.propTypes = {
     handleModal: PropTypes.func.isRequired,
     handleOk: PropTypes.func.isRequired,
     handleTextChange: PropTypes.func.isRequired,
     isFormModalOpen: PropTypes.bool.isRequired,
-    profile: PropTypes.obj,
+    profile: PropTypes.object,
+};
+
+TimeLineProfileForm.defaultProps = {
+    profile: {},
 };
