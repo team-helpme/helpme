@@ -29,15 +29,19 @@ export default class Auth {
 	  // ...
 
 	  handleAuthentication() {
-	    this.auth0.parseHash((err, authResult) => {
+	      return new Promise((resolve, reject) => {
+	          this.auth0.parseHash((err, authResult) => {
 	        if (authResult && authResult.accessToken && authResult.idToken) {
 				  this.setSession(authResult);
 				  this.getProfile(authResult.accessToken);
-	        } else if (err) {
-	  this.login();
-	            console.log(err);
-	            alert(`Error: ${err.error}. Check the console for further details.`);
-	        }
+				  return resolve();
+	        } if (err) {
+	              //   this.login();
+	                  console.log(err);
+	                  return reject();
+	              }
+	              return reject();
+	        });
 	    });
 	  }
 
@@ -46,8 +50,9 @@ export default class Auth {
 	      const expiresAt = JSON.stringify((authResult.expiresIn * 1000) + new Date().getTime());
 	      localStorage.setItem('access_token', authResult.accessToken);
 	      localStorage.setItem('id_token', authResult.idToken);
-	      localStorage.setItem('expires_at', expiresAt);
-	      // navigate to the home route
+		  localStorage.setItem('expires_at', expiresAt);
+		  // navigate to the home route
+		  this.getProfile();
 	  }
 
 	  logout() {
@@ -57,9 +62,8 @@ export default class Auth {
 		  localStorage.removeItem('expires_at');
 		  localStorage.removeItem('profile');
 	      this.userProfile = null;
-	      console.log('Logged Out');
 	      // navigate to the home route
-	      Router.push('/');
+	    //   Router.push('/');
 	  }
 
 	  getAccessToken() {

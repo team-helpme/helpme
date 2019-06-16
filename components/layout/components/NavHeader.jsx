@@ -111,7 +111,15 @@ function NavHeader(props) {
                     type={isAuthenticated ? 'danger' : 'primary'}
                     onClick={isAuthenticated ? handleLogOut : handleLogin}
                 >
-                    { isAuthenticated ? LOGOUT : LOGIN }
+                    {isAuthenticated
+                        ? (
+                            <Link href="/api/users/logout">
+                                <a>
+                                    {LOGOUT}
+                                </a>
+                            </Link>
+                        )
+                        : LOGIN}
                 </Button>
             </Header>
         </>

@@ -3,7 +3,7 @@ import actionTypes from './actionTypes';
 const {
     LOGIN_FAILURE,
     LOGIN_SUCCESS,
-    GET_PROFILE,
+    GET_USER_PROFILE,
 } = actionTypes;
 
 export const loginFailure = () => ({
@@ -14,7 +14,7 @@ export const loginSuccess = () => ({
     type: LOGIN_SUCCESS,
 });
 
-export const getProfile = payload => ({
+export const getUserProfile = payload => ({
     payload,
-    type: GET_PROFILE,
+    type: GET_USER_PROFILE,
 });

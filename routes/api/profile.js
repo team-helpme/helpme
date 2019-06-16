@@ -4,8 +4,6 @@ const router = express.Router();
 
 const Profile = require('../../models/profile.model');
 
-const secured = require('../../lib/middleware/secure');
-
 const validateInput = require('../../validation/profile');
 
 // Create a new Profile

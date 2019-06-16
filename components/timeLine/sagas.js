@@ -4,7 +4,6 @@ import {
 import actionTypes from './actionTypes';
 import {
     setTimeLineError, setTimeLineData, setOnlineFriendsData, setOnlineFriendsError,
-    postProfileDataToDatabaseSuccess,
     postProfileDataToDatabaseError
 } from './actions';
 

@@ -102,8 +102,12 @@ export default (state = initialState, action) => {
         });
         return { ...state, timelineData: [...newArray] };
     case POST_PROFILE_DATA_TO_DATABASE: return { ...state, isProfileUpdating: true };
-    case POST_PROFILE_DATA_TO_DATABASE_SUCCESS: return { ...state, isProfileUpdating: false, userProfile: payload };
-    case POST_PROFILE_DATA_TO_DATABASE_ERROR: return { ...state, isProfileUpdating: false, error: payload };
+
+    case POST_PROFILE_DATA_TO_DATABASE_SUCCESS:
+        return { ...state, isProfileUpdating: false, userProfile: payload };
+
+    case POST_PROFILE_DATA_TO_DATABASE_ERROR:
+        return { ...state, error: payload, isProfileUpdating: false };
 
     default:
         return state;

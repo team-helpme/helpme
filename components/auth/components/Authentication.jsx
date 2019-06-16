@@ -2,39 +2,46 @@
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import { Spin } from 'antd';
 import React, { PureComponent } from 'react';
 import Router from 'next/router';
 import Auth from './auth';
 import {
-    getProfile,
+    getUserProfile,
     loginFailure,
     loginSuccess
 } from '../actions';
 import {
     getIsAuthenticated,
-    getUserProfile
+    getUsersProfile
 } from '../selectors';
 
 const auth = new Auth();
 class Authentication extends PureComponent {
     componentDidMount() {
         const { isAuthenticated, userProfile } = auth;
-        const { loginSuccess, loginFailure, getProfile } = this.props;
-        console.log(this.props.loginSuccess);
-        if (isAuthenticated()) {
-            loginSuccess();
-            getProfile(auth.getProfile());
-            Router.push('/timeline');
-        } else if (!auth.isAuthenticated()) {
-            loginFailure();
-            auth.login();
+        const { loginSuccess, loginFailure, getUserProfile } = this.props;
+        try {
+            auth.handleAuthentication().then(() => {
+                if (isAuthenticated()) {
+                    loginSuccess();
+                    Router.push('/timeline');
+                }
+            });
+        } catch (err) {
+            console.log('err', err);
+            if (!auth.isAuthenticated()) {
+                loginFailure();
+                auth.login();
+            }
         }
     }
 
     render() {
         return (
-            <div>
-                signing you in .....
+
+            <div className="loading_Div">
+                <Spin tip="signing you in ..." size="large" />
             </div>
         );
     }
@@ -42,11 +49,11 @@ class Authentication extends PureComponent {
 
 const mapStateToProps = state => ({
     isAuthenticated: getIsAuthenticated(state),
-    userProfile: getUserProfile(state),
+    userProfile: getUsersProfile(state),
 });
 
 const authActions = {
-    getProfile,
+    getUserProfile,
     loginFailure,
     loginSuccess,
 };

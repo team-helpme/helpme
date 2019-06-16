@@ -1,5 +1,5 @@
 import 'antd/dist/antd.css';
-// import './LandingPage.css';
+import './Authentication.css';
 import {
     authorize, logout, parseHash, getBaseUrl
 } from './auth0';

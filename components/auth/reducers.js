@@ -1,14 +1,14 @@
 import actionTypes from './actionTypes';
 
 const {
-    GET_PROFILE,
+    GET_USER_PROFILE,
     LOGIN_FAILURE,
     LOGIN_SUCCESS,
 } = actionTypes;
 
 const initialState = {
     isAuthenticated: false,
-    userProfile: null,
+    usersProfile: null,
 };
 
 export default (state = initialState, action) => {
@@ -19,9 +19,8 @@ export default (state = initialState, action) => {
         return { ...state, isAuthenticated: false };
     case LOGIN_SUCCESS:
         return { ...state, isAuthenticated: true };
-    case GET_PROFILE:
-        console.log('payload', payload);
-        // return { ...state, userProfile: payload };
+    case GET_USER_PROFILE:
+        return { ...state, usersProfile: payload };
     default:
         return state;
     }

@@ -50,6 +50,7 @@ export const POPULAR_TOPIC = [
     },
 ];
 export const STRINGS = {
+    AT: '@',
     COMMENT_PLACEHOLDER: 'Write your reply',
     CREATE_POST_PLACEHOLDER: 'What is on your mind?',
     EMPTY_COMMENT: 'It seems very Lonely here, please add posts',
@@ -65,7 +66,8 @@ export const STRINGS = {
     TIMELINE_TITLE: 'Timeline | Find friends',
     TOGGLE_MODAL: 'TOGGLE_MODAL',
     USERS_BIO: `Lorem ipsum dolor sit amet consectetur adipisicing elit.Repellen dusharum odit
-    inventore, iste dignissimos laudantium! Veniam.`,
+	inventore, iste dignissimos laudantium! Veniam.`,
+
 };
 
 export const PROFILE_INPUTS = [

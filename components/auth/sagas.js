@@ -3,13 +3,13 @@ import {
 } from 'redux-saga/effects';
 import actionTypes from './actionTypes';
 import {
-    getProfile
+    getUserProfile
 } from './actions';
 
 const { LOGIN_SUCCESS } = actionTypes;
 
 function* handleGetUserProfile(payload) {
-    yield put(getProfile(payload));
+    yield put(getUserProfile(payload));
 }
 
 export default function* watchProfileDataLoad() {

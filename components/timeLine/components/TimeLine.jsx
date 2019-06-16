@@ -64,15 +64,31 @@ componentDidMount() {
         Router.push('/api/users/login');
     }
 
-    const ProfileData = JSON.parse(localStorage.getItem('profile'));
-    const userData = { ...ProfileData.profile, id: ProfileData.profile.sub.substring(6) };
-    this.setState({
-        userData,
-    });
-
     const { loadTimeLineData, loadOnlineFriendsData } = this.props;
     loadTimeLineData();
     loadOnlineFriendsData();
+}
+
+componentDidUpdate(prevState, prevProps) {
+    let ProfileData;
+    let userData;
+    // we need to get profileData from local storage
+    if (localStorage.profile) {
+        ProfileData = JSON.parse(localStorage.getItem('profile'));
+        // we have to parse it because auth0 adds some strings to the profile data
+        userData = { ...ProfileData.profile, id: ProfileData.profile.sub.substring(6) };
+    }
+    // because of async, the profile data will not be available in the local storage until some time. so always check the local storage and compare with current user data state. but when the userdata changes in local storage, pull it and update state
+    if (JSON.stringify(userData) !== JSON.stringify(prevProps.userData)) {
+        this.handleGetProfileUpdate(userData);
+    }
+}
+
+// handle seting userdata to store
+handleGetProfileUpdate = userData => {
+    this.setState({
+        userData,
+    });
 }
 
     /**
@@ -298,6 +314,7 @@ const mapStateToProps = state => ({
     onlineFriendsData: getOnlineFriendsData(state),
     onlineFriendsFetching: getIsOnlineFriendsFetching(state),
     timelineData: getTimelineData(state),
+    userProfile: getUserProfile(state),
 });
 
 const timeLineActions = {
