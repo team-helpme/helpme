@@ -37,7 +37,7 @@ export const setTimeLineError = payload => ({
     type: REQUEST_SET_TIMELINE_ERROR,
 });
 
-export const setTimeLineData = payload => ({
+export const setTimeLineData = ({ payload }) => ({
     payload,
     type: REQUEST_SET_TIMELINE_DATA_SUCCESS,
 });

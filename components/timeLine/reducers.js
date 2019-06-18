@@ -53,7 +53,7 @@ export default (state = initialState, action) => {
         return { ...state, isTimelineFetching: true };
 
     case REQUEST_SET_TIMELINE_DATA_SUCCESS:
-        return { ...state, isTimelineFetching: false, timelineData: payload.data.postFound };
+        return { ...state, isTimelineFetching: false, timelineData: payload.postFound };
 
     case REQUEST_SET_TIMELINE_ERROR:
         return { ...state, error: payload, isTimelineFetching: false };
