@@ -52,6 +52,8 @@ export const POPULAR_TOPIC = [
 export const STRINGS = {
     AT: '@',
     COMMENT_PLACEHOLDER: 'Write your reply',
+    COMPLETE_PROFILE_INSTRUCTION: `Please Complete your profile
+    before you can post to the timeline`,
     COMPLETE_YOUR_PROFILE: 'Complete Your Profile',
     CREATE_POST_PLACEHOLDER: 'What is on your mind?',
     EMPTY_COMMENT: 'It seems very Lonely here, please add posts',

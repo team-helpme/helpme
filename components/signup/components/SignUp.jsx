@@ -2,10 +2,11 @@
 /* eslint-disable no-shadow */
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Form, notification } from 'antd';
+import { Form } from 'antd';
 import Router from 'next/router';
 import PropTypes from 'prop-types';
 import React from 'react';
+import { openNotificationWithIcon } from '../utils';
 
 import {
     getError, getIsRegistering, getPayload, getSuccess
@@ -36,22 +37,13 @@ class RegistrationForm extends React.Component {
         const errorValue = error !== null ? Object.keys(error).map(key => error[key]) : null;
 
         if (prevProps.error !== error) {
-            this.openNotificationWithIcon('error', errorValue.toLocaleString());
+            openNotificationWithIcon('error', errorValue.toLocaleString());
         } else if (prevProps.success !== success) {
-            this.openNotificationWithIcon('success',
+            openNotificationWithIcon('success',
                 `Successfully created account for ${success.name}`);
             Router.push('/api/users/login');
         }
     }
-
-    // notification function
-     openNotificationWithIcon = (type, text) => {
-         notification[type]({
-             description:
-             text,
-             message: type,
-         });
-     };
 
     /**
     * function that is used to handle submit

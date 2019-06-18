@@ -1,11 +1,13 @@
 import { takeEvery, call, put } from 'redux-saga/effects';
 import actionTypes from './actionTypes';
 import {
+    setUsersProfile,
     setTimeLineError,
     setTimeLineData,
     setOnlineFriendsData,
     setOnlineFriendsError,
-    postProfileDataToDatabaseError
+    postProfileDataToDatabaseError,
+    postProfileDataToDatabaseSuccess
 } from './actions';
 
 const PROFILE_DATA_URL = '/api/profile';
@@ -15,7 +17,12 @@ const {
     REQUEST_LOAD_TIMELINE_DATA,
     REQUEST_LOAD_ONLINE_FRIENDS_DATA,
     POST_PROFILE_DATA_TO_DATABASE,
+    REQUEST_LOAD_USERS_PROFILE,
 } = actionTypes;
+
+function* handleSetUsersProfile({ payload }) {
+    yield put(setUsersProfile(payload));
+}
 
 function* handleTimeLineDataLoad() {
     const response = yield call(fetch, TIMELINE_DATA_URL);
@@ -46,15 +53,17 @@ function* handleProfileDataPost({ payload }) {
         method: 'POST',
     });
     const data = yield response.json();
-    if (response.ok) {
-        yield put(postProfileDataToDatabaseError(data));
+    const { status, message } = data;
+    if (status === 'success') {
+        yield put(postProfileDataToDatabaseSuccess(data));
     } else {
-        yield put(postProfileDataToDatabaseError(data));
+        yield put(postProfileDataToDatabaseError(message));
     }
 }
 
 // watcher
 export default function* watchTimelineDataLoad() {
+    yield takeEvery(REQUEST_LOAD_USERS_PROFILE, handleSetUsersProfile);
     yield takeEvery(REQUEST_LOAD_TIMELINE_DATA, handleTimeLineDataLoad);
     yield takeEvery(REQUEST_LOAD_ONLINE_FRIENDS_DATA, handleProfileDataLoad);
     yield takeEvery(POST_PROFILE_DATA_TO_DATABASE, handleProfileDataPost);

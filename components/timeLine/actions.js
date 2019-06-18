@@ -3,11 +3,13 @@ import actionTypes from './actionTypes';
 const {
     ADD_COMMENT_TO_POST,
     ADD_POST_TO_TIMELINE,
+    SET_USERS_PROFILE,
     POST_PROFILE_DATA_TO_DATABASE,
     POST_PROFILE_DATA_TO_DATABASE_SUCCESS,
     POST_PROFILE_DATA_TO_DATABASE_ERROR,
     REQUEST_SET_ONLINE_FRIENDS_ERROR,
     REQUEST_LOAD_ONLINE_FRIENDS_DATA,
+    REQUEST_LOAD_USERS_PROFILE,
     REQUEST_SET_ONLINE_FRIENDS_DATA,
     REQUEST_LOAD_TIMELINE_DATA,
     REQUEST_SET_TIMELINE_ERROR,
@@ -16,6 +18,15 @@ const {
     TOGGLE_COMMENT_BUTTON_CLICKED,
     TOGGLE_LIKE_BUTTON_CLICKED,
 } = actionTypes;
+
+export const loadUsersProfile = () => ({
+    type: REQUEST_LOAD_USERS_PROFILE,
+});
+
+export const setUsersProfile = payload => ({
+    payload,
+    type: SET_USERS_PROFILE,
+});
 
 export const loadTimeLineData = () => ({
     type: REQUEST_LOAD_TIMELINE_DATA,
