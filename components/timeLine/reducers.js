@@ -3,10 +3,9 @@ import actionTypes from './actionTypes';
 
 const {
     ADD_POST_TO_TIMELINE,
+    ADD_POST_TO_TIMELINE_FAILURE,
+    ADD_POST_TO_TIMELINE_SUCCESS,
     ADD_COMMENT_TO_POST,
-    GET_PROFILE_DATA_FROM_DATABASE,
-    GET_PROFILE_DATA_FROM_DATABASE_ERROR,
-    GET_PROFILE_DATA_FROM_DATABASE_SUCCESS,
     POST_PROFILE_DATA_TO_DATABASE,
     POST_PROFILE_DATA_TO_DATABASE_SUCCESS,
     POST_PROFILE_DATA_TO_DATABASE_ERROR,
@@ -63,30 +62,11 @@ export default (state = initialState, action) => {
             usersProfile: { ...payload, id: payload._id },
         };
 
-    case GET_PROFILE_DATA_FROM_DATABASE:
-        return {
-            ...state, isUserProfileFetching: true,
-        };
-
-    case GET_PROFILE_DATA_FROM_DATABASE_ERROR:
-        return {
-            ...state, error: payload, isUserProfileFetching: false,
-        };
-
-    case GET_PROFILE_DATA_FROM_DATABASE_SUCCESS:
-        return {
-            ...state,
-            isUserProfileComplete: true,
-            isUserProfileFetching: false,
-            isUserProfilePresent: true,
-            usersProfile: payload,
-        };
-
     case REQUEST_LOAD_TIMELINE_DATA:
         return { ...state, isTimelineFetching: true };
 
     case REQUEST_SET_TIMELINE_DATA_SUCCESS:
-        return { ...state, isTimelineFetching: false, timelineData: payload };
+        return { ...state, isTimelineFetching: false, timelineData: payload.postFound };
 
     case REQUEST_SET_TIMELINE_ERROR:
         return { ...state, error: payload, isTimelineFetching: false };

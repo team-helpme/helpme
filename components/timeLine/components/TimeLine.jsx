@@ -11,11 +11,8 @@ import React from 'react';
 import {
     commentButtonClicked,
     favButtonClicked,
-    getProfileDataFromDatabase,
-    getProfileDataFromDatabaseError,
-    getProfileDataFromDatabaseSuccess,
     handlePostComment,
-    handlePostUpdate,
+    addPostToTimeline,
     likeButtonClicked,
     loadOnlineFriendsData,
     loadTimeLineData,
@@ -130,13 +127,13 @@ componentDidUpdate(prevState) {
      */
     handleCreateStatus = () => {
         const {
-            handlePostUpdate, timelineData,
+            addPostToTimeline, timelineData,
         } = this.props;
 
         const { isModalOpen, statusValue } = this.state;
-
+        const { name, avatar } = this.props.profile;
         // // get post
-        handlePostUpdate(generateData(timelineData.length + 1, statusValue));
+        addPostToTimeline(statusValue);
 
         // close modal
         if (isModalOpen) {
@@ -304,7 +301,6 @@ componentDidUpdate(prevState) {
                         handleModal={this.FormModalHandler}
                         handleTextChange={this.handleTextChange}
                         loadUsersProfile={loadUsersProfile}
-                        getProfileDataFromDatabase={getProfileDataFromDatabase}
                     />
                     {/* popular topics aside */}
                     <TimeLinePopularTopic />
@@ -378,13 +374,10 @@ const mapStateToProps = state => ({
 });
 
 const timeLineActions = {
+    addPostToTimeline,
     commentButtonClicked,
     favButtonClicked,
-    getProfileDataFromDatabase,
-    getProfileDataFromDatabaseError,
-    getProfileDataFromDatabaseSuccess,
     handlePostComment,
-    handlePostUpdate,
     likeButtonClicked,
     loadOnlineFriendsData,
     loadTimeLineData,
@@ -404,11 +397,11 @@ const mapDispatchToProps = dispatch => bindActionCreators(timeLineActions, dispa
 export default connect(mapStateToProps, mapDispatchToProps)(TimeLine);
 
 TimeLine.propTypes = {
+    addPostToTimeline: PropTypes.func.isRequired,
     commentButtonClicked: PropTypes.func.isRequired,
     error: PropTypes.string,
     favButtonClicked: PropTypes.func.isRequired,
     handlePostComment: PropTypes.func.isRequired,
-    handlePostUpdate: PropTypes.func.isRequired,
     isOnlineFriendsFetching: PropTypes.bool,
     isTimelineFetching: PropTypes.bool.isRequired,
     isUserProfileComplete: PropTypes.bool.isRequired,

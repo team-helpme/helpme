@@ -19,6 +19,7 @@ const {
     REQUEST_LOAD_ONLINE_FRIENDS_DATA,
     POST_PROFILE_DATA_TO_DATABASE,
     REQUEST_LOAD_USERS_PROFILE,
+    ADD_POST_TO_TIMELINE,
 } = actionTypes;
 
 function* handleSetUsersProfile({ payload }) {
@@ -70,10 +71,29 @@ function* handleProfileDataPost({ payload }) {
     }
 }
 
+function* handleAddPostToTimeline({ payload }) {
+    console.log(payload);
+    // const response = yield call(fetch, PROFILE_DATA_URL, {
+    //     body: JSON.stringify(payload),
+    //     headers: {
+    //         'Content-Type': 'application/json',
+    //     },
+    //     method: 'POST',
+    // });
+    // const data = yield response.json();
+    // const { status, message } = data;
+    // if (status === 'success') {
+    //     yield put(postProfileDataToDatabaseSuccess(data.data));
+    // } else {
+    //     yield put(postProfileDataToDatabaseError(message));
+    // }
+}
+
 // watcher
 export default function* watchTimelineDataLoad() {
     yield takeEvery(REQUEST_LOAD_USERS_PROFILE, handleSetUsersProfile);
     yield takeEvery(REQUEST_LOAD_TIMELINE_DATA, handleTimeLineDataLoad);
     yield takeEvery(REQUEST_LOAD_ONLINE_FRIENDS_DATA, handleProfileDataLoad);
     yield takeEvery(POST_PROFILE_DATA_TO_DATABASE, handleProfileDataPost);
+    yield takeEvery(ADD_POST_TO_TIMELINE, handleAddPostToTimeline);
 }
