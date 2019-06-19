@@ -47,7 +47,7 @@ export default (state = initialState, action) => {
         return { ...state, isUserProfileFetching: true, isUserProfilePresent: false };
 
     case SET_USERS_PROFILE_SUCCESS:
-        if (typeof payload.profile === 'undefined' || payload.profile.length === 0) {
+        if (!payload.profile || payload.profile.length === 0) {
             return {
                 ...state,
                 isUserProfileFetching: false,
