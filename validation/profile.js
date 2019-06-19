@@ -24,7 +24,7 @@ module.exports = function validateInput(data) {
     if (Validator.isEmpty(city)) {
         errors.city = 'City field is required';
     }
-    
+
     if (Validator.isEmpty(lastName)) {
         errors.password = 'Last Name field is required';
     }

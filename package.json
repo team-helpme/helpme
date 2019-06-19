@@ -3,10 +3,9 @@
   "version": "1.0.0",
   "description": "An App That connects depressed people to each other for comfort",
   "main": "index.js",
-   "engines": {
-        "node": "10.3.0"
-    },
-
+  "engines": {
+    "node": "10.3.0"
+  },
   "scripts": {
     "test": "jest",
     "lint": "eslint --ext .js --ext .jsx . --fix",

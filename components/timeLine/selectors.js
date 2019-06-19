@@ -6,6 +6,7 @@ export const getError = state => state[NAME].error;
 export const getIsAuthenticated = state => state[NAME].isAuthenticated;
 export const getIsOnlineFriendsFetching = state => state[NAME].isOnlineFriendsFetching;
 export const getIsTimelineFetching = state => state[NAME].isTimelineFetching;
+export const getIsUserProfileComplete = state => state[NAME].isUserProfileComplete;
 export const getIsUserProfileFetching = state => state[NAME].isUserProfileFetching;
 export const getIsUserProfilePresent = state => state[NAME].isUserProfilePresent;
 export const getOnlineFriendsData = state => state[NAME].onlineFriendsData;

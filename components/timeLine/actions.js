@@ -3,7 +3,11 @@ import actionTypes from './actionTypes';
 const {
     ADD_COMMENT_TO_POST,
     ADD_POST_TO_TIMELINE,
-    SET_USERS_PROFILE,
+    GET_PROFILE_DATA_FROM_DATABASE,
+    GET_PROFILE_DATA_FROM_DATABASE_SUCCESS,
+    GET_PROFILE_DATA_FROM_DATABASE_ERROR,
+    SET_USERS_PROFILE_SUCCESS,
+    SET_USERS_PROFILE_ERROR,
     POST_PROFILE_DATA_TO_DATABASE,
     POST_PROFILE_DATA_TO_DATABASE_SUCCESS,
     POST_PROFILE_DATA_TO_DATABASE_ERROR,
@@ -19,13 +23,34 @@ const {
     TOGGLE_LIKE_BUTTON_CLICKED,
 } = actionTypes;
 
-export const loadUsersProfile = () => ({
+export const getProfileDataFromDatabase = payload => ({
+    payload,
+    type: GET_PROFILE_DATA_FROM_DATABASE,
+});
+
+export const getProfileDataFromDatabaseError = payload => ({
+    payload,
+    type: GET_PROFILE_DATA_FROM_DATABASE_ERROR,
+});
+
+export const getProfileDataFromDatabaseSuccess = payload => ({
+    payload,
+    type: GET_PROFILE_DATA_FROM_DATABASE_SUCCESS,
+});
+
+export const loadUsersProfile = payload => ({
+    payload,
     type: REQUEST_LOAD_USERS_PROFILE,
 });
 
-export const setUsersProfile = payload => ({
+export const setUsersProfileSuccess = payload => ({
     payload,
-    type: SET_USERS_PROFILE,
+    type: SET_USERS_PROFILE_SUCCESS,
+});
+
+export const setUsersProfileError = payload => ({
+    payload,
+    type: SET_USERS_PROFILE_ERROR,
 });
 
 export const loadTimeLineData = () => ({
