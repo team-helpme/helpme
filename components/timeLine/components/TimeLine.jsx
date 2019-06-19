@@ -11,6 +11,9 @@ import React from 'react';
 import {
     commentButtonClicked,
     favButtonClicked,
+    getProfileDataFromDatabase,
+    getProfileDataFromDatabaseError,
+    getProfileDataFromDatabaseSuccess,
     handlePostComment,
     handlePostUpdate,
     likeButtonClicked,
@@ -35,6 +38,7 @@ import {
     getIsAuthenticated,
     getIsOnlineFriendsFetching,
     getIsTimelineFetching,
+    getIsUserProfileComplete,
     getIsUserProfilePresent,
     getOnlineFriendsData,
     getTimelineData,
@@ -50,7 +54,6 @@ import { openNotificationWithIcon } from '../../signup/utils';
 
 const { CREATE_POST_PLACEHOLDER, COMPLETE_YOUR_PROFILE, TIMELINE_TITLE } = STRINGS;
 const { PageLayout } = components;
-
 const { isAuthenticated, login } = utils;
 
 // notification button
@@ -68,18 +71,19 @@ state ={
 }
 
 componentDidMount() {
+    // if user is not authenticated, redirect to login
     if (!isAuthenticated()) {
         login();
     }
 
     const { loadTimeLineData, loadOnlineFriendsData } = this.props;
+    // load timeline data and friends data
     loadTimeLineData();
     loadOnlineFriendsData();
 }
 
 componentDidUpdate(prevState) {
     let ProfileData;
-    let userId;
     const {
         error, setUsersProfileSuccess, usersProfile, loadUsersProfile,
     } = this.props;
@@ -89,14 +93,14 @@ componentDidUpdate(prevState) {
         ProfileData = JSON.parse(localStorage.getItem('profile'));
         const { sub, picture, nickname } = ProfileData;
         // we have to parse it because auth0 adds some strings to the profile data
-        const userPartialData = { picture, nickname, id: sub.substring(6) };
+        const userPartialData = { id: sub.substring(6), nickname, picture };
+        const { id } = userPartialData;
 
         // because of async, the profile data will not be available in the local storage until
         // some time. so always check the local storage and compare with
         // current user profile redux state.
         // but when the userdata changes in local storage, pull it and update state
         if (usersProfile === null) {
-            const { id } = userPartialData;
             // set data to redux for initial rendering
             setUsersProfileSuccess(userPartialData);
             // get full profile from the database for full data rendering
@@ -212,7 +216,7 @@ componentDidUpdate(prevState) {
     handlePostSubmit = () => {
         // pull out email from the redux state
         const { usersProfile, postProfileDataToDatabase } = this.props;
-        const { id, email } = usersProfile;
+        const { id } = usersProfile;
 
         // get this data from the local state
         const {
@@ -227,7 +231,6 @@ componentDidUpdate(prevState) {
             bio,
             city,
             country,
-            email,
             firstName,
             id,
             lastName,
@@ -252,6 +255,7 @@ componentDidUpdate(prevState) {
             onlineFriendsData,
             isOnlineFriendsFetching,
             error,
+            isUserProfileComplete,
             isUserProfilePresent,
             usersProfile,
         } = this.props;
@@ -270,7 +274,6 @@ componentDidUpdate(prevState) {
             >
 
                 <main className="TimeLine_content">
-
                     <section>
                         {/* edit component for mobile */}
                         <div className="create-icon-container">
@@ -295,10 +298,13 @@ componentDidUpdate(prevState) {
                         error={error}
                         userProfile={usersProfile}
                         isUserProfilePresent={isUserProfilePresent}
+                        isUserProfileComplete={isUserProfileComplete}
                         handleOk={this.handlePostSubmit}
                         isFormModalOpen={isFormModalOpen}
                         handleModal={this.FormModalHandler}
                         handleTextChange={this.handleTextChange}
+                        loadUsersProfile={loadUsersProfile}
+                        getProfileDataFromDatabase={getProfileDataFromDatabase}
                     />
                     {/* popular topics aside */}
                     <TimeLinePopularTopic />
@@ -363,6 +369,7 @@ const mapStateToProps = state => ({
     error: getError(state),
     isAuthenticated: getIsAuthenticated(state),
     isTimelineFetching: getIsTimelineFetching(state),
+    isUserProfileComplete: getIsUserProfileComplete(state),
     isUserProfilePresent: getIsUserProfilePresent(state),
     onlineFriendsData: getOnlineFriendsData(state),
     onlineFriendsFetching: getIsOnlineFriendsFetching(state),
@@ -373,6 +380,9 @@ const mapStateToProps = state => ({
 const timeLineActions = {
     commentButtonClicked,
     favButtonClicked,
+    getProfileDataFromDatabase,
+    getProfileDataFromDatabaseError,
+    getProfileDataFromDatabaseSuccess,
     handlePostComment,
     handlePostUpdate,
     likeButtonClicked,
@@ -401,6 +411,7 @@ TimeLine.propTypes = {
     handlePostUpdate: PropTypes.func.isRequired,
     isOnlineFriendsFetching: PropTypes.bool,
     isTimelineFetching: PropTypes.bool.isRequired,
+    isUserProfileComplete: PropTypes.bool.isRequired,
     isUserProfilePresent: PropTypes.bool.isRequired,
     likeButtonClicked: PropTypes.func.isRequired,
     loadOnlineFriendsData: PropTypes.func.isRequired,
@@ -430,4 +441,3 @@ TimeLine.defaultProps = {
     timelineData: [],
     usersProfile: {},
 };
-'';

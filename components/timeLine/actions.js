@@ -3,6 +3,9 @@ import actionTypes from './actionTypes';
 const {
     ADD_COMMENT_TO_POST,
     ADD_POST_TO_TIMELINE,
+    GET_PROFILE_DATA_FROM_DATABASE,
+    GET_PROFILE_DATA_FROM_DATABASE_SUCCESS,
+    GET_PROFILE_DATA_FROM_DATABASE_ERROR,
     SET_USERS_PROFILE_SUCCESS,
     SET_USERS_PROFILE_ERROR,
     POST_PROFILE_DATA_TO_DATABASE,
@@ -19,6 +22,21 @@ const {
     TOGGLE_COMMENT_BUTTON_CLICKED,
     TOGGLE_LIKE_BUTTON_CLICKED,
 } = actionTypes;
+
+export const getProfileDataFromDatabase = payload => ({
+    payload,
+    type: GET_PROFILE_DATA_FROM_DATABASE,
+});
+
+export const getProfileDataFromDatabaseError = payload => ({
+    payload,
+    type: GET_PROFILE_DATA_FROM_DATABASE_ERROR,
+});
+
+export const getProfileDataFromDatabaseSuccess = payload => ({
+    payload,
+    type: GET_PROFILE_DATA_FROM_DATABASE_SUCCESS,
+});
 
 export const loadUsersProfile = payload => ({
     payload,

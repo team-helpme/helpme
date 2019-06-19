@@ -24,11 +24,9 @@ const {
 function* handleSetUsersProfile({ payload }) {
     const id = payload;
     const response = yield call(fetch, `${PROFILE_DATA_URL}/${id}`);
-    console.log('id', id);
     if (response) {
         const responseData = yield response.json();
-        console.log('responseData', responseData);
-        // yield put(setUsersProfileSuccess(responseData));
+        yield put(setUsersProfileSuccess(responseData));
     } else {
         yield put(setUsersProfileError(response.statusText));
     }
@@ -66,7 +64,7 @@ function* handleProfileDataPost({ payload }) {
     const data = yield response.json();
     const { status, message } = data;
     if (status === 'success') {
-        yield put(postProfileDataToDatabaseSuccess(data));
+        yield put(postProfileDataToDatabaseSuccess(data.data));
     } else {
         yield put(postProfileDataToDatabaseError(message));
     }

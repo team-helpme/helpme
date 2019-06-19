@@ -290,7 +290,7 @@ text-align: center;
   }
 
   .profile-avatar {
-    margin-right: 0;
+    margin-right: 0 !important;
   }
   .profile-loading {
     grid-row: 1/2;
@@ -342,7 +342,15 @@ text-align: center;
   .TimeLine_online-friends {
     background: #ffffff;
     display: block;
-    padding: 1em 24px;
+    padding: 1em;
+  }
+
+  .TimeLine_profile-info{
+    display: grid;
+    place-content: center
+  }
+  .profile-modal-content > * {
+    margin:  1em 0;
   }
 
   .TimeLine_post {

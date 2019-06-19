@@ -2,7 +2,6 @@ const express = require('express');
 
 const router = express.Router();
 const HttpStatus = require('http-status-codes');
-const secured = require('../../lib/middleware/secure');
 const StatusText = require('../../lib/constants/constants');
 const Post = require('../../models/Post');
 const Profile = require('../../models/profile.model');
