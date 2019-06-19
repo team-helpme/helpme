@@ -11,10 +11,10 @@ const validateInput = require('../../validation/profile');
 // Create a new Profile
 router.post('/', async (req, res) => {
     const {
-        bio, city, country, firstName, lastName,
+        bio, city, country, firstName, id, lastName,
     } = req.body;
 
-    const { id } = req.user;
+    // const { id } = req.user;
 
     // Validate request
     const { errors, isValid } = validateInput(req.body);
@@ -94,9 +94,9 @@ router.get('/:profileId', async (req, res) => {
 // Update a Profile with profileId
 router.put('/:profileId', async (req, res) => {
     const {
-        bio, city, country, firstName, lastName,
+        bio, city, country, firstName, lastName, profileId
     } = req.body;
-    const { profileId } = req.user;
+    // const { profileId } = req.user;
 
     // Validate request
     const { errors, isValid } = validateInput(req.body);

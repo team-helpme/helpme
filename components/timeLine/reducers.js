@@ -13,7 +13,7 @@ const {
     REQUEST_LOAD_ONLINE_FRIENDS_DATA,
     REQUEST_SET_ONLINE_FRIENDS_DATA,
     REQUEST_LOAD_USERS_PROFILE,
-    SET_USERS_PROFILE,
+    SET_USERS_PROFILE_SUCCESS,
     TOGGLE_LIKE_BUTTON_CLICKED,
     TOGGLE_FAV_BUTTON_CLICKED,
     TOGGLE_COMMENT_BUTTON_CLICKED,
@@ -41,7 +41,7 @@ export default (state = initialState, action) => {
     case REQUEST_LOAD_USERS_PROFILE:
         return { ...state, isUserProfileFetching: true, isUserProfilePresent: false };
 
-    case SET_USERS_PROFILE:
+    case SET_USERS_PROFILE_SUCCESS:
         return {
             ...state,
             isUserProfileFetching: false,
@@ -53,7 +53,7 @@ export default (state = initialState, action) => {
         return { ...state, isTimelineFetching: true };
 
     case REQUEST_SET_TIMELINE_DATA_SUCCESS:
-        return { ...state, isTimelineFetching: false, timelineData: payload.postFound };
+        return { ...state, isTimelineFetching: false, timelineData: payload };
 
     case REQUEST_SET_TIMELINE_ERROR:
         return { ...state, error: payload, isTimelineFetching: false };

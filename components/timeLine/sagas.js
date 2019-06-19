@@ -1,11 +1,12 @@
 import { takeEvery, call, put } from 'redux-saga/effects';
 import actionTypes from './actionTypes';
 import {
-    setUsersProfile,
+    setUsersProfileSuccess,
     setTimeLineError,
     setTimeLineData,
     setOnlineFriendsData,
     setOnlineFriendsError,
+    setUsersProfileError,
     postProfileDataToDatabaseError,
     postProfileDataToDatabaseSuccess
 } from './actions';
@@ -21,13 +22,21 @@ const {
 } = actionTypes;
 
 function* handleSetUsersProfile({ payload }) {
-    yield put(setUsersProfile(payload));
+    const id = payload;
+    const response = yield call(fetch, `${PROFILE_DATA_URL}/${id}`);
+    if (response) {
+        const responseData = yield response.json();
+        yield put(setUsersProfileSuccess(responseData));
+    } else {
+        yield put(setUsersProfileError(response.statusText));
+    }
 }
 
 function* handleTimeLineDataLoad() {
     const response = yield call(fetch, TIMELINE_DATA_URL);
-    if (response.ok) {
-        const data = yield response.json();
+    if (response) {
+        const responseData = yield response.json();
+        const { data } = responseData;
         yield put(setTimeLineData(data));
     } else {
         yield put(setTimeLineError(response.statusText));

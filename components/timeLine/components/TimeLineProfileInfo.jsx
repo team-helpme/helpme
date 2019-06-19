@@ -21,27 +21,45 @@ class TimeLineProfileForm extends React.Component {
             handleOk,
             handleTextChange,
             isUserProfilePresent,
-            profile,
+            userProfile,
         } = this.props;
 
+        // check if profile is present
+        if (!isUserProfilePresent) {
+            return (
+                <aside className="profile-loading">
+                    <div className="loading_Div">
+                        <Spin />
+                    </div>
+                </aside>
+            );
+        }
+        // check if profile is present and not empty
         if (isUserProfilePresent) {
-            const { picture, nickname, bio } = profile;
+            const {
+                avatar, email, name, profile,
+            } = userProfile;
+            console.log('userProfile', userProfile);
+            console.log('timelineinfo', profile);
+            const {
+                bio, city, country, firstName, followers, following, lastName, nickname,
+            } = profile[0];
 
             return (
                 <aside className="TimeLine_profile-info">
                     <img
-                        src={picture}
+                        src={avatar}
                         alt="name"
-                        className="user-avatar"
+                        className="user-avatar profile-avatar"
                     />
                     {/* followers stat */}
-                    <h3 className="user-name">{nickname}</h3>
+                    <h3 className="user-name">{`${firstName} ${lastName}` || name}</h3>
                     <p>
                         {AT}
-                        {nickname}
+                        {nickname || name}
                     </p>
                     {/* if the user does not have a bio, ask to complete the profile */}
-                    {(!bio)
+                    {(profile.length === 0)
                         ? (
                             <Button
                                 type="primary"
@@ -53,17 +71,17 @@ class TimeLineProfileForm extends React.Component {
                             <>
                                 <div className="user-followers-stat">
                                     <div className="users-follow-number">
-                                        <h3 className="count">{3}</h3>
+                                        <h3 className="count">{following}</h3>
                                         <p>{FOLLOWING}</p>
                                     </div>
                                     <Divider type="vertical" className="divider-height" />
                                     <div className="users-follow-number">
-                                        <h3 className="count">{4}</h3>
+                                        <h3 className="count">{followers}</h3>
                                         <p>{FOLLOWERS}</p>
                                     </div>
                                 </div>
                                 <div className="users-bio">
-                                    {USERS_BIO}
+                                    {bio}
                                 </div>
                             </>
                         )
@@ -97,13 +115,6 @@ class TimeLineProfileForm extends React.Component {
                 </aside>
             );
         }
-        return (
-            <aside className="TimeLine_profile-info">
-                <div className="loading_Div">
-                    <Spin />
-                </div>
-            </aside>
-        );
     }
 }
 
