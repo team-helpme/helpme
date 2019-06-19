@@ -68,7 +68,7 @@ router.get('/', async (req, res) => {
 
 // Retrieve a single Profile with profileId
 router.get('/:profileId', async (req, res) => {
-    const { profileId } = req.body;
+    const { profileId } = req.params;
     try {
         const profile = await User.findById(profileId);
         if (!profile) {
@@ -131,7 +131,7 @@ router.put('/:profileId', async (req, res) => {
 
 // Delete a Profile with profileId
 router.delete('/:profileId', async (req, res) => {
-    const { profileId } = req.body;
+    const { profileId } = req.params;
     try {
         const profile = await User.findByIdAndDelete(profileId);
         if (!profile) {
