@@ -11,10 +11,8 @@ const validateInput = require('../../validation/profile');
 // Create a new Profile
 router.post('/', async (req, res) => {
     const {
-        bio, city, country, firstName, lastName,
+        bio, city, country, firstName, id, lastName,
     } = req.body;
-
-    const { id } = req.user;
 
     // Validate request
     const { errors, isValid } = validateInput(req.body);
@@ -70,7 +68,7 @@ router.get('/', async (req, res) => {
 
 // Retrieve a single Profile with profileId
 router.get('/:profileId', async (req, res) => {
-    const { profileId } = req.params;
+    const { profileId } = req.body;
     try {
         const profile = await User.findById(profileId);
         if (!profile) {
@@ -94,9 +92,8 @@ router.get('/:profileId', async (req, res) => {
 // Update a Profile with profileId
 router.put('/:profileId', async (req, res) => {
     const {
-        bio, city, country, firstName, lastName,
+        bio, city, country, firstName, lastName, profileId,
     } = req.body;
-    const { profileId } = req.user;
 
     // Validate request
     const { errors, isValid } = validateInput(req.body);
@@ -134,7 +131,7 @@ router.put('/:profileId', async (req, res) => {
 
 // Delete a Profile with profileId
 router.delete('/:profileId', async (req, res) => {
-    const { profileId } = req.user;
+    const { profileId } = req.body;
     try {
         const profile = await User.findByIdAndDelete(profileId);
         if (!profile) {
