@@ -68,7 +68,7 @@ state ={
 }
 
 componentDidMount() {
-    if (!isAuthenticated) {
+    if (!isAuthenticated()) {
         login();
     }
 
