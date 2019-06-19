@@ -256,6 +256,19 @@
   place-content: center;
 }
 
+.loading_Div{
+  height: 100%;
+  width: 100%;
+  display: grid;
+  place-content: center;
+}
+
+.profile_complete_button {
+display: block;
+width: 100%;
+text-align: center;
+}
+
 @media screen and (max-width:767px) {
   .TimeLine_content {
     max-width: 458px;
@@ -264,6 +277,10 @@
 }
 
 @media screen and (min-width: 768px) {
+  .profile_complete_button {
+    display: none;
+  }
+
   .create-icon-container {
     display: none
   }

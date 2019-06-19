@@ -1,27 +1,36 @@
 import actionTypes from './actionTypes';
 
+const {
+    ADD_POST_TO_TIMELINE,
+    ADD_COMMENT_TO_POST,
+    POST_PROFILE_DATA_TO_DATABASE,
+    POST_PROFILE_DATA_TO_DATABASE_SUCCESS,
+    POST_PROFILE_DATA_TO_DATABASE_ERROR,
+    REQUEST_LOAD_TIMELINE_DATA,
+    REQUEST_SET_TIMELINE_ERROR,
+    REQUEST_SET_TIMELINE_DATA_SUCCESS,
+    REQUEST_SET_ONLINE_FRIENDS_ERROR,
+    REQUEST_LOAD_ONLINE_FRIENDS_DATA,
+    REQUEST_SET_ONLINE_FRIENDS_DATA,
+    REQUEST_LOAD_USERS_PROFILE,
+    SET_USERS_PROFILE,
+    TOGGLE_LIKE_BUTTON_CLICKED,
+    TOGGLE_FAV_BUTTON_CLICKED,
+    TOGGLE_COMMENT_BUTTON_CLICKED,
+} = actionTypes;
+
 const initialState = {
     error: null,
+    isAuthenticated: false,
     isOnlineFriendsFetching: false,
     isTimelineFetching: false,
+    isUserProfileFetching: false,
+    isUserProfilePresent: false,
     onlineFriendsData: [],
     timelineData: [],
+    usersProfile: null,
 };
 export default (state = initialState, action) => {
-    const {
-        REQUEST_LOAD_TIMELINE_DATA,
-        REQUEST_SET_TIMELINE_ERROR,
-        REQUEST_SET_TIMELINE_DATA_SUCCESS,
-        REQUEST_SET_ONLINE_FRIENDS_ERROR,
-        REQUEST_LOAD_ONLINE_FRIENDS_DATA,
-        REQUEST_SET_ONLINE_FRIENDS_DATA,
-        ADD_POST_TO_TIMELINE,
-        ADD_COMMENT_TO_POST,
-        TOGGLE_LIKE_BUTTON_CLICKED,
-        TOGGLE_FAV_BUTTON_CLICKED,
-        TOGGLE_COMMENT_BUTTON_CLICKED,
-    } = actionTypes;
-
     const {
         type, error, payload,
     } = action;
@@ -29,14 +38,25 @@ export default (state = initialState, action) => {
     let newArray = [];
 
     switch (type) {
+    case REQUEST_LOAD_USERS_PROFILE:
+        return { ...state, isUserProfileFetching: true, isUserProfilePresent: false };
+
+    case SET_USERS_PROFILE:
+        return {
+            ...state,
+            isUserProfileFetching: false,
+            isUserProfilePresent: true,
+            usersProfile: payload,
+        };
+
     case REQUEST_LOAD_TIMELINE_DATA:
         return { ...state, isTimelineFetching: true };
 
     case REQUEST_SET_TIMELINE_DATA_SUCCESS:
-        return { ...state, isTimelineFetching: false, timelineData: payload };
+        return { ...state, isTimelineFetching: false, timelineData: payload.postFound };
 
     case REQUEST_SET_TIMELINE_ERROR:
-        return { ...state, error, isTimelineFetching: false };
+        return { ...state, error: payload, isTimelineFetching: false };
 
     case REQUEST_LOAD_ONLINE_FRIENDS_DATA:
         return { ...state, isOnlineFriendsFetching: true };
@@ -97,6 +117,14 @@ export default (state = initialState, action) => {
             return item;
         });
         return { ...state, timelineData: [...newArray] };
+    case POST_PROFILE_DATA_TO_DATABASE: return { ...state, isProfileUpdating: true };
+
+    case POST_PROFILE_DATA_TO_DATABASE_SUCCESS:
+        return { ...state, isProfileUpdating: false, userProfile: payload };
+
+    case POST_PROFILE_DATA_TO_DATABASE_ERROR:
+        return { ...state, error: payload, isProfileUpdating: false };
+
     default:
         return state;
     }
