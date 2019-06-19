@@ -4,13 +4,17 @@ const router = express.Router();
 
 const Profile = require('../../models/profile.model');
 
+const User = require('../../models/User');
+
 const validateInput = require('../../validation/profile');
 
 // Create a new Profile
 router.post('/', async (req, res) => {
     const {
-        bio, city, country, email, firstName, lastName,
+        bio, city, country, firstName, lastName,
     } = req.body;
+
+    const { id } = req.user;
 
     // Validate request
     const { errors, isValid } = validateInput(req.body);
@@ -23,30 +27,21 @@ router.post('/', async (req, res) => {
         });
     }
 
-    // check if user profile exists
-
-    const user = await Profile.findOne({ email });
-
-    if (user) {
-        return res.json({
-            message: `${email} already exist`,
-            status: 'error',
-        });
-    }
     // create new profile
     const profile = new Profile({
         bio,
         city,
         country,
-        email,
         firstName,
         lastName,
     });
     // Save Profile in the database
     try {
-        const newProfile = await profile.save();
+        const user = await User.findById(id);
+        user.profile = profile;
+        user.save();
         return res.json({
-            data: newProfile,
+            data: user,
             status: 'success',
         });
     } catch (err) {
@@ -57,7 +52,7 @@ router.post('/', async (req, res) => {
 // Retrieve all profiles
 router.get('/', async (req, res) => {
     try {
-        const profiles = await Profile.find();
+        const profiles = await User.find();
         if (!profiles) {
             return res.json({
                 message: 'No Profile found',
@@ -77,7 +72,7 @@ router.get('/', async (req, res) => {
 router.get('/:profileId', async (req, res) => {
     const { profileId } = req.params;
     try {
-        const profile = await Profile.findById(profileId);
+        const profile = await User.findById(profileId);
         if (!profile) {
             return res.json({
                 message: `Profile not found with id ${profileId}`,
@@ -99,9 +94,9 @@ router.get('/:profileId', async (req, res) => {
 // Update a Profile with profileId
 router.put('/:profileId', async (req, res) => {
     const {
-        bio, city, country, email, firstName, lastName,
+        bio, city, country, firstName, lastName,
     } = req.body;
-    const { profileId } = req.params;
+    const { profileId } = req.user;
 
     // Validate request
     const { errors, isValid } = validateInput(req.body);
@@ -117,12 +112,11 @@ router.put('/:profileId', async (req, res) => {
         bio,
         city,
         country,
-        email,
         firstName,
         lastName,
     });
     try {
-        const updatedProfile = await Profile.findByIdAndUpdate(profileId, profile, { new: true });
+        const updatedProfile = await User.findByIdAndUpdate(profileId, profile, { new: true });
         if (!updatedProfile) {
             return res.json({
                 message: `Profile not found with id ${profileId}`,
@@ -140,9 +134,9 @@ router.put('/:profileId', async (req, res) => {
 
 // Delete a Profile with profileId
 router.delete('/:profileId', async (req, res) => {
-    const { profileId } = req.params;
+    const { profileId } = req.user;
     try {
-        const profile = await Profile.findByIdAndDelete(profileId);
+        const profile = await User.findByIdAndDelete(profileId);
         if (!profile) {
             return res.json({
                 message: `Profile not found with id ${profileId}`,
