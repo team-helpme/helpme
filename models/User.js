@@ -24,6 +24,8 @@ const UserSchema = new Schema({
         required: true,
         type: String,
     },
+
+    profile: [],
 });
 
 module.exports = mongoose.model('users', UserSchema);
