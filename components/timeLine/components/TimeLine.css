@@ -229,6 +229,7 @@
 
 .ant-timeline {
   margin-top: 2em;
+  padding-left: 2em
 }
 
 .ant-timeline-item-tail {
@@ -270,6 +271,9 @@ width: 100%;
 text-align: center;
 }
 
+.TimeLine_posts p {
+  word-break: break-all;
+}
 @media screen and (max-width:767px) {
   .TimeLine_content {
     max-width: 458px;
