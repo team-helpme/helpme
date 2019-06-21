@@ -2,7 +2,6 @@ const express = require('express');
 
 const router = express.Router();
 const HttpStatus = require('http-status-codes');
-const secured = require('../../lib/middleware/secure');
 const StatusText = require('../../lib/constants/constants');
 const Post = require('../../models/Post');
 const Profile = require('../../models/profile.model');
@@ -63,11 +62,13 @@ router.get('/:id', async (req, res) => {
 // ===================================================================================
 
 // POST Create Posts
-// Route: api/post
+// Route: api/posts
 // Access: Protected route
-router.post('/', secured(), async (req, res) => {
-    const { text, name, avatar } = req.body;
-    const { id } = req.user;
+router.post('/', async (req, res) => {
+    const {
+        text, name, avatar, id,
+    } = req.body;
+
     try {
         const { errors, isValid } = validatePostInput(req.body);
 
@@ -99,13 +100,13 @@ router.post('/', secured(), async (req, res) => {
 // ===============================================================================
 
 // DELETE a Posts if you are the owner
-// Route: api/post/:id
+// Route: api/posts/:id
 // Access: Protected route
-router.delete('/:id', secured(), async (req, res) => {
-    const { id } = req.user;
+router.delete('/:id', async (req, res) => {
+    const { id } = req.body;
     try {
         // Find the current login user
-        await Profile.findOne({ user: id });
+        await Post.findOne({ user: id });
         const postFound = await Post.findById(req.params.id);
 
         // Check for post owner
@@ -132,21 +133,22 @@ router.delete('/:id', secured(), async (req, res) => {
 // ====================================================================================
 
 // POST: Like a particular post
-// Route: api/post/like/:id
+// Route: api/posts/like/:id
 // Access: Protected route
-router.post('/like/:id', secured(), async (req, res) => {
+router.post('/like/:id', async (req, res) => {
+    const { id } = req.body;
     try {
         // Find the current login user
-        await Profile.findOne({ user: req.user.id });
+        await Profile.findOne({ user: id });
         const postFound = await Post.findById(req.params.id);
 
         // Check if user already like the post
-        if (postFound.likes.filter(like => like.user.toString() === req.user.id).length > 0) {
+        if (postFound.likes.filter(like => like.user.toString() === id).length > 0) {
             return res.status(BAD_REQUEST).json({ message: 'User already liked this post' });
         }
 
         // Add user id to likes array
-        postFound.likes.unshift({ user: req.user.id });
+        postFound.likes.unshift({ user: id });
         const postSaved = await postFound.save();
 
         return res.status(CREATED).send({
@@ -166,21 +168,22 @@ router.post('/like/:id', secured(), async (req, res) => {
 // POST: UnLike a particular post
 // Route: api/post/unlike/:id
 // Access: Protected route
-router.post('/unlike/:id', secured(), async (req, res) => {
+router.post('/unlike/:id', async (req, res) => {
+    const { id } = req.body;
     try {
         // Find the current login user
-        await Profile.findOne({ user: req.user.id });
+        await Post.findOne({ user: id });
         const postFound = await Post.findById(req.params.id);
 
         // Check if user have not yet like the post
-        if (postFound.likes.filter(like => like.user.toString() === req.user.id).length === 0) {
+        if (postFound.likes.filter(like => like.user.toString() === id).length === 0) {
             return res.status(BAD_REQUEST).json({ message: 'You need to like this post first!' });
         }
 
         // Get Index to be removed
         const indexToBeRemoved = postFound.likes
             .map(item => item.user.toString())
-            .indexOf(req.user.id);
+            .indexOf(id);
 
         // Spilce out of array
         postFound.likes.splice(indexToBeRemoved, 1);
@@ -199,11 +202,12 @@ router.post('/unlike/:id', secured(), async (req, res) => {
 
 // ====================================================================================
 // POST: Add comments to a particular post(post_id)
-// Route: api/post/comment/:id
+// Route: api/posts/comment/:id
 // Access: Protected route
-router.post('/comment/:id', secured(), async (req, res) => {
-    const { text, name, avatar } = req.body;
-    const { id } = req.user;
+router.post('/comment/:id', async (req, res) => {
+    const {
+        text, name, avatar, id,
+    } = req.body;
     try {
         const { errors, isValid } = validatePostInput(req.body);
 
@@ -243,7 +247,7 @@ router.post('/comment/:id', secured(), async (req, res) => {
 // POST: Delete a particular comment from a particular post(post_id)
 // Route: api/post/comment/:id/comment_id
 // Access: Protected route
-router.delete('/comment/:id/:comment_id', secured(), async (req, res) => {
+router.delete('/comment/:id/:comment_id', async (req, res) => {
     try {
         // Find a particular post and delete comments from it
         const postFound = await Post.findById(req.params.id);
