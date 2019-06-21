@@ -60,19 +60,6 @@ function NavHeader(props) {
                         <img src={HELPME_LOGO} alt={HELPME_LOGO_DESC} className="logo" />
                     </a>
                 </Link>
-                {
-                    isAuthenticated
-                        ? (
-                            <Search
-                                placeholder={PLACEHOLDER}
-                                onSearch={handleSearch}
-                                className="search"
-                                value={searchValue}
-                            />
-                        )
-                        : null
-                }
-
                 {/* navbar for authenticated desktop */}
                 <Menu
                     theme="light"
