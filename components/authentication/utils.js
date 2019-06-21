@@ -4,7 +4,9 @@ import Router from 'next/router';
 export const authConfig = new auth0.WebAuth({
     clientID: `${process.env.clientID}`,
     domain: 'teamhelpme.auth0.com',
-    redirectUri: (process.env.NODE_ENV === 'production') ? 'https://teamhelpme.herokuapp.com/auth/signed-in' : 'http://localhost:3000/auth/signed-in',
+    redirectUri: (process.env.NODE_ENV === 'production')
+        ? 'https://teamhelpme.herokuapp.com/auth/signed-in'
+        : 'http://localhost:3000/auth/signed-in',
     responseType: 'token id_token',
     scope: 'openid profile email',
 });

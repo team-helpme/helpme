@@ -1,5 +1,5 @@
 import {
-    Button, Input, Layout, Menu
+    Button, Layout, Menu
 } from 'antd';
 import Head from 'next/head';
 import Link from 'next/link';
@@ -12,12 +12,11 @@ import {
 
 const { Header } = Layout;
 const {
-    HEADER_TITLE, LOGIN, LOGOUT, PLACEHOLDER,
+    HEADER_TITLE, LOGIN, LOGOUT,
 } = STRINGS;
 const { HELPME_LOGO } = IMAGE_URLS;
 const { HELPME_LOGO_DESC } = IMAGE_ALT;
 const { LOGIN_LINK } = LINKS;
-const { Search } = Input;
 
 /**
  * Head function that is infused into all pages and controls page's title
@@ -27,7 +26,7 @@ const { Search } = Input;
  */
 function NavHeader(props) {
     const {
-        handleSearch, searchValue, title, selectedKey, isAuthenticated, handleLogin, handleLogOut,
+        title, selectedKey, isAuthenticated, handleLogin, handleLogOut,
     } = props;
     return (
         <>
@@ -107,15 +106,11 @@ export default NavHeader;
 NavHeader.propTypes = {
     handleLogOut: PropTypes.func.isRequired,
     handleLogin: PropTypes.func.isRequired,
-    handleSearch: PropTypes.func,
     isAuthenticated: PropTypes.bool,
-    searchValue: PropTypes.string,
     selectedKey: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
 };
 
 NavHeader.defaultProps = {
-    handleSearch: null,
     isAuthenticated: false,
-    searchValue: '',
 };
