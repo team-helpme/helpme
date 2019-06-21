@@ -65,6 +65,7 @@ export const STRINGS = {
     ONLINE_FRIENDS: 'Online Friends',
     POPULAR_TOPIC_TEXT: 'Popular Topic',
     POST: 'post',
+    POST_LENGTH_ERROR: 'Post must be between 10 and 500 characters',
     TIME: '3hrs ago',
     TIMELINE_TITLE: 'Timeline | Find friends',
     TOGGLE_MODAL: 'TOGGLE_MODAL',

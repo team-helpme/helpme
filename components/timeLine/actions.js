@@ -2,6 +2,8 @@ import actionTypes from './actionTypes';
 
 const {
     ADD_COMMENT_TO_POST,
+    ADD_COMMENT_TO_POST_FAILURE,
+    ADD_COMMENT_TO_POST_SUCCESS,
     ADD_POST_TO_TIMELINE,
     ADD_POST_TO_TIMELINE_SUCCESS,
     ADD_POST_TO_TIMELINE_FAILURE,
@@ -17,9 +19,10 @@ const {
     REQUEST_LOAD_TIMELINE_DATA,
     REQUEST_SET_TIMELINE_ERROR,
     REQUEST_SET_TIMELINE_DATA_SUCCESS,
-    TOGGLE_FAV_BUTTON_CLICKED,
     TOGGLE_COMMENT_BUTTON_CLICKED,
     TOGGLE_LIKE_BUTTON_CLICKED,
+    TOGGLE_LIKE_BUTTON_CLICKED_SUCCESS,
+    TOGGLE_LIKE_BUTTON_CLICKED_FAILURE,
 } = actionTypes;
 
 export const loadUsersProfile = payload => ({
@@ -37,7 +40,8 @@ export const setUsersProfileError = payload => ({
     type: SET_USERS_PROFILE_ERROR,
 });
 
-export const loadTimeLineData = () => ({
+export const loadTimeLineData = payload => ({
+    payload,
     type: REQUEST_LOAD_TIMELINE_DATA,
 });
 
@@ -85,14 +89,29 @@ export const handlePostComment = payload => ({
     type: ADD_COMMENT_TO_POST,
 });
 
+export const handlePostCommentSuccess = payload => ({
+    payload,
+    type: ADD_COMMENT_TO_POST_SUCCESS,
+});
+
+export const handlePostCommentFailure = payload => ({
+    payload,
+    type: ADD_COMMENT_TO_POST_FAILURE,
+});
+
 export const likeButtonClicked = payload => ({
     payload,
     type: TOGGLE_LIKE_BUTTON_CLICKED,
 });
 
-export const favButtonClicked = payload => ({
+export const likeButtonClickedSuccess = payload => ({
     payload,
-    type: TOGGLE_FAV_BUTTON_CLICKED,
+    type: TOGGLE_LIKE_BUTTON_CLICKED_SUCCESS,
+});
+
+export const likeButtonClickedFailure = payload => ({
+    payload,
+    type: TOGGLE_LIKE_BUTTON_CLICKED_FAILURE,
 });
 
 export const commentButtonClicked = payload => ({

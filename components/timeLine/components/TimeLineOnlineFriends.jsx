@@ -6,7 +6,7 @@ import { STRINGS } from '../constants';
 
 const { ONLINE_FRIENDS } = STRINGS;
 
-const TimeLineOnlineFriends = props => {
+const TimeLineOnlineFriends = React.memo(props => {
     const { onlineFriendsData } = props;
 
     return (
@@ -31,8 +31,9 @@ const TimeLineOnlineFriends = props => {
             </ul>
         </aside>
     );
-};
+});
 
+TimeLineOnlineFriends.displayName = 'TimeLineOnlineFriends';
 export default TimeLineOnlineFriends;
 
 TimeLineOnlineFriends.propTypes = {

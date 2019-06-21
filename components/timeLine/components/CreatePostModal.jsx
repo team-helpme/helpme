@@ -9,7 +9,7 @@ const { CREATE_POST_PLACEHOLDER } = STRINGS;
 
 const CreatePostModal = props => {
     const {
-        visible, handleOkFunction, closeModal, handleValueChange, value,
+        visible, handleOkFunction, closeModal, handleValueChange, value, textValueError,
     } = props;
 
     return (
@@ -26,6 +26,7 @@ const CreatePostModal = props => {
                 InputPlaceholder={CREATE_POST_PLACEHOLDER}
                 handleValueChange={handleValueChange}
                 value={value}
+                textValueError={textValueError}
             />
         </Modal>
     );
@@ -37,6 +38,7 @@ CreatePostModal.propTypes = {
     closeModal: PropTypes.func.isRequired,
     handleOkFunction: PropTypes.func.isRequired,
     handleValueChange: PropTypes.func.isRequired,
+    textValueError: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired,
     visible: PropTypes.bool.isRequired,
 };
