@@ -1,4 +1,5 @@
 import auth0 from 'auth0-js';
+import Router from 'next/router';
 
 export const authConfig = new auth0.WebAuth({
     clientID: `${process.env.clientID}`,
@@ -33,6 +34,7 @@ export const handleAuthentication = () => new Promise((resolve, reject) => {
     authConfig.parseHash((err, authResult) => {
         if (authResult && authResult.accessToken && authResult.idToken) {
             setSession(authResult);
+            Router.push('/timeline');
             return resolve();
         } if (err) {
             login();

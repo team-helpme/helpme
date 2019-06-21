@@ -3,8 +3,17 @@ import actionTypes from './actionTypes';
 const {
     ADD_COMMENT_TO_POST,
     ADD_POST_TO_TIMELINE,
+    GET_PROFILE_DATA_FROM_DATABASE,
+    GET_PROFILE_DATA_FROM_DATABASE_SUCCESS,
+    GET_PROFILE_DATA_FROM_DATABASE_ERROR,
+    SET_USERS_PROFILE_SUCCESS,
+    SET_USERS_PROFILE_ERROR,
+    POST_PROFILE_DATA_TO_DATABASE,
+    POST_PROFILE_DATA_TO_DATABASE_SUCCESS,
+    POST_PROFILE_DATA_TO_DATABASE_ERROR,
     REQUEST_SET_ONLINE_FRIENDS_ERROR,
     REQUEST_LOAD_ONLINE_FRIENDS_DATA,
+    REQUEST_LOAD_USERS_PROFILE,
     REQUEST_SET_ONLINE_FRIENDS_DATA,
     REQUEST_LOAD_TIMELINE_DATA,
     REQUEST_SET_TIMELINE_ERROR,
@@ -13,6 +22,36 @@ const {
     TOGGLE_COMMENT_BUTTON_CLICKED,
     TOGGLE_LIKE_BUTTON_CLICKED,
 } = actionTypes;
+
+export const getProfileDataFromDatabase = payload => ({
+    payload,
+    type: GET_PROFILE_DATA_FROM_DATABASE,
+});
+
+export const getProfileDataFromDatabaseError = payload => ({
+    payload,
+    type: GET_PROFILE_DATA_FROM_DATABASE_ERROR,
+});
+
+export const getProfileDataFromDatabaseSuccess = payload => ({
+    payload,
+    type: GET_PROFILE_DATA_FROM_DATABASE_SUCCESS,
+});
+
+export const loadUsersProfile = payload => ({
+    payload,
+    type: REQUEST_LOAD_USERS_PROFILE,
+});
+
+export const setUsersProfileSuccess = payload => ({
+    payload,
+    type: SET_USERS_PROFILE_SUCCESS,
+});
+
+export const setUsersProfileError = payload => ({
+    payload,
+    type: SET_USERS_PROFILE_ERROR,
+});
 
 export const loadTimeLineData = () => ({
     type: REQUEST_LOAD_TIMELINE_DATA,
@@ -23,7 +62,7 @@ export const setTimeLineError = payload => ({
     type: REQUEST_SET_TIMELINE_ERROR,
 });
 
-export const setTimeLineData = payload => ({
+export const setTimeLineData = ({ payload }) => ({
     payload,
     type: REQUEST_SET_TIMELINE_DATA_SUCCESS,
 });
@@ -65,4 +104,19 @@ export const favButtonClicked = payload => ({
 export const commentButtonClicked = payload => ({
     payload,
     type: TOGGLE_COMMENT_BUTTON_CLICKED,
+});
+
+export const postProfileDataToDatabase = payload => ({
+    payload,
+    type: POST_PROFILE_DATA_TO_DATABASE,
+});
+
+export const postProfileDataToDatabaseSuccess = payload => ({
+    payload,
+    type: POST_PROFILE_DATA_TO_DATABASE_SUCCESS,
+});
+
+export const postProfileDataToDatabaseError = payload => ({
+    payload,
+    type: POST_PROFILE_DATA_TO_DATABASE_ERROR,
 });

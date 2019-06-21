@@ -65,9 +65,11 @@ router.get('/:id', async (req, res) => {
 // Route: api/posts
 // Access: Protected route
 router.post('/', async (req, res) => {
+
     const {
         text, name, avatar, id,
     } = req.body;
+
 
     try {
         const { errors, isValid } = validatePostInput(req.body);
@@ -103,7 +105,9 @@ router.post('/', async (req, res) => {
 // Route: api/posts/:id
 // Access: Protected route
 router.delete('/:id', async (req, res) => {
+
     const { id } = req.body;
+  
     try {
         // Find the current login user
         await Post.findOne({ user: id });
@@ -136,7 +140,9 @@ router.delete('/:id', async (req, res) => {
 // Route: api/posts/like/:id
 // Access: Protected route
 router.post('/like/:id', async (req, res) => {
+
     const { id } = req.body;
+
     try {
         // Find the current login user
         await Profile.findOne({ user: id });
@@ -169,7 +175,9 @@ router.post('/like/:id', async (req, res) => {
 // Route: api/post/unlike/:id
 // Access: Protected route
 router.post('/unlike/:id', async (req, res) => {
+
     const { id } = req.body;
+
     try {
         // Find the current login user
         await Post.findOne({ user: id });
@@ -205,9 +213,11 @@ router.post('/unlike/:id', async (req, res) => {
 // Route: api/posts/comment/:id
 // Access: Protected route
 router.post('/comment/:id', async (req, res) => {
+
     const {
         text, name, avatar, id,
     } = req.body;
+
     try {
         const { errors, isValid } = validatePostInput(req.body);
 

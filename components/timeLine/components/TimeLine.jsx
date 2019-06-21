@@ -1,22 +1,33 @@
+/* eslint-disable react/forbid-prop-types */
 /* eslint-disable no-shadow */
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { Divider, Icon } from 'antd';
+import {
+    Divider, Icon, Button
+} from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 
 import {
     commentButtonClicked,
     favButtonClicked,
-    handlePostUpdate,
+    getProfileDataFromDatabase,
+    getProfileDataFromDatabaseError,
+    getProfileDataFromDatabaseSuccess,
     handlePostComment,
-    loadTimeLineData,
+    handlePostUpdate,
     likeButtonClicked,
-    setTimeLineData,
+    loadOnlineFriendsData,
+    loadTimeLineData,
+    loadUsersProfile,
+    postProfileDataToDatabase,
+    postProfileDataToDatabaseError,
+    postProfileDataToDatabaseSuccess,
     setOnlineFriendsData,
     setOnlineFriendsError,
-    loadOnlineFriendsData,
-    setTimeLineError
+    setTimeLineData,
+    setTimeLineError,
+    setUsersProfileSuccess
 } from '../actions';
 import { components } from '../../layout';
 import { CreatePostComponent } from './CreatePostComponent';
@@ -24,20 +35,28 @@ import CreatePostModal from './CreatePostModal';
 import { generateCommentData, generateData } from '../utils';
 import {
     getError,
+    getIsAuthenticated,
     getIsOnlineFriendsFetching,
     getIsTimelineFetching,
+    getIsUserProfileComplete,
+    getIsUserProfilePresent,
     getOnlineFriendsData,
-    getTimelineData
+    getTimelineData,
+    getUsersProfile
 } from '../selectors';
+import { STRINGS } from '../constants';
 import TimeLinePosts from './TimeLinePosts';
 import TimeLinePopularTopic from './TimeLinePopularTopic';
 import TimeLineProfileInfo from './TimeLineProfileInfo';
 import TimeLineOnlineFriends from './TimeLineOnlineFriends';
-import { STRINGS } from '../constants';
+import { utils } from '../../authentication';
+import { openNotificationWithIcon } from '../../signup/utils';
 
-const { CREATE_POST_PLACEHOLDER, TIMELINE_TITLE } = STRINGS;
+const { CREATE_POST_PLACEHOLDER, COMPLETE_YOUR_PROFILE, TIMELINE_TITLE } = STRINGS;
 const { PageLayout } = components;
+const { isAuthenticated, login } = utils;
 
+// notification button
 /** Helper function that is used to render the TimeLine Component
  * @class TimeLine
  * @extends {React.Component}
@@ -46,14 +65,49 @@ const { PageLayout } = components;
 class TimeLine extends React.Component {
 state ={
     commentValue: '',
+    isFormModalOpen: false,
     isModalOpen: false,
     statusValue: '',
 }
 
 componentDidMount() {
+    // if user is not authenticated, redirect to login
+    if (!isAuthenticated()) {
+        login();
+    }
+
     const { loadTimeLineData, loadOnlineFriendsData } = this.props;
+    // load timeline data and friends data
     loadTimeLineData();
     loadOnlineFriendsData();
+}
+
+componentDidUpdate(prevState) {
+    let ProfileData;
+    const {
+        error, setUsersProfileSuccess, usersProfile, loadUsersProfile,
+    } = this.props;
+
+    // we need to get profileData from local storage
+    if (localStorage.profile) {
+        ProfileData = JSON.parse(localStorage.getItem('profile'));
+        const { sub, picture, nickname } = ProfileData;
+        // we have to parse it because auth0 adds some strings to the profile data
+        const userPartialData = { id: sub.substring(6), nickname, picture };
+        const { id } = userPartialData;
+
+        // because of async, the profile data will not be available in the local storage until
+        // some time. so always check the local storage and compare with
+        // current user profile redux state.
+        // but when the userdata changes in local storage, pull it and update state
+        if (usersProfile === null) {
+            // set data to redux for initial rendering
+            setUsersProfileSuccess(userPartialData);
+            // get full profile from the database for full data rendering
+            loadUsersProfile(id);
+        }
+    }
+    if (prevState.error !== error) { openNotificationWithIcon('error', error); }
 }
 
     /**
@@ -151,26 +205,83 @@ componentDidMount() {
         });
     }
 
+      handleTextChange = e => {
+          this.setState(
+              {
+                  [e.target.name]: e.target.value,
+              }
+          );
+      }
+
+    handlePostSubmit = () => {
+        // pull out email from the redux state
+        const { usersProfile, postProfileDataToDatabase } = this.props;
+        const { id } = usersProfile;
+
+        // get this data from the local state
+        const {
+            firstName,
+            lastName,
+            city,
+            country,
+            bio,
+        } = this.state;
+
+        const body = {
+            bio,
+            city,
+            country,
+            firstName,
+            id,
+            lastName,
+        };
+        // make a redux call and send the data to the database
+        postProfileDataToDatabase(body);
+        // close the form
+        this.FormModalHandler();
+    };
+
+    FormModalHandler = () => {
+        const { isFormModalOpen } = this.state;
+        this.setState({
+            isFormModalOpen: !isFormModalOpen,
+        });
+    };
+
     render() {
         const {
-            timelineData, isTimelineFetching, onlineFriendsData, isOnlineFriendsFetching,
+            timelineData,
+            isTimelineFetching,
+            onlineFriendsData,
+            isOnlineFriendsFetching,
+            error,
+            isUserProfileComplete,
+            isUserProfilePresent,
+            usersProfile,
         } = this.props;
-        const { commentValue, isModalOpen, statusValue } = this.state;
+
+        const {
+            commentValue, isModalOpen, statusValue, isFormModalOpen,
+        } = this.state;
 
         return (
             <PageLayout
-                isSiderPresent={timelineData.length > 0}
+                isSiderPresent={!isTimelineFetching}
                 isFooterPresent={false}
                 isAuthenticated
                 title={TIMELINE_TITLE}
                 selectedKey="1"
             >
-                <main className="TimeLine_content">
 
+                <main className="TimeLine_content">
                     <section>
                         {/* edit component for mobile */}
                         <div className="create-icon-container">
-                            <Icon type="form" className="create-icon" onClick={this.modalHandler} />
+                            <Icon
+                                type="form"
+                                className="create-icon"
+                                onClick={this.modalHandler}
+                            />
                         </div>
 
                         <CreatePostModal
@@ -183,7 +294,18 @@ componentDidMount() {
                     </section>
 
                     {/* profile info desktop */}
-                    <TimeLineProfileInfo />
+                    <TimeLineProfileInfo
+                        error={error}
+                        userProfile={usersProfile}
+                        isUserProfilePresent={isUserProfilePresent}
+                        isUserProfileComplete={isUserProfileComplete}
+                        handleOk={this.handlePostSubmit}
+                        isFormModalOpen={isFormModalOpen}
+                        handleModal={this.FormModalHandler}
+                        handleTextChange={this.handleTextChange}
+                        loadUsersProfile={loadUsersProfile}
+                        getProfileDataFromDatabase={getProfileDataFromDatabase}
+                    />
                     {/* popular topics aside */}
                     <TimeLinePopularTopic />
                     {/* online friends aside tab */}
@@ -207,16 +329,33 @@ componentDidMount() {
                         <Divider />
 
                         <section className="TimeLine_posts">
+                            {/* button to complete profile
+                             */}
+                            <div className="profile_complete_button">
+                                {
+                                    (usersProfile !== null && usersProfile.bio === undefined)
+                                        ? (
+                                            <Button
+                                                type="primary"
+                                                onClick={this.FormModalHandler}
+                                            >
+                                                {COMPLETE_YOUR_PROFILE}
+                                            </Button>
+                                        ) : null
+                                }
+                            </div>
                             {/* timeline posts */}
                             <TimeLinePosts
                                 isTimelineFetching={isTimelineFetching}
                                 profileData={timelineData}
+                                userProfile={usersProfile}
                                 handleLikeButton={this.handleLikeButton}
                                 handleFavButton={this.handleFavButton}
                                 handleCommentButton={this.handleCommentButton}
                                 handleCommentOnPost={this.handleCommentOnPost}
                                 handleValueChange={this.handleCommentValueChange}
                                 value={commentValue}
+                                handleModal={this.FormModalHandler}
                             />
                         </section>
                     </section>
@@ -228,24 +367,36 @@ componentDidMount() {
 
 const mapStateToProps = state => ({
     error: getError(state),
+    isAuthenticated: getIsAuthenticated(state),
     isTimelineFetching: getIsTimelineFetching(state),
+    isUserProfileComplete: getIsUserProfileComplete(state),
+    isUserProfilePresent: getIsUserProfilePresent(state),
     onlineFriendsData: getOnlineFriendsData(state),
     onlineFriendsFetching: getIsOnlineFriendsFetching(state),
     timelineData: getTimelineData(state),
+    usersProfile: getUsersProfile(state),
 });
 
 const timeLineActions = {
     commentButtonClicked,
     favButtonClicked,
+    getProfileDataFromDatabase,
+    getProfileDataFromDatabaseError,
+    getProfileDataFromDatabaseSuccess,
     handlePostComment,
     handlePostUpdate,
     likeButtonClicked,
     loadOnlineFriendsData,
     loadTimeLineData,
+    loadUsersProfile,
+    postProfileDataToDatabase,
+    postProfileDataToDatabaseError,
+    postProfileDataToDatabaseSuccess,
     setOnlineFriendsData,
     setOnlineFriendsError,
     setTimeLineData,
     setTimeLineError,
+    setUsersProfileSuccess,
 };
 
 const mapDispatchToProps = dispatch => bindActionCreators(timeLineActions, dispatch);
@@ -254,18 +405,24 @@ export default connect(mapStateToProps, mapDispatchToProps)(TimeLine);
 
 TimeLine.propTypes = {
     commentButtonClicked: PropTypes.func.isRequired,
+    error: PropTypes.string,
     favButtonClicked: PropTypes.func.isRequired,
     handlePostComment: PropTypes.func.isRequired,
     handlePostUpdate: PropTypes.func.isRequired,
     isOnlineFriendsFetching: PropTypes.bool,
     isTimelineFetching: PropTypes.bool.isRequired,
+    isUserProfileComplete: PropTypes.bool.isRequired,
+    isUserProfilePresent: PropTypes.bool.isRequired,
     likeButtonClicked: PropTypes.func.isRequired,
     loadOnlineFriendsData: PropTypes.func.isRequired,
     loadTimeLineData: PropTypes.func.isRequired,
+    loadUsersProfile: PropTypes.func.isRequired,
     onlineFriendsData: PropTypes.arrayOf(PropTypes.shape({
         name: PropTypes.string.isRequired,
         photo: PropTypes.string.isRequired,
     })).isRequired,
+    postProfileDataToDatabase: PropTypes.func.isRequired,
+    setUsersProfileSuccess: PropTypes.func.isRequired,
     timelineData: PropTypes.arrayOf(PropTypes.shape({
         avatar: PropTypes.string.isRequired,
         comment: PropTypes.number.isRequired,
@@ -274,9 +431,13 @@ TimeLine.propTypes = {
         lastName: PropTypes.string.isRequired,
         likes: PropTypes.number.isRequired,
         post: PropTypes.string.isRequired,
-    })).isRequired,
+    })),
+    usersProfile: PropTypes.object,
 };
 
 TimeLine.defaultProps = {
+    error: null,
     isOnlineFriendsFetching: null,
+    timelineData: [],
+    usersProfile: {},
 };
