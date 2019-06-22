@@ -6,6 +6,7 @@ export const authConfig = new auth0.WebAuth({
     domain: 'teamhelpme.auth0.com',
     redirectUri: 'https://teamhelpme-app.herokuapp.com/auth/signed-in',
     responseType: 'token id_token',
+    returnTo: 'https://teamhelpme-app.herokuapp.com',
     scope: 'openid profile email',
 });
 
