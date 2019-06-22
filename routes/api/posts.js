@@ -104,9 +104,8 @@ router.post('/', async (req, res) => {
 // Route: api/posts/:id
 // Access: Protected route
 router.delete('/:id', async (req, res) => {
-
     const { id } = req.body;
-  
+
     try {
         // Find the current login user
         await Post.findOne({ user: id });
@@ -140,7 +139,6 @@ router.delete('/:id', async (req, res) => {
 // Access: Protected route
 
 router.post('/like/:id', async (req, res) => {
-
     const { id } = req.body;
 
     try {
@@ -177,7 +175,6 @@ router.post('/like/:id', async (req, res) => {
 // Access: Protected route
 
 router.post('/unlike/:id', async (req, res) => {
-
     const { id } = req.body;
 
     try {
@@ -215,7 +212,6 @@ router.post('/unlike/:id', async (req, res) => {
 // Route: api/posts/comment/:id
 // Access: Protected route
 router.post('/comment/:id', async (req, res) => {
-
     const {
         text, name, avatar, id,
     } = req.body;
