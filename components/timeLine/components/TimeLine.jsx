@@ -2,20 +2,14 @@
 /* eslint-disable no-shadow */
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import {
-    Divider, Icon, Button
-} from 'antd';
+import { Divider, Icon, Button } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
 
 import {
     commentButtonClicked,
-    favButtonClicked,
-    getProfileDataFromDatabase,
-    getProfileDataFromDatabaseError,
-    getProfileDataFromDatabaseSuccess,
     handlePostComment,
-    handlePostUpdate,
+    addPostToTimeline,
     likeButtonClicked,
     loadOnlineFriendsData,
     loadTimeLineData,
@@ -32,7 +26,6 @@ import {
 import { components } from '../../layout';
 import { CreatePostComponent } from './CreatePostComponent';
 import CreatePostModal from './CreatePostModal';
-import { generateCommentData, generateData } from '../utils';
 import {
     getError,
     getIsAuthenticated,
@@ -52,7 +45,12 @@ import TimeLineOnlineFriends from './TimeLineOnlineFriends';
 import { utils } from '../../authentication';
 import { openNotificationWithIcon } from '../../signup/utils';
 
-const { CREATE_POST_PLACEHOLDER, COMPLETE_YOUR_PROFILE, TIMELINE_TITLE } = STRINGS;
+const {
+    CREATE_POST_PLACEHOLDER,
+    COMPLETE_YOUR_PROFILE,
+    TIMELINE_TITLE,
+    POST_LENGTH_ERROR,
+} = STRINGS;
 const { PageLayout } = components;
 const { isAuthenticated, login } = utils;
 
@@ -63,52 +61,58 @@ const { isAuthenticated, login } = utils;
  * @return {Object} returns the TimeLine component
  */
 class TimeLine extends React.Component {
-state ={
-    commentValue: '',
-    isFormModalOpen: false,
-    isModalOpen: false,
-    statusValue: '',
-}
+    state = {
+        commentValue: '',
+        isFormModalOpen: false,
+        isModalOpen: false,
+        statusValue: '',
+        textValueError: '',
+    };
 
-componentDidMount() {
-    // if user is not authenticated, redirect to login
-    if (!isAuthenticated()) {
-        login();
+    componentDidMount() {
+        // if user is not authenticated, redirect to login
+        if (!isAuthenticated()) {
+            login();
+        }
+
+        const { loadOnlineFriendsData } = this.props;
+        // load timeline data and friends data
+        loadOnlineFriendsData();
     }
 
-    const { loadTimeLineData, loadOnlineFriendsData } = this.props;
-    // load timeline data and friends data
-    loadTimeLineData();
-    loadOnlineFriendsData();
-}
+    componentDidUpdate(prevState) {
+        let ProfileData;
+        const {
+            error,
+            setUsersProfileSuccess,
+            usersProfile,
+            loadUsersProfile,
+        } = this.props;
 
-componentDidUpdate(prevState) {
-    let ProfileData;
-    const {
-        error, setUsersProfileSuccess, usersProfile, loadUsersProfile,
-    } = this.props;
+        // we need to get profileData from local storage
+        if (localStorage.profile) {
+            ProfileData = JSON.parse(localStorage.getItem('profile'));
+            const { sub, picture, nickname } = ProfileData;
+            // we have to parse it because auth0 adds some strings to the profile data
+            const userPartialData = { id: sub.substring(6), nickname, picture };
+            const { id } = userPartialData;
 
-    // we need to get profileData from local storage
-    if (localStorage.profile) {
-        ProfileData = JSON.parse(localStorage.getItem('profile'));
-        const { sub, picture, nickname } = ProfileData;
-        // we have to parse it because auth0 adds some strings to the profile data
-        const userPartialData = { id: sub.substring(6), nickname, picture };
-        const { id } = userPartialData;
+            // because of async, the profile data will not be available in the local storage until
+            // some time. so always check the local storage and compare with
+            // current user profile redux state.
+            // but when the userdata changes in local storage, pull it and update state
+            if (usersProfile === null) {
+                // set data to redux for initial rendering
+                setUsersProfileSuccess(userPartialData);
 
-        // because of async, the profile data will not be available in the local storage until
-        // some time. so always check the local storage and compare with
-        // current user profile redux state.
-        // but when the userdata changes in local storage, pull it and update state
-        if (usersProfile === null) {
-            // set data to redux for initial rendering
-            setUsersProfileSuccess(userPartialData);
-            // get full profile from the database for full data rendering
-            loadUsersProfile(id);
+                // get full profile from the database for full data rendering
+                loadUsersProfile(id);
+            }
+        }
+        if (prevState.error !== error) {
+            openNotificationWithIcon('error', error);
         }
     }
-    if (prevState.error !== error) { openNotificationWithIcon('error', error); }
-}
 
     /**
      * Helper function that handles the visibility of a modal
@@ -129,89 +133,126 @@ componentDidUpdate(prevState) {
      * @return {Object} returns 'false' to close the modal post component
      */
     handleCreateStatus = () => {
-        const {
-            handlePostUpdate, timelineData,
-        } = this.props;
+        const { addPostToTimeline } = this.props;
 
         const { isModalOpen, statusValue } = this.state;
+        const { usersProfile } = this.props;
+        const { name, avatar, id } = usersProfile;
+        if (statusValue.length > 10 && statusValue.length < 500) {
+            const body = {
+                avatar,
+                id,
+                name,
+                text: statusValue,
+            };
+            // // get post
+            addPostToTimeline(body);
 
-        // // get post
-        handlePostUpdate(generateData(timelineData.length + 1, statusValue));
+            // close modal
+            if (isModalOpen) {
+                this.modalHandler();
+            }
 
-        // close modal
-        if (isModalOpen) {
-            this.modalHandler();
+            // clear post component
+            this.setState({
+                statusValue: '',
+                textValueError: '',
+            });
+        } else {
+            this.setState({
+                textValueError: POST_LENGTH_ERROR,
+            });
         }
 
-        // clear post component
-        this.setState({
-            statusValue: '',
-        });
         // close the modal and make make an api call
     };
 
     /**
-    * Helper function that is used to handle clicking on the like button
-    * @function
-    * @param {Number} id the id of the liked post
-    * @return {Object} changes the state of the like component
-    */
+     * Helper function that is used to handle clicking on the like button
+     * @function
+     * @param {Number} id the id of the liked post
+     * @return {Object} changes the state of the like component
+     */
     handleLikeButton = id => {
         const { likeButtonClicked } = this.props;
         likeButtonClicked(id);
     };
 
     /**
-    * Helper function that is used to handle favourite button
-    * @function
-    * @param {Number} id the id of the commented post
-    * @return {Object} changes the state of the like component
-    */
-   handleFavButton = id => {
-       const { favButtonClicked } = this.props;
-       favButtonClicked(id);
-   };
-
-    /**
-    * Helper function that is used to handle clicking on the comment button
-    * @function
-    * @param {Number} id the id of the commented post
-    * @return {Object} changes the state of the like component
-    */
+     * Helper function that is used to handle clicking on the comment button
+     * @function
+     * @param {Number} id the id of the commented post
+     * @return {Object} changes the state of the like component
+     */
     handleCommentButton = id => {
         const { commentButtonClicked } = this.props;
         commentButtonClicked(id);
     };
 
-    handleCommentOnPost = id => {
-        const { handlePostComment } = this.props;
+    /**
+     * Helper function that is used to handle comments on posts
+     * @function
+     * @param {string} postId of the post been commented
+     * @return {Object} returns the comment made
+     */
+    handleCommentOnPost = postId => {
+        const { handlePostComment, usersProfile } = this.props;
+        const { avatar, name, _id } = usersProfile;
         const { commentValue } = this.state;
+        const body = {
+            avatar,
+            id: _id,
+            name,
+            text: commentValue,
+        };
 
-        handlePostComment(generateCommentData(id, commentValue));
+        handlePostComment({ body, postId });
         this.setState({
             commentValue: '',
         });
-    }
+    };
 
+    /**
+     * Helper function that is used to set the status value
+     * @function
+     * @param {string} id of the post been commented
+     * @return {Object} returns the status value
+     */
     handleStatusValueChange = e => {
         this.setState({
             statusValue: e.target.value,
         });
-    }
+    };
 
+    /**
+     * Helper function that is used to load the timeline
+     * @function
+     * @param {string} id of the current logged user
+     * @return {Object} returns the timelineData
+     */
+    handleLoadTimeLineData = id => {
+        const { loadTimeLineData } = this.props;
+        // get the current user's
+        loadTimeLineData(id);
+    };
+
+    /**
+     * Helper function that is used to set the status value
+     * @function
+     * @param {string} id of the post been commented
+     * @return {Object} returns the status value
+     */
     handleCommentValueChange = e => {
         this.setState({
             commentValue: e.target.value,
         });
-    }
+    };
 
-      handleTextChange = e => {
-          this.setState(
-              {
-                  [e.target.name]: e.target.value,
-              }
-          );
-      }
+    handleTextChange = e => {
+        this.setState({
+            [e.target.name]: e.target.value,
+        });
+    };
 
     handlePostSubmit = () => {
         // pull out email from the redux state
@@ -220,11 +261,7 @@ componentDidUpdate(prevState) {
 
         // get this data from the local state
         const {
-            firstName,
-            lastName,
-            city,
-            country,
-            bio,
+            firstName, lastName, city, country, bio,
         } = this.state;
 
         const body = {
@@ -261,7 +298,11 @@ componentDidUpdate(prevState) {
         } = this.props;
 
         const {
-            commentValue, isModalOpen, statusValue, isFormModalOpen,
+            commentValue,
+            isModalOpen,
+            statusValue,
+            isFormModalOpen,
+            textValueError,
         } = this.state;
 
         return (
@@ -272,7 +313,6 @@ componentDidUpdate(prevState) {
                 title={TIMELINE_TITLE}
                 selectedKey="1"
             >
-
                 <main className="TimeLine_content">
                     <section>
                         {/* edit component for mobile */}
@@ -290,6 +330,7 @@ componentDidUpdate(prevState) {
                             closeModal={this.modalHandler}
                             handleValueChange={this.handleStatusValueChange}
                             value={statusValue}
+                            textValueError={textValueError}
                         />
                     </section>
 
@@ -304,7 +345,7 @@ componentDidUpdate(prevState) {
                         handleModal={this.FormModalHandler}
                         handleTextChange={this.handleTextChange}
                         loadUsersProfile={loadUsersProfile}
-                        getProfileDataFromDatabase={getProfileDataFromDatabase}
+                        textValueError={textValueError}
                     />
                     {/* popular topics aside */}
                     <TimeLinePopularTopic />
@@ -323,6 +364,7 @@ componentDidUpdate(prevState) {
                                 handleOkFunction={this.handleCreateStatus}
                                 handleValueChange={this.handleStatusValueChange}
                                 value={statusValue}
+                                textValueError={textValueError}
                             />
                         </section>
 
@@ -332,22 +374,17 @@ componentDidUpdate(prevState) {
                             {/* button to complete profile
                              */}
                             <div className="profile_complete_button">
-                                {
-                                    (usersProfile !== null && usersProfile.bio === undefined)
-                                        ? (
-                                            <Button
-                                                type="primary"
-                                                onClick={this.FormModalHandler}
-                                            >
-                                                {COMPLETE_YOUR_PROFILE}
-                                            </Button>
-                                        ) : null
-                                }
+                                {!isUserProfileComplete ? (
+                                    <Button type="primary" onClick={this.FormModalHandler}>
+                                        {COMPLETE_YOUR_PROFILE}
+                                    </Button>
+                                ) : null}
                             </div>
                             {/* timeline posts */}
                             <TimeLinePosts
                                 isTimelineFetching={isTimelineFetching}
-                                profileData={timelineData}
+                                timelineData={timelineData}
+                                handleLoadTimeLineData={this.handleLoadTimeLineData}
                                 userProfile={usersProfile}
                                 handleLikeButton={this.handleLikeButton}
                                 handleFavButton={this.handleFavButton}
@@ -356,6 +393,7 @@ componentDidUpdate(prevState) {
                                 handleValueChange={this.handleCommentValueChange}
                                 value={commentValue}
                                 handleModal={this.FormModalHandler}
+                                textValueError={textValueError}
                             />
                         </section>
                     </section>
@@ -378,13 +416,9 @@ const mapStateToProps = state => ({
 });
 
 const timeLineActions = {
+    addPostToTimeline,
     commentButtonClicked,
-    favButtonClicked,
-    getProfileDataFromDatabase,
-    getProfileDataFromDatabaseError,
-    getProfileDataFromDatabaseSuccess,
     handlePostComment,
-    handlePostUpdate,
     likeButtonClicked,
     loadOnlineFriendsData,
     loadTimeLineData,
@@ -401,14 +435,16 @@ const timeLineActions = {
 
 const mapDispatchToProps = dispatch => bindActionCreators(timeLineActions, dispatch);
 
-export default connect(mapStateToProps, mapDispatchToProps)(TimeLine);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(TimeLine);
 
 TimeLine.propTypes = {
+    addPostToTimeline: PropTypes.func.isRequired,
     commentButtonClicked: PropTypes.func.isRequired,
     error: PropTypes.string,
-    favButtonClicked: PropTypes.func.isRequired,
     handlePostComment: PropTypes.func.isRequired,
-    handlePostUpdate: PropTypes.func.isRequired,
     isOnlineFriendsFetching: PropTypes.bool,
     isTimelineFetching: PropTypes.bool.isRequired,
     isUserProfileComplete: PropTypes.bool.isRequired,
@@ -417,21 +453,15 @@ TimeLine.propTypes = {
     loadOnlineFriendsData: PropTypes.func.isRequired,
     loadTimeLineData: PropTypes.func.isRequired,
     loadUsersProfile: PropTypes.func.isRequired,
-    onlineFriendsData: PropTypes.arrayOf(PropTypes.shape({
-        name: PropTypes.string.isRequired,
-        photo: PropTypes.string.isRequired,
-    })).isRequired,
+    onlineFriendsData: PropTypes.arrayOf(
+        PropTypes.shape({
+            name: PropTypes.string.isRequired,
+            photo: PropTypes.string.isRequired,
+        })
+    ).isRequired,
     postProfileDataToDatabase: PropTypes.func.isRequired,
     setUsersProfileSuccess: PropTypes.func.isRequired,
-    timelineData: PropTypes.arrayOf(PropTypes.shape({
-        avatar: PropTypes.string.isRequired,
-        comment: PropTypes.number.isRequired,
-        firstName: PropTypes.string.isRequired,
-        image: PropTypes.string,
-        lastName: PropTypes.string.isRequired,
-        likes: PropTypes.number.isRequired,
-        post: PropTypes.string.isRequired,
-    })),
+    timelineData: PropTypes.array,
     usersProfile: PropTypes.object,
 };
 

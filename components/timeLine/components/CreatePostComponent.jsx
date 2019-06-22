@@ -1,5 +1,5 @@
 import {
-    Button, Icon, Input, Upload
+    Button, Icon, Input, Upload, Typography
 } from 'antd';
 import PropTypes from 'prop-types';
 import React from 'react';
@@ -8,7 +8,7 @@ import { STRINGS } from '../constants';
 
 const { POST } = STRINGS;
 const { TextArea } = Input;
-
+const { Text } = Typography;
 /**
  * Helper function that is used for creating the input part of the post *component
  * @function
@@ -30,6 +30,8 @@ const CreatePostInput = props => {
             autoFocus
             onChange={handleValueChange}
             value={value}
+            minLength="10"
+            maxLength="500"
         />
     );
 };
@@ -78,6 +80,7 @@ const CreatePostComponent = props => {
     const {
         InputPlaceholder,
         rowHeight,
+        textValueError,
         handleOkFunction,
         handleValueChange,
         value,
@@ -91,6 +94,7 @@ const CreatePostComponent = props => {
                 handleValueChange={handleValueChange}
                 value={value}
             />
+            <Text type="danger">{textValueError}</Text>
             <div className="comment-post-button">
                 <CreatePostButtons handleOkFunction={handleOkFunction} />
             </div>
@@ -115,5 +119,6 @@ CreatePostComponent.propTypes = {
     handleOkFunction: PropTypes.func.isRequired,
     handleValueChange: PropTypes.func.isRequired,
     rowHeight: PropTypes.number.isRequired,
+    textValueError: PropTypes.string.isRequired,
     value: PropTypes.string.isRequired,
 };

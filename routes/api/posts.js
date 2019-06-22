@@ -1,3 +1,4 @@
+
 const express = require('express');
 
 const router = express.Router();
@@ -65,11 +66,9 @@ router.get('/:id', async (req, res) => {
 // Route: api/posts
 // Access: Protected route
 router.post('/', async (req, res) => {
-
     const {
         text, name, avatar, id,
     } = req.body;
-
 
     try {
         const { errors, isValid } = validatePostInput(req.body);
@@ -139,6 +138,7 @@ router.delete('/:id', async (req, res) => {
 // POST: Like a particular post
 // Route: api/posts/like/:id
 // Access: Protected route
+
 router.post('/like/:id', async (req, res) => {
 
     const { id } = req.body;
@@ -146,6 +146,7 @@ router.post('/like/:id', async (req, res) => {
     try {
         // Find the current login user
         await Profile.findOne({ user: id });
+
         const postFound = await Post.findById(req.params.id);
 
         // Check if user already like the post
@@ -174,6 +175,7 @@ router.post('/like/:id', async (req, res) => {
 // POST: UnLike a particular post
 // Route: api/post/unlike/:id
 // Access: Protected route
+
 router.post('/unlike/:id', async (req, res) => {
 
     const { id } = req.body;

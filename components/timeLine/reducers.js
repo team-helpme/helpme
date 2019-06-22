@@ -3,10 +3,11 @@ import actionTypes from './actionTypes';
 
 const {
     ADD_POST_TO_TIMELINE,
+    ADD_POST_TO_TIMELINE_FAILURE,
+    ADD_POST_TO_TIMELINE_SUCCESS,
     ADD_COMMENT_TO_POST,
-    GET_PROFILE_DATA_FROM_DATABASE,
-    GET_PROFILE_DATA_FROM_DATABASE_ERROR,
-    GET_PROFILE_DATA_FROM_DATABASE_SUCCESS,
+    ADD_COMMENT_TO_POST_FAILURE,
+    ADD_COMMENT_TO_POST_SUCCESS,
     POST_PROFILE_DATA_TO_DATABASE,
     POST_PROFILE_DATA_TO_DATABASE_SUCCESS,
     POST_PROFILE_DATA_TO_DATABASE_ERROR,
@@ -18,14 +19,15 @@ const {
     REQUEST_SET_ONLINE_FRIENDS_DATA,
     REQUEST_LOAD_USERS_PROFILE,
     SET_USERS_PROFILE_SUCCESS,
-    TOGGLE_LIKE_BUTTON_CLICKED,
-    TOGGLE_FAV_BUTTON_CLICKED,
+    TOGGLE_LIKE_BUTTON_CLICKED_FAILURE,
+    TOGGLE_LIKE_BUTTON_CLICKED_SUCCESS,
     TOGGLE_COMMENT_BUTTON_CLICKED,
 } = actionTypes;
 
 const initialState = {
     error: null,
     isAuthenticated: false,
+    isCommentOpen: false,
     isOnlineFriendsFetching: false,
     isTimelineFetching: false,
     isUserProfileComplete: false,
@@ -39,7 +41,11 @@ export default (state = initialState, action) => {
     const {
         type, error, payload,
     } = action;
-
+    let liked;
+    let newPost;
+    let postIndex;
+    let newTimeLineData;
+    let loggedUserId;
     let newArray = [];
 
     switch (type) {
@@ -47,7 +53,7 @@ export default (state = initialState, action) => {
         return { ...state, isUserProfileFetching: true, isUserProfilePresent: false };
 
     case SET_USERS_PROFILE_SUCCESS:
-        if (!payload.profile || payload.profile.length === 0) {
+        if (typeof payload.profile === 'undefined' || payload.profile.length === 0) {
             return {
                 ...state,
                 isUserProfileFetching: false,
@@ -63,30 +69,42 @@ export default (state = initialState, action) => {
             usersProfile: { ...payload, id: payload._id },
         };
 
-    case GET_PROFILE_DATA_FROM_DATABASE:
-        return {
-            ...state, isUserProfileFetching: true,
-        };
-
-    case GET_PROFILE_DATA_FROM_DATABASE_ERROR:
-        return {
-            ...state, error: payload, isUserProfileFetching: false,
-        };
-
-    case GET_PROFILE_DATA_FROM_DATABASE_SUCCESS:
-        return {
-            ...state,
-            isUserProfileComplete: true,
-            isUserProfileFetching: false,
-            isUserProfilePresent: true,
-            usersProfile: payload,
-        };
-
     case REQUEST_LOAD_TIMELINE_DATA:
         return { ...state, isTimelineFetching: true };
 
     case REQUEST_SET_TIMELINE_DATA_SUCCESS:
-        return { ...state, isTimelineFetching: false, timelineData: payload };
+        // const { postFound } = payload;
+        loggedUserId = payload.payload;
+        newTimeLineData = [...payload.postFound];
+        // const { isCommentOpen } = initialState;
+        // map through the array and check if  the likes array contains the users id,
+        // if it does, pass a liked state to the data and render
+
+        payload.postFound.map(post => {
+            const { likes } = post;
+            likes.map(item => {
+                const { user } = item;
+                if (JSON.stringify(loggedUserId) === JSON.stringify(user)) {
+                    liked = true;
+                    newPost = { ...post, isCommentOpen: false, liked };
+                    postIndex = payload.postFound.indexOf(post);
+                    newTimeLineData[postIndex] = newPost;
+                    return newTimeLineData;
+                }
+                return newTimeLineData;
+            });
+            return newTimeLineData;
+        });
+        // pass a !liked state to the redux store.
+        newTimeLineData.map((post, i) => {
+            if (post.liked === undefined) {
+                post = { ...post, isCommentOpen: false, liked: false };
+                newTimeLineData[i] = post;
+                return newTimeLineData;
+            }
+            return newTimeLineData;
+        });
+        return { ...state, isTimelineFetching: false, timelineData: newTimeLineData };
 
     case REQUEST_SET_TIMELINE_ERROR:
         return { ...state, error: payload, isTimelineFetching: false };
@@ -102,12 +120,46 @@ export default (state = initialState, action) => {
 
     case ADD_POST_TO_TIMELINE:
         return payload.post !== ''
-            ? { ...state, timelineData: [payload, ...state.timelineData] } : state;
+            ? { ...state, isTimelineFetching: true } : state;
+
+    case ADD_POST_TO_TIMELINE_SUCCESS:
+        return payload.post !== ''
+            ? {
+                ...state,
+                isTimelineFetching: false,
+                timelineData: [payload.postCreated, ...state.timelineData],
+            } : state;
+
+    case ADD_POST_TO_TIMELINE_FAILURE:
+        return payload.post !== ''
+            ? { ...state, error: payload.text, isTimelineFetching: false } : { ...state };
 
     case ADD_COMMENT_TO_POST:
+        return payload.post !== ''
+            ? { ...state, isTimelineCommentFetching: true } : state;
+
+    case ADD_COMMENT_TO_POST_SUCCESS:
+        newTimeLineData = [...state.timelineData];
+        newTimeLineData.map(post => {
+            if (JSON.stringify(post._id) === JSON.stringify(payload._id)) {
+                post.comments = payload.comments;
+                return post;
+            }
+            return post;
+        });
+
+        return { ...state, isTimelineCommentFetching: false, timelineData: newTimeLineData };
+
+    case ADD_COMMENT_TO_POST_FAILURE:
+        return payload.post !== ''
+            ? { ...state, error: payload } : state;
+
+    case TOGGLE_LIKE_BUTTON_CLICKED_SUCCESS:
         newArray = state.timelineData.map(item => {
-            if (item.id === payload.id) {
-                item.comments = [{ ...payload, id: item.comments.length + 1 }, ...item.comments];
+            const { id, likes } = item;
+            if (id === payload) {
+                item.liked = !item.liked;
+                item.likes = item.liked ? likes - 1 : likes + 1;
             }
             return item;
         });
@@ -116,40 +168,19 @@ export default (state = initialState, action) => {
             timelineData: [...newArray],
         };
 
-    case TOGGLE_LIKE_BUTTON_CLICKED:
-        newArray = state.timelineData.map(item => {
-            const { id, liked, likes } = item;
-            if (id === payload) {
-                item.liked = !liked;
-                item.likes = liked ? likes - 1 : likes + 1;
-            }
-            return item;
-        });
-        return {
-            ...state,
-            timelineData: [...newArray],
-        };
-
-    case TOGGLE_FAV_BUTTON_CLICKED:
-        newArray = state.timelineData.map(item => {
-            const { id, favourited, favouriteCount } = item;
-            if (id === payload) {
-                item.favourited = !favourited;
-                item.favouriteCount = favourited ? favouriteCount - 1 : favouriteCount + 1;
-            }
-            return item;
-        });
-        return { ...state, timelineData: [...newArray] };
+    case TOGGLE_LIKE_BUTTON_CLICKED_FAILURE:
+        return { ...state, error: payload };
 
     case TOGGLE_COMMENT_BUTTON_CLICKED:
         newArray = state.timelineData.map(item => {
-            const { id, isCommentOpen } = item;
-            if (id === payload) {
+            const { _id, isCommentOpen } = item;
+            if (_id === payload) {
                 item.isCommentOpen = !isCommentOpen;
             }
             return item;
         });
         return { ...state, timelineData: [...newArray] };
+
     case POST_PROFILE_DATA_TO_DATABASE: return { ...state, isProfileUpdating: true };
 
     case POST_PROFILE_DATA_TO_DATABASE_SUCCESS:

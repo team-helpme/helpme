@@ -1,3 +1,4 @@
+/* eslint-disable no-shadow */
 /* eslint-disable react/jsx-no-literals */
 import {
     Avatar, Empty, Icon, List, Skeleton, Timeline
@@ -5,13 +6,14 @@ import {
 import PropTypes from 'prop-types';
 import React from 'react';
 import uuid from 'uuid';
+import { timeAgo } from '../utils';
 
 import { CreatePostComponent } from './CreatePostComponent';
 import { LOADING_SKELETON, STRINGS } from '../constants';
 import './TimeLine.css';
 
 const {
-    COMMENT_PLACEHOLDER, TIME, EMPTY_COMMENT, IMAGE_LINK,
+    COMMENT_PLACEHOLDER, EMPTY_COMMENT, IMAGE_LINK,
 } = STRINGS;
 const { Item } = Timeline;
 const IconText = ({
@@ -29,20 +31,29 @@ const IconText = ({
 );
 
 class TimeLinePosts extends React.Component {
+    componentDidMount() {
+        const { handleLoadTimeLineData } = this.props;
+        const ProfileData = JSON.parse(localStorage.getItem('profile'));
+        const { sub } = ProfileData;
+        const loggedUser = sub.substring(6);
+        handleLoadTimeLineData(loggedUser);
+    }
+
     render() {
         const {
-            profileData,
+            timelineData,
             handleCommentButton,
             handleCommentOnPost,
             handleLikeButton,
-            handleFavButton,
             handleValueChange,
             value,
             isTimelineFetching,
+            textValueError,
         } = this.props;
-        if ((isTimelineFetching || profileData === [])) {
+
+        if ((isTimelineFetching || timelineData === [])) {
             return (
-                // data loading simulation
+            // data loading simulation
                 LOADING_SKELETON.map(items => {
                     const {
                         paragraph,
@@ -66,7 +77,7 @@ class TimeLinePosts extends React.Component {
             );
         }
 
-        if (profileData === [] && profileData.length === 0 && !isTimelineFetching) {
+        if (timelineData === [] && timelineData.length === 0 && !isTimelineFetching) {
             return (
                 <Empty
                     image={IMAGE_LINK}
@@ -84,104 +95,102 @@ class TimeLinePosts extends React.Component {
 
             <List
                 itemLayout="vertical"
-                dataSource={profileData}
-                className="mx-1"
+                dataSource={timelineData}
                 size="large"
-                renderItem={user => {
+                renderItem={item => {
                     const {
-                        id,
-                        firstName,
-                        lastName,
-                        post,
+                        _id,
+                        name,
+                        text,
+                        date,
                         avatar,
                         image,
                         liked,
-                        favourited,
                         likes,
-                        comment,
-                        favouriteCount,
-                    } = user;
+                        comments,
+                        user,
+                        isCommentOpen,
+                    } = item;
                     return (
                         <List.Item
-                            key={uuid()}
+                            key={_id}
+                            className="list_style"
                             actions={[
-                                <IconText
-                                    type="star"
-                                    className={favourited ? 'favourited' : 'mr-8'}
-                                    text={favouriteCount}
-                                    action={() => handleFavButton(id)}
-                                    key={1}
-                                />,
                                 <IconText
                                     type="like"
                                     className={liked ? 'liked' : 'mr-8'}
-                                    text={likes}
-                                    action={() => handleLikeButton(id)}
+                                    text={likes.length}
+                                    action={() => handleLikeButton({ _id, liked, user })}
                                     key={2}
                                 />,
                                 <IconText
                                     type="message"
                                     className="mr-8"
-                                    text={comment}
-                                    action={() => handleCommentButton(id)}
+                                    text={comments.length}
+                                    action={() => handleCommentButton(_id)}
                                     key={3}
                                 />,
                             ]}
                         >
                             <List.Item.Meta
                                 avatar={(<Avatar src={avatar} className="user-avatar" />)}
-                                title={`${firstName} ${lastName}`}
-                                description={TIME}
+                                title={name}
+                                description={timeAgo(date)}
                             />
 
                             {
                                 image ? (
                                     <img
                                         className="post-image"
-                                        alt={image ? `${firstName} image` : null}
+                                        alt={image ? `${name} image` : null}
                                         src={image}
                                     />
                                 ) : <div />
                             }
 
                             <p>
-                                {post.substring(0, 150)}
+                                {text.substring(0, 150)}
                             </p>
 
                             {/* post comment component */}
-                            <div className={profileData[id - 1].isCommentOpen ? 'show' : 'hide'}>
+                            <div className={isCommentOpen ? 'show' : 'hide'}>
 
                                 <CreatePostComponent
-                                    handleOkFunction={() => handleCommentOnPost(id)}
+                                    handleOkFunction={() => handleCommentOnPost(_id)}
                                     InputPlaceholder={COMMENT_PLACEHOLDER}
                                     rowHeight={2}
                                     handleValueChange={handleValueChange}
                                     value={value}
+                                    textValueError={textValueError}
                                 />
                                 <Timeline>
                                     {/* comment post */}
-                                    {profileData[id - 1].comments.map(commentPost => (
-                                        <Item key={uuid()}>
-                                            <section className="Timeline_comment">
-                                                {/* avatar */}
-                                                <Avatar
-                                                    src={commentPost.avatar}
-                                                    className="user-avatar avatar-pop"
-                                                />
-                                                <div>
-                                                    {/* name */}
-                                                    <h3>
-                                                        {`${commentPost.firstName}
-                                                    ${commentPost.lastName}`}
-                                                    </h3>
-                                                    {/* time */}
-                                                    <p>{TIME}</p>
-                                                    {/* comment */}
-                                                    <p>{commentPost.post}</p>
-                                                </div>
-                                            </section>
-                                        </Item>
-                                    ))
+                                    {
+                                        comments.length > 0
+                                            ? comments.map(commentPost => {
+                                                const {
+                                                    avatar, name, text, _id,
+                                                } = commentPost;
+                                                return (
+                                                    <Item key={_id}>
+                                                        <section className="Timeline_comment">
+                                                            {/* avatar */}
+                                                            <Avatar
+                                                                src={avatar}
+                                                                className="user-avatar avatar-pop"
+                                                            />
+                                                            <div>
+                                                                {/* name */}
+                                                                <h3>
+                                                                    {name}
+                                                                </h3>
+                                                                {/* comment */}
+                                                                <p>{text}</p>
+                                                            </div>
+                                                        </section>
+                                                    </Item>
+                                                );
+                                            }) : null
                                     }
                                 </Timeline>
                             </div>
@@ -202,26 +211,18 @@ IconText.propTypes = {
     text: PropTypes.number.isRequired,
     type: PropTypes.string.isRequired,
 };
-
 TimeLinePosts.propTypes = {
     handleCommentButton: PropTypes.func.isRequired,
     handleCommentOnPost: PropTypes.func.isRequired,
-    handleFavButton: PropTypes.func.isRequired,
     handleLikeButton: PropTypes.func.isRequired,
+    handleLoadTimeLineData: PropTypes.func.isRequired,
     handleValueChange: PropTypes.func.isRequired,
     isTimelineFetching: PropTypes.bool.isRequired,
-    profileData: PropTypes.arrayOf(PropTypes.shape({
-        avatar: PropTypes.string.isRequired,
-        comment: PropTypes.number.isRequired,
-        favouriteCount: PropTypes.number.isRequired,
-        favourited: PropTypes.bool.isRequired,
-        firstName: PropTypes.string.isRequired,
+    textValueError: PropTypes.string.isRequired,
+    timelineData: PropTypes.arrayOf(PropTypes.shape({
         image: PropTypes.string,
         isCommentOpen: PropTypes.bool.isRequired,
-        lastName: PropTypes.string.isRequired,
         liked: PropTypes.bool.isRequired,
-        likes: PropTypes.number.isRequired,
-        post: PropTypes.string.isRequired,
     })).isRequired,
     value: PropTypes.string.isRequired,
 };

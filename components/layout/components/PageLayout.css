@@ -89,6 +89,8 @@ a {
 
     .layout_header-list {
         line-height: 63px;
+        width: 100%;
+        text-align: center;
     }
 }
 
