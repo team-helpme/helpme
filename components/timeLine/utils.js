@@ -1,4 +1,3 @@
-/* eslint-disable no-else-return */
 export const generateCommentData = (id, post) => ({
     avatar: 'https://randomuser.me/api/portraits/men/44.jpg',
     firstName: 'Justice',
@@ -73,17 +72,17 @@ export const timeAgo = dateParam => {
 
     if (seconds < 5) {
         return 'now';
-    } else if (seconds < 60) {
+    } if (seconds < 60) {
         return `${seconds} seconds ago`;
-    } else if (seconds < 90) {
+    } if (seconds < 90) {
         return 'about a minute ago';
-    } else if (minutes < 60) {
+    } if (minutes < 60) {
         return `${minutes} minutes ago`;
-    } else if (isToday) {
+    } if (isToday) {
         return getFormattedDate(date, 'Today'); // Today at 10:20
-    } else if (isYesterday) {
+    } if (isYesterday) {
         return getFormattedDate(date, 'Yesterday'); // Yesterday at 10:20
-    } else if (isThisYear) {
+    } if (isThisYear) {
         return getFormattedDate(date, false, true); // 10. January at 10:20
     }
 

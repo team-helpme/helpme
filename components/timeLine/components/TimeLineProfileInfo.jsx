@@ -55,7 +55,7 @@ class TimeLineProfileForm extends React.Component {
                     <div className="profile-modal-content">
                         <img
                             src={avatar}
-                            alt="name"
+                            alt={name}
                             className="user-avatar profile-avatar"
                         />
                         {/* followers stat */}
