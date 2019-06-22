@@ -10,7 +10,9 @@ export default class extends Document {
             <html lang="en">
                 <Head>
                     <meta charSet="UTF-8" />
-                    <meta httpEquiv="Content-Security-Policy" content="default-src *; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline' 'unsafe-eval' http://www.google.com" />
+                    <meta http-equiv="Content-Security-Policy" content="default-src *;
+                    script-src 'self' 'unsafe-inline' 'unsafe-eval' *; style-src	'self'
+                    'unsafe-inline' *; img-src 'self' data: *">
                     <meta name="viewport" content="width=device-width initial-scale=1.0" />
                     <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
                     <link rel="shortcut icon" href={FAVICON} type="image/x-icon" />
