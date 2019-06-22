@@ -104,7 +104,9 @@ router.post('/', async (req, res) => {
 // Route: api/posts/:id
 // Access: Protected route
 router.delete('/:id', async (req, res) => {
+
     const { id } = req.body;
+  
     try {
         // Find the current login user
         await Post.findOne({ user: id });
@@ -136,11 +138,15 @@ router.delete('/:id', async (req, res) => {
 // POST: Like a particular post
 // Route: api/posts/like/:id
 // Access: Protected route
-router.put('/like/:id', async (req, res) => {
+
+router.post('/like/:id', async (req, res) => {
+
     const { id } = req.body;
+
     try {
         // Find the current login user
-        await Profile.findOne({ id });
+        await Profile.findOne({ user: id });
+
         const postFound = await Post.findById(req.params.id);
 
         // Check if user already like the post
@@ -169,11 +175,14 @@ router.put('/like/:id', async (req, res) => {
 // POST: UnLike a particular post
 // Route: api/post/unlike/:id
 // Access: Protected route
-router.put('/unlike/:id', async (req, res) => {
+
+router.post('/unlike/:id', async (req, res) => {
+
     const { id } = req.body;
+
     try {
         // Find the current login user
-        await Post.findOne({ id });
+        await Post.findOne({ user: id });
         const postFound = await Post.findById(req.params.id);
 
         // Check if user have not yet like the post
@@ -206,9 +215,11 @@ router.put('/unlike/:id', async (req, res) => {
 // Route: api/posts/comment/:id
 // Access: Protected route
 router.post('/comment/:id', async (req, res) => {
+
     const {
         text, name, avatar, id,
     } = req.body;
+
     try {
         const { errors, isValid } = validatePostInput(req.body);
 
