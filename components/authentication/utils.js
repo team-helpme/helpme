@@ -5,7 +5,7 @@ export const authConfig = new auth0.WebAuth({
     clientID: `${process.env.clientID}`,
     domain: 'teamhelpme.auth0.com',
     redirectUri: (process.env.NODE_ENV === 'production')
-        ? 'https://teamhelpme.herokuapp.com/auth/signed-in'
+        ? 'https://helpmeapp-app.herokuapp.com/'
         : 'http://localhost:3000/auth/signed-in',
     responseType: 'token id_token',
     scope: 'openid profile email',
