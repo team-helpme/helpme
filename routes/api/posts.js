@@ -105,10 +105,6 @@ router.post('/', async (req, res) => {
 // Access: Protected route
 router.delete('/:id', async (req, res) => {
     const { id } = req.body;
-<<<<<<< HEAD
-
-=======
->>>>>>> parent of 6bfa5e6... Merge branch 'master' into feature/justiceotuya/Connecting_Post
     try {
         // Find the current login user
         await Post.findOne({ user: id });
