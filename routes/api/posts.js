@@ -104,9 +104,7 @@ router.post('/', async (req, res) => {
 // Route: api/posts/:id
 // Access: Protected route
 router.delete('/:id', async (req, res) => {
-
     const { id } = req.body;
-  
     try {
         // Find the current login user
         await Post.findOne({ user: id });
@@ -140,13 +138,10 @@ router.delete('/:id', async (req, res) => {
 // Access: Protected route
 
 router.post('/like/:id', async (req, res) => {
-
     const { id } = req.body;
-
     try {
         // Find the current login user
-        await Profile.findOne({ user: id });
-
+        await Profile.findOne({ id });
         const postFound = await Post.findById(req.params.id);
 
         // Check if user already like the post
@@ -177,12 +172,10 @@ router.post('/like/:id', async (req, res) => {
 // Access: Protected route
 
 router.post('/unlike/:id', async (req, res) => {
-
     const { id } = req.body;
-
     try {
         // Find the current login user
-        await Post.findOne({ user: id });
+        await Post.findOne({ id });
         const postFound = await Post.findById(req.params.id);
 
         // Check if user have not yet like the post
@@ -215,11 +208,9 @@ router.post('/unlike/:id', async (req, res) => {
 // Route: api/posts/comment/:id
 // Access: Protected route
 router.post('/comment/:id', async (req, res) => {
-
     const {
         text, name, avatar, id,
     } = req.body;
-
     try {
         const { errors, isValid } = validatePostInput(req.body);
 
