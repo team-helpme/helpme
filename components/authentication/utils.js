@@ -28,6 +28,13 @@ export const logout = () => {
     localStorage.removeItem('id_token');
     localStorage.removeItem('expires_at');
     localStorage.removeItem('profile');
+
+    authConfig.logout({
+        returnTo: window.location.origin,
+    });
+
+    // navigate to the home route
+    Router.push('/');
 };
 
 export const handleAuthentication = () => new Promise((resolve, reject) => {
