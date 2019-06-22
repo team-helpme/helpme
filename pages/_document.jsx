@@ -12,8 +12,8 @@ export default class extends Document {
                     <meta charSet="UTF-8" />
                     <meta name="viewport" content="width=device-width initial-scale=1.0" />
                     <meta httpEquiv="X-UA-Compatible" content="ie=edge" />
-                    <link rel="shortcut icon" href={FAVICON} type="image/x-icon" />
-                    <link rel="icon" href={FAVICON} type="image/x-icon" />
+                    {/* <link rel="shortcut icon" href={FAVICON} type="image/x-icon" />
+                    <link rel="icon" href={FAVICON} type="image/x-icon" /> */}
                     <link
                         rel="stylesheet"
                         href={href}
